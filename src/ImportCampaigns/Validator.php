@@ -44,6 +44,25 @@ class Validator {
 			return $valid_credentials;
 		}
 
+		//validate connection name if include_as_connection is set to true.
+		if ( isset( $params ['include_as_connection'] ) && 'true' === $params['include_as_connection'] ) {
+			if ( ! isset( $params['connection_name'] ) || empty( $params['connection_name'] ) ) {
+				return new \WP_Error( 'missing_connection_name', __( 'Connection name is required.', 'integration-toolkit-for-beehiiv' ), array( 'status' => 400 ) );
+			}
+
+			$connection_name = strtolower( trim( str_replace( ' ', '_', $params['connection_name'] ) ) );
+
+			$all_connections = Helper::get_all_beehiiv_connections();
+			
+			if ( array_key_exists( $connection_name, $all_connections ) ) {
+				return new \WP_Error(
+					'connection_exists',
+					'Connection name is duplicated. Please choose a different name.',
+					array( 'status' => 404 )
+				);
+			} 
+		}
+
 		// Validate basic parameters.
 		$valid_params = self::validate_parameters( $params );
 		if ( is_wp_error( $valid_params ) ) {
@@ -150,7 +169,14 @@ class Validator {
 		// Validate each parameter.
 		foreach ( $params as $key => $param ) {
 			if ( empty( $param ) ) {
+
+				// Skip taxonomy and taxonomy_term if the post type has no taxonomies.
 				if ( in_array( $key, array( 'taxonomy', 'taxonomy_term' ) ) && ! $post_type_has_taxonomies ) {
+					continue;
+				}
+
+				// Skip connection name if include_as_connection is set to false.
+				if ( 'connection_name' === $key && 'true' !== $params['include_as_connection'] ) {
 					continue;
 				}
 
