@@ -901,3 +901,13 @@
 	text-decoration: underline;
 	cursor: pointer;
 }
+
+.include-as-connection-container{
+	margin-top: 40px;
+}
+.components-modal__content {
+	margin-top: 0 !important;
+}
+.components-modal__content.has-scrolled-content:not(.hide-header) .components-modal__header {
+ border-width: 0 !important;
+}

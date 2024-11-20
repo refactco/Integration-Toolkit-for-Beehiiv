@@ -11405,6 +11405,852 @@ async function delay(ms) {
 
 /***/ }),
 
+/***/ "./lib/components/add-button.js":
+/*!**************************************!*\
+  !*** ./lib/components/add-button.js ***!
+  \**************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @refactco/ui-kit */ "./node_modules/@refactco/ui-kit/dist/ui-kit-expose.js");
+
+
+const AddButton = ({
+  children,
+  icon,
+  iconPosition = 'left',
+  buttonColor = _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.ButtonColor.GREEN,
+  onClick
+}) => {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Button, {
+    color: buttonColor,
+    icon: icon !== null && icon !== void 0 ? icon : null,
+    iconPosition: iconPosition,
+    style: {
+      display: 'flex',
+      alignItems: 'center'
+    },
+    onClick: onClick
+  }, children);
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (AddButton);
+
+/***/ }),
+
+/***/ "./lib/components/add-new-schedule-form/add-new-schedule-form-helper.js":
+/*!******************************************************************************!*\
+  !*** ./lib/components/add-new-schedule-form/add-new-schedule-form-helper.js ***!
+  \******************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   addNewScheduleFormHelper: () => (/* binding */ addNewScheduleFormHelper)
+/* harmony export */ });
+/* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/dist/react-toastify.esm.mjs");
+/* harmony import */ var _common_common_function__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../common/common-function */ "./lib/common/common-function.js");
+/* eslint-disable camelcase */
+
+const apiFetch = wp.apiFetch;
+
+
+function addNewScheduleFormHelper(state, setState, onClose, handleRefreshScheduleData) {
+  async function getDefaultOptions() {
+    try {
+      const response = await apiFetch({
+        path: 'itfb/v1/import-defaults-options'
+      });
+      const {
+        post_statuses,
+        authors,
+        current_server_time,
+        post_types
+      } = response;
+      if (authors.length === 0) {
+        react_toastify__WEBPACK_IMPORTED_MODULE_0__.toast.error('You should add at least one new user with rule Author.Navigating to the Add New User page...');
+        await (0,_common_common_function__WEBPACK_IMPORTED_MODULE_1__.delay)(5000);
+        window.location.href = 'user-new.php';
+        return false;
+      }
+      const postStatusesData = Object.entries(post_statuses).map(([key, value]) => ({
+        label: value,
+        value: key
+      }));
+      const selectedPostType = post_types[0].post_type;
+      const taxonomies = post_types[0].taxonomies ? post_types[0].taxonomies : [];
+      const selectedTaxonomy = taxonomies.length > 0 ? taxonomies[0].taxonomy_slug : '';
+      const terms = taxonomies[0].terms ? taxonomies[0].terms : [];
+      const selectedTerm = terms.length > 0 ? terms[0].term_id : '';
+      const selectedAuthor = authors[0].id;
+      setState({
+        ...state,
+        postStatuses: postStatusesData,
+        postTypes: post_types,
+        taxonomies,
+        selectedTaxonomy,
+        selectedPostType: selectedPostType ? selectedPostType : 'post',
+        terms,
+        selectedTerm,
+        authors,
+        selectedAuthor,
+        serverTime: current_server_time,
+        loading: false
+      });
+    } catch (error) {
+      (0,_common_common_function__WEBPACK_IMPORTED_MODULE_1__.logger)(error);
+    }
+  }
+  function handleInputChange(value, name) {
+    setState(prevState => {
+      const newState = {
+        ...prevState,
+        [name]: value
+      };
+      const {
+        publishedCampaigns,
+        draftededCampaigns,
+        archivedCampaigns
+      } = newState;
+      if (name === 'selectedPostType') {
+        const selectedPostType = state.postTypes.find(pt => pt.post_type === value);
+        newState.taxonomies = selectedPostType ? selectedPostType.taxonomies : [];
+        newState.selectedTaxonomy = newState.taxonomies.length > 0 ? newState.taxonomies[0].taxonomy_slug : '';
+        newState.selectedTerm = newState.taxonomies.length > 0 && newState.terms.length > 0 ? newState.terms[0].term_id : '';
+        newState.terms = newState.selectedTaxonomy ? newState.taxonomies.find(pt => pt.taxonomy_slug === newState.selectedTaxonomy).terms : [];
+      }
+      if (name === 'selectedTaxonomy') {
+        const selectedTaxonomy = state.taxonomies.find(pt => pt.taxonomy_slug === value);
+        newState.terms = selectedTaxonomy ? selectedTaxonomy.terms : [];
+        newState.selectedTerm = newState.terms.length > 0 ? newState.terms[0].term_id : '';
+      }
+      if ((name === 'publishedCampaigns' || name === 'draftededCampaigns' || name === 'archivedCampaigns') && value) {
+        newState.errors = {
+          ...prevState.errors,
+          campaignStatus: ''
+        };
+        newState.isFormDisabled = false;
+      }
+      if (!publishedCampaigns && !draftededCampaigns && !archivedCampaigns) {
+        newState.errors = {
+          ...prevState.errors,
+          campaignStatus: 'You should select at least one campaign status'
+        };
+        newState.isFormDisabled = true;
+      }
+      return newState;
+    });
+  }
+  function validateInput(name, value) {
+    switch (name) {
+      case 'apiKey':
+        if (!value) return 'API Key is required.';
+        if (value.length !== 64) return 'API Key must be 64 characters.';
+        break;
+      case 'publicationId':
+        if (!value) return 'Publication ID is required.';
+        if (value.length !== 40) return 'Publication ID must be 40 characters.';
+        break;
+      case 'runHour':
+        if (!value) return 'Run hour is required.';
+        if (value < 1 || value > 24) return 'The run hour should be between 1 to 24';
+        if (!/^(?:[01]?[0-9]|2[0-4])$/.test(value)) return 'Invalid hour format';
+        break;
+      case 'runTime':
+        if (!value) return 'Run time is required.';
+        if (!/^(?:[01]\d|2[0-3]):[0-5]\d$/.test(value)) return 'Invalid time format. Use "HH:mm" (e.g., "02:00").';
+        break;
+      default:
+        return '';
+    }
+  }
+  function handleBlur(name, value) {
+    const error = validateInput(name, value);
+    if (error) {
+      setState(prevState => ({
+        ...prevState,
+        errors: {
+          ...prevState.errors,
+          [name]: error
+        },
+        isFormDisabled: true
+      }));
+    } else {
+      setState(prevState => ({
+        ...prevState,
+        errors: {
+          ...prevState.errors,
+          [name]: ''
+        },
+        isFormDisabled: false
+      }));
+    }
+  }
+  async function startImportHandler(event) {
+    event.preventDefault();
+    const {
+      apiKey,
+      publicationId,
+      publishedCampaigns,
+      publishedWrodpressPostStatus,
+      draftededCampaigns,
+      draftedWrodpressPostStatus,
+      archivedCampaigns,
+      archivedWrodpressPostStatus,
+      selectedPostType,
+      selectedTaxonomy,
+      selectedTerm,
+      selectedAuthor,
+      importCampaignTagAs,
+      importOption,
+      frequency,
+      runHour,
+      runTime,
+      runDay,
+      contentType,
+      includeAsConnection
+    } = state;
+    const post_status = {};
+    if (publishedCampaigns) {
+      post_status.confirmed = publishedWrodpressPostStatus;
+    }
+    if (draftededCampaigns) {
+      post_status.draft = draftedWrodpressPostStatus;
+    }
+    if (archivedCampaigns) {
+      post_status.archived = archivedWrodpressPostStatus;
+    }
+    const schedule_settings = {};
+    schedule_settings.enabled = 'on';
+    schedule_settings.frequency = frequency;
+    if (frequency === 'hourly') {
+      schedule_settings.specific_hour = runHour;
+    } else if (frequency === 'daily') {
+      schedule_settings.time = runTime;
+    } else {
+      schedule_settings.time = runTime;
+      schedule_settings.specific_day = runDay;
+    }
+    const data = {
+      credentials: JSON.stringify({
+        api_key: apiKey,
+        publication_id: publicationId
+      }),
+      post_status: JSON.stringify(post_status),
+      post_type: selectedPostType,
+      taxonomy: selectedTaxonomy !== null && selectedTaxonomy !== void 0 ? selectedTaxonomy : null,
+      taxonomy_term: selectedTerm !== null && selectedTerm !== void 0 ? selectedTerm : null,
+      author: selectedAuthor !== null && selectedAuthor !== void 0 ? selectedAuthor : null,
+      import_cm_tags_as: importCampaignTagAs !== null && importCampaignTagAs !== void 0 ? importCampaignTagAs : null,
+      import_option: importOption !== null && importOption !== void 0 ? importOption : null,
+      schedule_settings: JSON.stringify(schedule_settings),
+      audience: contentType,
+      include_as_connection: includeAsConnection
+    };
+    try {
+      setState(prevState => ({
+        ...prevState,
+        isFormDisabled: true,
+        disableInput: true
+      }));
+      const response = await apiFetch({
+        path: 'itfb/v1/add-scheduled-import',
+        method: 'POST',
+        data
+      });
+      const {
+        message
+      } = response;
+      setState(prevState => ({
+        ...prevState,
+        errors: {
+          ...prevState.errors,
+          requestError: ''
+        },
+        disableInput: false
+      }));
+      if (response.data) {
+        react_toastify__WEBPACK_IMPORTED_MODULE_0__.toast.error(message);
+      } else {
+        onClose();
+        handleRefreshScheduleData();
+        react_toastify__WEBPACK_IMPORTED_MODULE_0__.toast.success(message);
+      }
+    } catch (error) {
+      const {
+        message
+      } = error;
+      setState(prevState => ({
+        ...prevState,
+        errors: {
+          ...prevState.errors,
+          requestError: message
+        },
+        isFormDisabled: false,
+        disableInput: false
+      }));
+      react_toastify__WEBPACK_IMPORTED_MODULE_0__.toast.error(message);
+    }
+  }
+  return {
+    getDefaultOptions,
+    handleInputChange,
+    handleBlur,
+    startImportHandler
+  };
+}
+
+/***/ }),
+
+/***/ "./lib/components/add-new-schedule-form/add-new-schedule-form.js":
+/*!***********************************************************************!*\
+  !*** ./lib/components/add-new-schedule-form/add-new-schedule-form.js ***!
+  \***********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   InputContainer: () => (/* binding */ InputContainer),
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @refactco/ui-kit */ "./node_modules/@refactco/ui-kit/dist/ui-kit-expose.js");
+/* harmony import */ var _add_new_schedule_form_helper__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./add-new-schedule-form-helper */ "./lib/components/add-new-schedule-form/add-new-schedule-form-helper.js");
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
+/* harmony import */ var _backdrop__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ..//backdrop */ "./lib/components/backdrop.js");
+/* harmony import */ var _spinner__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../spinner */ "./lib/components/spinner.js");
+/* harmony import */ var _common_common_function__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../common/common-function */ "./lib/common/common-function.js");
+
+/* eslint-disable camelcase */
+/* eslint-disable no-nested-ternary */
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-unused-vars */
+const {
+  useState,
+  useEffect
+} = wp.element;
+
+
+
+
+
+
+const AddNewScheduleForm = ({
+  onClose,
+  handleRefreshScheduleData
+}) => {
+  const [state, setState] = useState({
+    apiKey: '',
+    clientId: '',
+    publishedCampaigns: true,
+    publishedWrodpressPostStatus: 'publish',
+    draftededCampaigns: true,
+    draftedWrodpressPostStatus: 'draft',
+    archivedCampaigns: true,
+    archivedWrodpressPostStatus: 'future',
+    postStatuses: [],
+    postTypes: [],
+    selectedPostType: '',
+    taxonomies: [],
+    selectedTaxonomy: '',
+    terms: [],
+    selectedTerm: '',
+    authors: [],
+    selectedAuthor: '',
+    importCampaignTagAs: 'post_tag',
+    importOption: 'new',
+    frequency: 'hourly',
+    runHour: 1,
+    runDay: 'monday',
+    runTime: '00:00',
+    serverTime: '',
+    errors: {},
+    disableInput: false,
+    isFormDisabled: true,
+    loading: true,
+    contentType: 'free',
+    includeAsConnection: true,
+    connectionName: ''
+  });
+  const {
+    apiKey,
+    publicationId,
+    publishedCampaigns,
+    publishedWrodpressPostStatus,
+    draftededCampaigns,
+    draftedWrodpressPostStatus,
+    archivedCampaigns,
+    archivedWrodpressPostStatus,
+    postStatuses,
+    postTypes,
+    selectedPostType,
+    taxonomies,
+    selectedTaxonomy,
+    terms,
+    selectedTerm,
+    authors,
+    selectedAuthor,
+    importCampaignTagAs,
+    importOption,
+    frequency,
+    runHour,
+    runDay,
+    runTime,
+    serverTime,
+    errors,
+    disableInput,
+    isFormDisabled,
+    loading,
+    contentType,
+    includeAsConnection,
+    connectionName
+  } = state;
+  const helper = (0,_add_new_schedule_form_helper__WEBPACK_IMPORTED_MODULE_2__.addNewScheduleFormHelper)(state, setState, onClose, handleRefreshScheduleData);
+  const {
+    getDefaultOptions,
+    handleInputChange,
+    startImportHandler,
+    handleBlur
+  } = helper;
+  useEffect(() => {
+    (async () => {
+      await getDefaultOptions();
+    })();
+  }, []);
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, disableInput && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_backdrop__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    show: true,
+    modalClosed: () => (0,_common_common_function__WEBPACK_IMPORTED_MODULE_5__.logger)('Fetching Campaigns ...')
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_spinner__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    label: "Fetching campaigns from Beehiiv. Please wait...",
+    marginBottom: "0px"
+  })), loading ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_spinner__WEBPACK_IMPORTED_MODULE_4__["default"], null) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("form", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Accordion, {
+    noDraggable: true,
+    transitionTimeout: 300,
+    items: [{
+      header: 'Step 1: Choose Data from Beehiiv',
+      initialEntered: true,
+      content: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Container, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+        className: "label",
+        htmlFor: "apiKey"
+      }, "API Key", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Tooltip, {
+        id: "apiKey",
+        mode: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.TooltipMode.DARK,
+        place: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.TooltipPlace.TOP,
+        content: "The API Key is a unique identifier that allows you to access your Beehiiv account data. You can find your API Key by logging into your Beehiiv account and go to Settings > Integrations > which will open up the API tab"
+      }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+        className: "question-icon"
+      }, "?"))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Input, {
+        type: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.InputType.TEXT,
+        value: apiKey,
+        onChange: value => handleInputChange(value, 'apiKey'),
+        onBlur: () => handleBlur('apiKey', apiKey),
+        required: true,
+        hasError: errors.apiKey,
+        disabled: disableInput
+      })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+        className: "label",
+        htmlFor: "publicationId"
+      }, "Publication ID", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Tooltip, {
+        id: "publicationId",
+        mode: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.TooltipMode.DARK,
+        place: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.TooltipPlace.TOP,
+        content: "The Publication ID is a unique identifier that allows you to access your Beehiiv account data. You can find your Publication ID by logging into your Beehiiv account and go to Settings > Integrations > which will open up the API tab"
+      }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+        className: "question-icon"
+      }, "?"))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Input, {
+        type: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.InputType.TEXT,
+        value: publicationId,
+        onChange: value => handleInputChange(value, 'publicationId'),
+        onBlur: () => handleBlur('publicationId', publicationId),
+        required: true,
+        hasError: errors.publicationId,
+        disabled: disableInput
+      })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+        className: "include-as-connection-container"
+      }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Checkbox, {
+        label: "Include as Connection",
+        checked: includeAsConnection,
+        onChange: value => handleInputChange(value, 'includeAsConnection'),
+        disabled: disableInput
+      }))), errors.apiKey && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ErrorContainer, null, errors.apiKey), errors.publicationId && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ErrorContainer, null, errors.publicationId)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Container, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+        className: "label",
+        htmlFor: "connectionName"
+      }, "Name of Connection"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Input, {
+        type: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.InputType.TEXT,
+        value: connectionName,
+        onChange: value => handleInputChange(value, 'connectionName'),
+        disabled: disableInput
+      })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Divider, null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Container, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+        className: "label",
+        htmlFor: "contentType"
+      }, "Content Type", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Tooltip, {
+        id: "contentType",
+        mode: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.TooltipMode.DARK,
+        place: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.TooltipPlace.TOP,
+        content: "Choose the content subscription level you'd like to import. 'Free' pertains to content available without subscription fees, while 'Premium' is exclusive paid content"
+      }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+        className: "question-icon"
+      }, "?"))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Select, {
+        onChange: value => handleInputChange(value, 'contentType'),
+        options: [{
+          label: 'Free',
+          value: 'free'
+        }, {
+          label: 'Premium',
+          value: 'premium'
+        }, {
+          label: 'All',
+          value: 'all'
+        }],
+        value: contentType,
+        required: true,
+        disabled: disableInput
+      })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null, "Select type of campaigns that you want migrated from Beehiiv", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Tooltip, {
+        id: "campaignType",
+        mode: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.TooltipMode.DARK,
+        place: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.TooltipPlace.TOP,
+        content: "Select the visibility status of the posts within. 'Published' posts are live on, 'Archived' posts are stored but not visible to the audience, and 'Draft' posts are unpublished content."
+      }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+        className: "question-icon"
+      }, "?"))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Container, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, "Campaign status on Beehiiv"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, "Post Status On Wordpress")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Checkbox, {
+        label: "Published Campaigns",
+        checked: publishedCampaigns,
+        onChange: value => handleInputChange(value, 'publishedCampaigns'),
+        disabled: disableInput
+      }), publishedCampaigns && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Select, {
+        value: publishedWrodpressPostStatus,
+        options: postStatuses,
+        onChange: value => handleInputChange(value, 'publishedWrodpressPostStatus'),
+        disabled: disableInput
+      })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Checkbox, {
+        label: "Draft Campaigns",
+        checked: draftededCampaigns,
+        onChange: value => handleInputChange(value, 'draftededCampaigns'),
+        disabled: disableInput
+      }), draftededCampaigns && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Select, {
+        value: draftedWrodpressPostStatus,
+        options: postStatuses,
+        onChange: value => handleInputChange(value, 'draftedWrodpressPostStatus'),
+        disabled: disableInput
+      })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Checkbox, {
+        label: "Archived Campaigns",
+        checked: archivedCampaigns,
+        onChange: value => handleInputChange(value, 'archivedCampaigns'),
+        disabled: disableInput
+      }), archivedCampaigns && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Select, {
+        value: archivedWrodpressPostStatus,
+        options: postStatuses,
+        onChange: value => handleInputChange(value, 'archivedWrodpressPostStatus'),
+        disabled: disableInput
+      })), errors.campaignStatus && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ErrorContainer, null, errors.campaignStatus)))
+    }, {
+      header: 'Step 2: Insert Data to WordPress',
+      content: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Container, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+        className: "label",
+        htmlFor: "postType"
+      }, "Select Post Type", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Tooltip, {
+        id: "postType",
+        mode: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.TooltipMode.DARK,
+        place: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.TooltipPlace.TOP,
+        content: "Define how you'd like the imported content to be categorized within your WordPress site. 'Post Type' determines the format of your content, such as a blog post, page, or custom post type."
+      }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+        className: "question-icon"
+      }, "?"))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Select, {
+        options: postTypes.map(({
+          post_type
+        }) => ({
+          label: post_type.charAt(0).toUpperCase() + post_type.slice(1),
+          // Capitalize the first letter
+          value: post_type
+        })),
+        value: selectedPostType,
+        onChange: value => handleInputChange(value, 'selectedPostType'),
+        required: true,
+        disabled: disableInput
+      })), taxonomies && taxonomies.length !== 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+        className: "label",
+        htmlFor: "taxonomy"
+      }, "Select Taxonomy", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Tooltip, {
+        id: "taxonomy",
+        mode: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.TooltipMode.DARK,
+        place: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.TooltipPlace.TOP,
+        content: "'Taxonomy' allows you to classify your content into categories and tags for easy searching and organization."
+      }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+        className: "question-icon"
+      }, "?"))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Select, {
+        options: taxonomies.map(({
+          taxonomy_name,
+          taxonomy_slug
+        }) => ({
+          label: taxonomy_name !== null && taxonomy_name !== void 0 ? taxonomy_name : '',
+          value: taxonomy_slug !== null && taxonomy_slug !== void 0 ? taxonomy_slug : ''
+        })),
+        value: selectedTaxonomy,
+        onChange: value => handleInputChange(value, 'selectedTaxonomy'),
+        disabled: disableInput
+      })), terms && terms.length !== 0 && taxonomies && taxonomies.length !== 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+        className: "label",
+        htmlFor: "term"
+      }, "Select Term", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Tooltip, {
+        id: "term",
+        mode: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.TooltipMode.DARK,
+        place: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.TooltipPlace.TOP,
+        content: "'Term' refers to the specific category or tag that you'd like to assign to your imported content."
+      }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+        className: "question-icon"
+      }, "?"))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Select, {
+        options: terms.map(({
+          term_id,
+          term_name
+        }) => ({
+          label: term_name !== null && term_name !== void 0 ? term_name : '',
+          value: term_id !== null && term_id !== void 0 ? term_id : ''
+        })),
+        value: selectedTerm,
+        onChange: value => handleInputChange(value, 'selectedTerm'),
+        disabled: disableInput
+      }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Divider, null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, authors && authors.length !== 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+        className: "label",
+        htmlFor: "author"
+      }, "Select Author", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Tooltip, {
+        id: "author",
+        mode: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.TooltipMode.DARK,
+        place: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.TooltipPlace.TOP,
+        content: "Choose a WordPress user to be designated as the author of the imported content. This user will be credited for the posts and will have edit rights over them."
+      }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+        className: "question-icon"
+      }, "?"))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Select, {
+        options: authors.map(({
+          display_name,
+          id
+        }) => ({
+          label: display_name !== null && display_name !== void 0 ? display_name : '',
+          value: id !== null && id !== void 0 ? id : ''
+        })),
+        value: selectedAuthor,
+        onChange: value => handleInputChange(value, 'selectedAuthor'),
+        required: true,
+        disabled: disableInput
+      })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+        className: "label",
+        htmlFor: "importCampaignTagsAs"
+      }, "Import campaign tags as", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Tooltip, {
+        id: "importCampaignTagsAs",
+        mode: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.TooltipMode.DARK,
+        place: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.TooltipPlace.TOP,
+        content: "Tags help organize and categorize your content. This setting allows you to pull tags associated with your content and assign them to specific taxonomies and terms within WordPress."
+      }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+        className: "question-icon"
+      }, "?"))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Select, {
+        options: [{
+          label: 'Post Tag',
+          value: 'post_tag'
+        }, {
+          label: 'Category',
+          value: 'category'
+        }],
+        value: importCampaignTagAs,
+        onChange: value => handleInputChange(value, 'importCampaignTagAs'),
+        required: true,
+        disabled: disableInput
+      })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+        className: "label",
+        htmlFor: "importOption"
+      }, "Import Option", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Tooltip, {
+        id: "importOption",
+        mode: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.TooltipMode.DARK,
+        place: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.TooltipPlace.TOP,
+        content: "Select how you'd like to handle the incoming content. 'Import new items' will only add new content, 'Update existing items' will overwrite existing content with updates from, and 'Do both' will import new items while updating any matching existing content."
+      }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+        className: "question-icon"
+      }, "?"))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Select, {
+        onChange: value => handleInputChange(value, 'importOption'),
+        options: [{
+          label: 'New',
+          value: 'new'
+        }, {
+          label: 'Update',
+          value: 'update'
+        }, {
+          label: 'Both',
+          value: 'both'
+        }],
+        value: importOption,
+        required: true,
+        disabled: disableInput
+      })))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Divider, null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Container, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Select, {
+        label: "Frequency",
+        options: [{
+          label: 'Hourly',
+          value: 'hourly'
+        }, {
+          label: 'Daily',
+          value: 'daily'
+        }, {
+          label: 'Weekly',
+          value: 'weekly'
+        }],
+        value: frequency,
+        onChange: value => handleInputChange(value, 'frequency'),
+        disabled: disableInput
+      }), frequency === 'hourly' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Input, {
+        type: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.InputType.NUMBER,
+        label: "Defines the hour",
+        help: "Enter the desired time intervals in hours and set the frequency of auto imports from your to your WordPress site.",
+        placeholder: "1-24",
+        min: "1",
+        max: "24",
+        value: runHour,
+        onChange: value => handleInputChange(value, 'runHour'),
+        onBlur: () => handleBlur('runHour', runHour),
+        hasError: errors.runHour,
+        disabled: disableInput
+      })), frequency === 'daily' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Input, {
+        type: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.InputType.TEXT,
+        label: "Specifies the time",
+        help: `Important: The time refers to your server current time, which is not necessarily in your personal timezone. Current Server Time :  ${serverTime})`,
+        placeholder: "Use \"HH:mm\" (e.g., \"02:00\")",
+        value: runTime,
+        onChange: value => handleInputChange(value, 'runTime'),
+        onBlur: () => handleBlur('runTime', runTime),
+        hasError: errors.runTime,
+        disabled: disableInput
+      })), frequency === 'weekly' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Select, {
+        label: "Specifies the days",
+        options: [{
+          label: 'Monday',
+          value: 'monday'
+        }, {
+          label: 'Tuesday',
+          value: 'tuesday'
+        }, {
+          label: 'Wednesday',
+          value: 'wednesday'
+        }, {
+          label: 'Thursday',
+          value: 'thursday'
+        }, {
+          label: 'Friday',
+          value: 'friday'
+        }, {
+          label: 'Saturday ',
+          value: 'saturday '
+        }, {
+          label: 'Sunday ',
+          value: 'sunday '
+        }],
+        value: runDay,
+        onChange: value => handleInputChange(value, 'runDay'),
+        disabled: disableInput
+      }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Input, {
+        type: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.InputType.TEXT,
+        label: "Specifies the time",
+        help: `Important: The time refers to your server current time, which is not necessarily in your personal timezone. Current Server Time :  ${serverTime}`,
+        placeholder: "Use \"HH:mm\" (e.g., \"02:00\")",
+        value: runTime,
+        onChange: value => handleInputChange(value, 'runTime'),
+        onBlur: () => handleBlur('runTime', runTime),
+        hasError: errors.runTime,
+        disabled: disableInput
+      }))), errors.runHour && frequency === 'hourly' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ErrorContainer, null, errors.runHour), errors.runTime && frequency !== 'hourly' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ErrorContainer, null, errors.runTime)))
+    }]
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    style: {
+      display: 'flex',
+      gap: '4px',
+      marginTop: '20px'
+    }
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Button, {
+    type: "submit",
+    onClick: startImportHandler,
+    disabled: isFormDisabled
+  }, "Start Import")))));
+};
+const Container = styled_components__WEBPACK_IMPORTED_MODULE_6__.styled.div`
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+`;
+const InputContainer = styled_components__WEBPACK_IMPORTED_MODULE_6__.styled.div`
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	padding-bottom: ${({
+  paddingBottom
+}) => paddingBottom || '1rem'};
+	gap: ${({
+  gap
+}) => gap || '1rem'};
+	> * {
+		flex: 1;
+	}
+	@media ( max-width: 782px ) {
+		flex-direction: column;
+	}
+`;
+const Divider = styled_components__WEBPACK_IMPORTED_MODULE_6__.styled.div`
+	width: 100%;
+	height: 1px;
+	margin-bottom: 1rem;
+	background: #d7dbdb;
+`;
+const ErrorContainer = styled_components__WEBPACK_IMPORTED_MODULE_6__.styled.div`
+	color: red;
+`;
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (AddNewScheduleForm);
+
+/***/ }),
+
+/***/ "./lib/components/add-new-schedule-modal.js":
+/*!**************************************************!*\
+  !*** ./lib/components/add-new-schedule-modal.js ***!
+  \**************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @refactco/ui-kit */ "./node_modules/@refactco/ui-kit/dist/ui-kit-expose.js");
+/* harmony import */ var _add_new_schedule_form_add_new_schedule_form__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./add-new-schedule-form/add-new-schedule-form */ "./lib/components/add-new-schedule-form/add-new-schedule-form.js");
+
+
+
+
+const AddNewScheduleModal = ({
+  onClose,
+  handleRefreshScheduleData
+}) => {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Modal, {
+    onRequestClose: onClose,
+    size: "fill"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_2__.Section, {
+    headerProps: {
+      title: 'Import Campaign Data',
+      description: 'Manually import content from Beehiiv to your WordPress site.'
+    }
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_add_new_schedule_form_add_new_schedule_form__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    onClose: onClose,
+    handleRefreshScheduleData: handleRefreshScheduleData
+  })));
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (AddNewScheduleModal);
+
+/***/ }),
+
 /***/ "./lib/components/backdrop.js":
 /*!************************************!*\
   !*** ./lib/components/backdrop.js ***!
@@ -11457,8 +12303,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
 /* harmony import */ var _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @refactco/ui-kit */ "./node_modules/@refactco/ui-kit/dist/ui-kit-expose.js");
+/* harmony import */ var _add_button__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./add-button */ "./lib/components/add-button.js");
+
 
 
 
@@ -11468,45 +12316,41 @@ const CustomSection = ({
   showButton,
   buttonText,
   buttonIcon,
-  buttonPosition = 'left',
+  iconPosition = 'left',
   buttonColor = _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.ButtonColor.GREEN,
   onClick
 }) => {
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(StyledSection, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(StyledH2, null, title), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(StyledParagraph, null, " ", description)), showButton ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Button, {
-    color: buttonColor,
-    icon: buttonIcon ? buttonIcon : null,
-    iconPosition: "left",
-    style: {
-      display: 'flex',
-      alignItems: 'center'
-    },
-    onClick: onClick
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(StyledSection, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(StyledH2, null, title), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(StyledParagraph, null, " ", description)), showButton ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_add_button__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    icon: buttonIcon,
+    onClick: onClick,
+    iconPosition: iconPosition,
+    color: buttonColor
   }, buttonText) : null);
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (CustomSection);
-const StyledSection = styled_components__WEBPACK_IMPORTED_MODULE_2__.styled.div`
-    background-color: #fff;
-    padding: 32px;
-    border-radius: 4px;
+const StyledSection = styled_components__WEBPACK_IMPORTED_MODULE_3__.styled.div`
+	background-color: #fff;
+	padding: 32px;
+	border-radius: 4px;
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
 	align-items: center;
-    border-bottom: 1px solid #d7dbdb;
+	border-bottom: 1px solid #d7dbdb;
 `;
-const StyledH2 = styled_components__WEBPACK_IMPORTED_MODULE_2__.styled.h2`
-    color: #002729;
-    font-size: 22px;
-    font-weight: 600;
-    line-height: 28px;
-    margin: 0;
+const StyledH2 = styled_components__WEBPACK_IMPORTED_MODULE_3__.styled.h2`
+	color: #002729;
+	font-size: 22px;
+	font-weight: 600;
+	line-height: 28px;
+	margin: 0;
 `;
-const StyledParagraph = styled_components__WEBPACK_IMPORTED_MODULE_2__.styled.p`
+const StyledParagraph = styled_components__WEBPACK_IMPORTED_MODULE_3__.styled.p`
 	color: #798686;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 28px;
-    margin: 4px 0 0 0;
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 28px;
+	margin: 4px 0 0 0;
 `;
 
 /***/ }),
@@ -11540,7 +12384,7 @@ const DeleteScheduleModal = ({
 }) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_modal__WEBPACK_IMPORTED_MODULE_1__["default"], {
   show: show,
   modalClosed: onClose
-}, selectedRowInfo && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null, "Are you sure you want to delete schedule with id ", selectedRowInfo.id, "?"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ButtonContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_2__.Button, {
+}, selectedRowInfo && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null, "Are you sure you want to delete schedule with id", ' ', selectedRowInfo.id, "?"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ButtonContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_2__.Button, {
   color: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_2__.ButtonColor.RED,
   disabled: loadingDeleteAction,
   onClick: deleteScheduleHandler
@@ -11549,10 +12393,10 @@ const DeleteScheduleModal = ({
   disabled: loadingDeleteAction
 }, "Cancel"))));
 const ButtonContainer = styled_components__WEBPACK_IMPORTED_MODULE_3__.styled.div`
-display: flex;
-justify-content: flex-start;
-margin-top: 20px;
-gap: 1rem;
+	display: flex;
+	justify-content: flex-start;
+	margin-top: 20px;
+	gap: 1rem;
 `;
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (DeleteScheduleModal);
 
@@ -11622,6 +12466,10 @@ const Header = () => {
   };
   useEffect(() => {
     const path = location.pathname;
+    if (path.includes('/import-campaigns')) {
+      const tabPanelItems = document.querySelectorAll('.components-tab-panel__tabs-item');
+      console.log('Tab Panel Items:', tabPanelItems);
+    }
     const index = items.findIndex(item => {
       if (item.item === 'settings' && path === '/') return true;
       return path.includes(item.item);
@@ -11711,6 +12559,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _modal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modal */ "./lib/components/modal.js");
 
+/* eslint-disable react/no-unescaped-entities   */
 
 const InfoModal = ({
   show,
@@ -11720,7 +12569,7 @@ const InfoModal = ({
 }) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_modal__WEBPACK_IMPORTED_MODULE_1__["default"], {
   show: show,
   modalClosed: onClose
-}, selectedRowInfo && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null, "Schedule Information"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, "Schedule Id:"), " ", selectedRowInfo.id, " ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, "Publication Id:"), ' ', selectedRowInfo.params[0].credentials.publication_id, ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, "Content Type:"), ' ', selectedRowInfo.params[0].audience, " ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "Campaign tags are imported as", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, selectedRowInfo.params[0].import_cm_tags_as), ' ', ", with the import option set to", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, selectedRowInfo.params[0].import_option), ".", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "The post type specified is", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, selectedRowInfo.params[0].post_type), ".", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "This schedule recurs", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, getRecurrenceText(selectedRowInfo.params[0].schedule_settings)), ".", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), ' '), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "The taxonomy used is", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, selectedRowInfo.params[0].taxonomy), ".", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "Campaign status on Beehiiv is mapped to the post status on WordPress as follows:", ' ', selectedRowInfo.params[0].post_status.confirmed && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, "'Confirmed'"), " corresponds to", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, selectedRowInfo.params[0].post_status.confirmed)), selectedRowInfo.params[0].post_status.draft && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, selectedRowInfo.params[0].post_status.confirmed ? ',' : '', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, "'Draft'"), " corresponds to", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, selectedRowInfo.params[0].post_status.draft)), selectedRowInfo.params[0].post_status.archived && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, selectedRowInfo.params[0].post_status.draft || selectedRowInfo.params[0].post_status.confirmed ? ', and ' : '', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, "'Archived'"), " corresponds to", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, selectedRowInfo.params[0].post_status.archived)), ".")));
+}, selectedRowInfo && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null, "Schedule Information"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, "Schedule Id:"), " ", selectedRowInfo.id, " ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, "Publication Id:"), ' ', selectedRowInfo.params[0].credentials.publication_id, ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, "Content Type:"), ' ', selectedRowInfo.params[0].audience, " ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "Campaign tags are imported as", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, selectedRowInfo.params[0].import_cm_tags_as), " , with the import option set to", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, selectedRowInfo.params[0].import_option), ".", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "The post type specified is", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, selectedRowInfo.params[0].post_type), ". ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "This schedule recurs", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, getRecurrenceText(selectedRowInfo.params[0].schedule_settings)), ".", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), ' '), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "The taxonomy used is", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, selectedRowInfo.params[0].taxonomy), ".", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "Campaign status on Beehiiv is mapped to the post status on WordPress as follows:", ' ', selectedRowInfo.params[0].post_status.confirmed && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, "'Confirmed'"), " corresponds to", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, selectedRowInfo.params[0].post_status.confirmed)), selectedRowInfo.params[0].post_status.draft && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, selectedRowInfo.params[0].post_status.confirmed ? ',' : '', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, "'Draft'"), " corresponds to", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, selectedRowInfo.params[0].post_status.draft)), selectedRowInfo.params[0].post_status.archived && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, selectedRowInfo.params[0].post_status.draft || selectedRowInfo.params[0].post_status.confirmed ? ', and ' : '', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, "'Archived'"), " corresponds to", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, selectedRowInfo.params[0].post_status.archived)), ".")));
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (InfoModal);
 
 /***/ }),
@@ -11809,6 +12658,86 @@ const ModalContainer = styled_components__WEBPACK_IMPORTED_MODULE_2__["default"]
 	}
 `;
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,react__WEBPACK_IMPORTED_MODULE_0__.memo)(Modal));
+
+/***/ }),
+
+/***/ "./lib/components/schedule-not-found.js":
+/*!**********************************************!*\
+  !*** ./lib/components/schedule-not-found.js ***!
+  \**********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
+/* harmony import */ var _add_button__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./add-button */ "./lib/components/add-button.js");
+/* harmony import */ var _add_new_schedule_modal__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./add-new-schedule-modal */ "./lib/components/add-new-schedule-modal.js");
+
+
+
+const {
+  useState
+} = wp.element;
+
+const ScheduleNotFound = ({
+  handleRefreshScheduleData
+}) => {
+  const [showAddNewScheduleModal, setShowAddNewScheduleModal] = useState(false);
+  const closeAddNewScheduleModalHandler = () => {
+    setShowAddNewScheduleModal(false);
+  };
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(StyledContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(StyledWrapper, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
+    xmlns: "http://www.w3.org/2000/svg",
+    width: "65",
+    height: "64",
+    viewBox: "0 0 65 64",
+    fill: "none"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    d: "M51.0876 7.99984H48.4209V2.6665H43.0876V7.99984H21.7542V2.6665H16.4209V7.99984H13.7542C10.8209 7.99984 8.4209 10.3998 8.4209 13.3332V50.6665C8.4209 53.5998 10.8209 55.9998 13.7542 55.9998H24.4209V50.6665H13.7542V23.9998H51.0876V50.6665H40.4209V55.9998H51.0876C54.0209 55.9998 56.4209 53.5998 56.4209 50.6665V13.3332C56.4209 10.3998 54.0209 7.99984 51.0876 7.99984ZM13.7542 18.6665V13.3332H51.0876V18.6665H13.7542ZM32.4209 31.9998L21.7542 42.6665H29.7542V58.6665H35.0876V42.6665H43.0876L32.4209 31.9998Z",
+    fill: "#D7DBDB"
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", null, "No Manual Schedule Found/Available.")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_add_button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    icon: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
+      xmlns: "http://www.w3.org/2000/svg",
+      width: "24",
+      height: "24",
+      viewBox: "0 0 24 24",
+      fill: "none"
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+      d: "M19 11.5V12.5C19 12.7761 18.7761 13 18.5 13H13V18.5C13 18.7761 12.7761 19 12.5 19H11.5C11.2239 19 11 18.7761 11 18.5V13H5.5C5.22386 13 5 12.7761 5 12.5V11.5C5 11.2239 5.22386 11 5.5 11H11V5.5C11 5.22386 11.2239 5 11.5 5H12.5C12.7761 5 13 5.22386 13 5.5V11H18.5C18.7761 11 19 11.2239 19 11.5Z",
+      fill: "white"
+    })),
+    onClick: () => {
+      setShowAddNewScheduleModal(true);
+    }
+  }, "Add a New Schedule Import"), showAddNewScheduleModal ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_add_new_schedule_modal__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    onClose: closeAddNewScheduleModalHandler,
+    handleRefreshScheduleData: handleRefreshScheduleData
+  }) : null);
+};
+const StyledContainer = styled_components__WEBPACK_IMPORTED_MODULE_3__.styled.div`
+	background-color: #fff;
+	width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    border: 1px solid var(--Text-Gains-Boro, #D7DBDB);
+    gap: 20px;
+    min-height: 307px;
+    flex-direction: column;
+`;
+const StyledWrapper = styled_components__WEBPACK_IMPORTED_MODULE_3__.styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+`;
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ScheduleNotFound);
 
 /***/ }),
 
@@ -12865,22 +13794,26 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
 /* harmony import */ var _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @refactco/ui-kit */ "./node_modules/@refactco/ui-kit/dist/ui-kit-expose.js");
 /* harmony import */ var _components_spinner__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../components/spinner */ "./lib/components/spinner.js");
 /* harmony import */ var _scheduleImportHelper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./scheduleImportHelper */ "./lib/container/scheduleImport/scheduleImportHelper.js");
 /* harmony import */ var _components_custom_section__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../components/custom-section */ "./lib/components/custom-section.js");
 /* harmony import */ var _components_info_modal__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../components/info-modal */ "./lib/components/info-modal.js");
 /* harmony import */ var _components_delete_schedule_modal__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../components/delete-schedule-modal */ "./lib/components/delete-schedule-modal.js");
+/* harmony import */ var _components_schedule_not_found__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../components/schedule-not-found */ "./lib/components/schedule-not-found.js");
+/* harmony import */ var _components_add_new_schedule_modal__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../components/add-new-schedule-modal */ "./lib/components/add-new-schedule-modal.js");
 
 /* eslint-disable react/no-unescaped-entities   */
 /* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable  no-nested-ternary */
 
 
 const {
   useState,
   useEffect
 } = wp.element;
+
 
 
 
@@ -12895,15 +13828,33 @@ const ScheduledImport = () => {
     selectedRowInfo: null,
     showMoreInfoModal: false,
     showDeleteScheduleModal: false,
-    loadingDeleteAction: false
+    loadingDeleteAction: false,
+    showAddNewScheduleModal: false,
+    loadingDeleteAction: false,
+    refreshScheduleData: false
   });
   const {
     loadingScheduledImports,
     rowData,
     selectedRowInfo,
     showMoreInfoModal,
-    showDeleteScheduleModal
+    showDeleteScheduleModal,
+    showAddNewScheduleModal,
+    loadingDeleteAction,
+    refreshScheduleData
   } = state;
+  const closeAddNewScheduleModalHandler = () => {
+    setState({
+      ...state,
+      showAddNewScheduleModal: false
+    });
+  };
+  const handleRefreshScheduleData = () => {
+    setState(prevState => ({
+      ...prevState,
+      refreshScheduleData: !prevState.refreshScheduleData
+    }));
+  };
   const helper = (0,_scheduleImportHelper__WEBPACK_IMPORTED_MODULE_3__.scheduleImportHelper)(state, setState);
   const {
     getScheduledImports,
@@ -12912,7 +13863,6 @@ const ScheduledImport = () => {
     getRecurrenceText,
     showDeleteScheduleModalHandler,
     deleteScheduleModalCloseHandler,
-    loadingDeleteAction,
     deleteScheduleHandler
   } = helper;
   const actions = [{
@@ -12932,13 +13882,12 @@ const ScheduledImport = () => {
     (async () => {
       await getScheduledImports();
     })();
-  }, []);
+  }, [refreshScheduleData]);
   const headers = ['Schedule Id', 'Recurrency ', 'Publication Id'];
-  console.log('rowData', rowData.length);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_custom_section__WEBPACK_IMPORTED_MODULE_4__["default"], {
     title: "Scheduled Imports",
     description: "Schedule your content imports from Beehiiv to your WordPress site.",
-    showButton: true,
+    showButton: rowData.length > 0 ? true : false,
     buttonText: "Add a Schedule Import",
     buttonIcon: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
       xmlns: "http://www.w3.org/2000/svg",
@@ -12950,17 +13899,20 @@ const ScheduledImport = () => {
       d: "M19 11.5V12.5C19 12.7761 18.7761 13 18.5 13H13V18.5C13 18.7761 12.7761 19 12.5 19H11.5C11.2239 19 11 18.7761 11 18.5V13H5.5C5.22386 13 5 12.7761 5 12.5V11.5C5 11.2239 5.22386 11 5.5 11H11V5.5C11 5.22386 11.2239 5 11.5 5H12.5C12.7761 5 13 5.22386 13 5.5V11H18.5C18.7761 11 19 11.2239 19 11.5Z",
       fill: "white"
     })),
-    buttonPosition: "left",
-    buttonColor: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.ButtonColor.GREEN,
     onClick: () => {
-      console.log('Add a Schedule Import');
+      setState({
+        ...state,
+        showAddNewScheduleModal: true
+      });
     }
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(StyledWrapper, null, loadingScheduledImports ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_spinner__WEBPACK_IMPORTED_MODULE_2__["default"], null) : rowData.length > 0 ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Table, {
     headers: headers,
     actions: actions,
     dataRows: rowData,
     noDraggable: true
-  }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "No scheduled imports found.")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_info_modal__WEBPACK_IMPORTED_MODULE_5__["default"], {
+  }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_schedule_not_found__WEBPACK_IMPORTED_MODULE_7__["default"], {
+    handleRefreshScheduleData: handleRefreshScheduleData
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_info_modal__WEBPACK_IMPORTED_MODULE_5__["default"], {
     show: showMoreInfoModal,
     selectedRowInfo: selectedRowInfo,
     onClose: moreInfoModalCloseHandler,
@@ -12971,11 +13923,16 @@ const ScheduledImport = () => {
     onClose: deleteScheduleModalCloseHandler,
     loadingDeleteAction: loadingDeleteAction,
     deleteScheduleHandler: deleteScheduleHandler
-  }));
+  }), showAddNewScheduleModal ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_add_new_schedule_modal__WEBPACK_IMPORTED_MODULE_8__["default"], {
+    onClose: closeAddNewScheduleModalHandler,
+    handleRefreshScheduleData: handleRefreshScheduleData
+  }) : null);
 };
-const StyledWrapper = styled_components__WEBPACK_IMPORTED_MODULE_7__.styled.div`
-    background-color: #fff;
-    padding: 32px;
+const StyledWrapper = styled_components__WEBPACK_IMPORTED_MODULE_9__.styled.div`
+	background-color: #fff;
+	padding: 32px;
+	position: relative;
+	min-height: 307px;
 `;
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ScheduledImport);
 
@@ -13359,10 +14316,10 @@ const ImportCampaigns = () => {
 
 // Styled component for the tab panel container
 const TabPanelContainer = styled_components__WEBPACK_IMPORTED_MODULE_4__["default"].div`
-    background-color: white; // Set background color to white
-    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.08);
-    padding: 20px 0px 0px 20px;
-    box-sizing: border-box;
+	background-color: white; // Set background color to white
+	box-shadow: 0px 2px 4px 0px rgba( 0, 0, 0, 0.08 );
+	padding: 20px 0px 0px 20px;
+	box-sizing: border-box;
 `;
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ImportCampaigns);
 
