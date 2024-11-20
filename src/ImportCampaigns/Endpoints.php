@@ -235,6 +235,8 @@ class Endpoints {
 			'author'            => sanitize_text_field( $request->get_param( 'author' ) ),
 			'import_cm_tags_as' => sanitize_text_field( $request->get_param( 'import_cm_tags_as' ) ),
 			'import_option'     => sanitize_text_field( $request->get_param( 'import_option' ) ),
+			'include_as_connection' => sanitize_text_field( $request->get_param( 'include_as_connection' ) ),
+			'connection_name'   => sanitize_text_field( $request->get_param( 'connection_name' ) ),
 		);
 
 		// Validate all parameters.
@@ -244,6 +246,39 @@ class Endpoints {
 			return $validation;
 		}
 
+		//add connection if include_as_connection is set to true.
+		if ( 'true' === $params['include_as_connection'] ) {
+			$api_key        = $params['credentials']['api_key'];
+			$publication_id = $params['credentials']['publication_id'];
+			$connection_name = $params['connection_name'];
+
+			// Normalize connection name.
+			$connection_name = strtolower( trim( str_replace( ' ', '_', $connection_name ) ) );
+
+			// Check if the connection name already exists.
+			$all_connections = Helper::get_all_beehiiv_connections();
+
+			if ( ! array_key_exists( $connection_name, $all_connections ) ) {
+				$connection_result = Helper::add_beehiiv_connection( $connection_name, $api_key, $publication_id );
+				if ( is_wp_error( $connection_result ) ) {
+					return $connection_result;
+				} else {
+					$output['connection_name'] = $connection_name;
+				}
+			}
+		}
+
+		// Schedule the import if the schedule is enabled.
+		if ( 'on' === $params['schedule_settings']['enabled'] ) {
+			$schedule_import_result = Helper::schedule_import_campaigns( $params );
+			if ( is_wp_error( $schedule_import_result ) ) {
+				return $schedule_import_result;
+			} else {
+				$output['schedule_id'] = $schedule_import_result;
+			}
+		}
+
+		// Fetch and push campaigns to the import queue.
 		$this->total_queued_campaigns_result = ( new ImportCampaigns( $params, $this->import_campaigns_process, 'manual' ) )->fetch_and_push_campaigns_to_import_queue();
 
 		if ( is_wp_error( $this->total_queued_campaigns_result ) ) {
@@ -255,15 +290,6 @@ class Endpoints {
 			'total_queued_campaigns' => $this->total_queued_campaigns_result['total_queued_campaigns'],
 			'group_name'             => $this->total_queued_campaigns_result['group_name'],
 		);
-
-		if ( 'on' === $params['schedule_settings']['enabled'] ) {
-			$schedule_import_result = Helper::schedule_import_campaigns( $params );
-			if ( is_wp_error( $schedule_import_result ) ) {
-				$output['schedule_id'] = $schedule_import_result->get_error_message();
-			} else {
-				$output['schedule_id'] = $schedule_import_result;
-			}
-		}
 
 		return rest_ensure_response( $output );
 	}
@@ -560,12 +586,34 @@ class Endpoints {
 			'author'            => sanitize_text_field( $request->get_param( 'author' ) ),
 			'import_cm_tags_as' => sanitize_text_field( $request->get_param( 'import_cm_tags_as' ) ),
 			'import_option'     => sanitize_text_field( $request->get_param( 'import_option' ) ),
+			'include_as_connection' => sanitize_text_field( $request->get_param( 'include_as_connection' ) ),
+			'connection_name'   => sanitize_text_field( $request->get_param( 'connection_name' ) ),
 		);
 
 		// Validate all parameters.
 		$validation = Validator::validate_all_parameters( $params );
 		if ( is_wp_error( $validation ) ) {
 			return $validation;
+		}
+
+		//add connection if include_as_connection is set to true.
+		if ( 'true' === $params['include_as_connection'] ) {
+			$api_key        = $params['credentials']['api_key'];
+			$publication_id = $params['credentials']['publication_id'];
+			$connection_name = $params['connection_name'];
+
+			// Normalize connection name.
+			$connection_name = strtolower( trim( str_replace( ' ', '_', $connection_name ) ) );
+
+			// Check if the connection name already exists.
+			$all_connections = Helper::get_all_beehiiv_connections();
+
+			if ( ! array_key_exists( $connection_name, $all_connections ) ) {
+				$connection_result = Helper::add_beehiiv_connection( $connection_name, $api_key, $publication_id );
+				if ( is_wp_error( $connection_result ) ) {
+					return $connection_result;
+				}
+			}
 		}
 
 		// Schedule the import.
