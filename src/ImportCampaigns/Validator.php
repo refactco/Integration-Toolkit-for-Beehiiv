@@ -37,30 +37,32 @@ class Validator {
 	 * @return mixed True if valid, otherwise WP_Error.
 	 */
 	public static function validate_all_parameters( $params ) {
-
-		// Validate credentials.
-		$valid_credentials = self::validate_credentials( $params['credentials'] );
-		if ( is_wp_error( $valid_credentials ) ) {
-			return $valid_credentials;
-		}
-
-		//validate connection name if include_as_connection is set to true.
-		if ( isset( $params ['include_as_connection'] ) && 'true' === $params['include_as_connection'] ) {
-			if ( ! isset( $params['connection_name'] ) || empty( $params['connection_name'] ) ) {
-				return new \WP_Error( 'missing_connection_name', __( 'Connection name is required.', 'integration-toolkit-for-beehiiv' ), array( 'status' => 400 ) );
+		
+		if ( 'not_set' === $params['selected_connection'] ) {
+			// Validate credentials.
+			$valid_credentials = self::validate_credentials( $params['credentials'] );
+			if ( is_wp_error( $valid_credentials ) ) {
+				return $valid_credentials;
 			}
 
-			$connection_name = strtolower( trim( str_replace( ' ', '_', $params['connection_name'] ) ) );
+			//validate connection name if include_as_connection is set to true.
+			if ( isset( $params ['include_as_connection'] ) && 'true' === $params['include_as_connection'] ) {
+				if ( ! isset( $params['new_connection_name'] ) || empty( $params['new_connection_name'] ) ) {
+					return new \WP_Error( 'missing_connection_name', __( 'Connection name is required.', 'integration-toolkit-for-beehiiv' ), array( 'status' => 400 ) );
+				}
 
-			$all_connections = Helper::get_all_beehiiv_connections();
-			
-			if ( array_key_exists( $connection_name, $all_connections ) ) {
-				return new \WP_Error(
-					'connection_exists',
-					'Connection name is duplicated. Please choose a different name.',
-					array( 'status' => 404 )
-				);
-			} 
+				$new_connection_name = strtolower( trim( str_replace( ' ', '_', $params['new_connection_name'] ) ) );
+
+				$all_connections = Helper::get_all_beehiiv_connections();
+				
+				if ( array_key_exists( $new_connection_name, $all_connections ) ) {
+					return new \WP_Error(
+						'connection_exists',
+						'Connection name is duplicated. Please choose a different name.',
+						array( 'status' => 404 )
+					);
+				} 
+			}
 		}
 
 		// Validate basic parameters.
@@ -175,8 +177,13 @@ class Validator {
 					continue;
 				}
 
-				// Skip connection name if include_as_connection is set to false.
-				if ( 'connection_name' === $key && 'true' !== $params['include_as_connection'] ) {
+				//skip new_connection_name and include_as_connection and credentials if selected_connection is set.
+				if ( in_array( $key, array( 'new_connection_name', 'include_as_connection', 'credentials' ) ) && 'not_set' !== $params['selected_connection'] ) {
+					continue;
+				}
+
+				//skip new_connection_name if include_as_connection is not equal to not_set.
+				if ( 'new_connection_name' === $key && 'not_set' === $params['selected_connection'] && 'true' !== $params['include_as_connection'] ) {
 					continue;
 				}
 
