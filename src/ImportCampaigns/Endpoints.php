@@ -258,7 +258,6 @@ class Endpoints {
 			return $validation;
 		}
 
-
 		// Check if the selected connection is set then retrieve the connection credentials.
 		if ( 'not_set' !== $params['selected_connection'] ) {
 			$connection_name = $params['selected_connection'];
@@ -272,14 +271,14 @@ class Endpoints {
 				);
 			}
 
-			$connection = $all_connections[ $connection_name ];
+			$connection            = $all_connections[ $connection_name ];
 			$params['credentials'] = array(
 				'api_key'        => $connection['api_key'],
 				'publication_id' => $connection['publication_id'],
 			);
-		} else if ( 'true' === $params['include_as_connection'] ) {
-				$api_key        = $params['credentials']['api_key'];
-				$publication_id = $params['credentials']['publication_id'];
+		} elseif ( 'true' === $params['include_as_connection'] ) {
+				$api_key             = $params['credentials']['api_key'];
+				$publication_id      = $params['credentials']['publication_id'];
 				$new_connection_name = $params['new_connection_name'];
 
 				// Normalize connection name.
@@ -288,14 +287,14 @@ class Endpoints {
 				// Check if the connection name already exists.
 				$all_connections = Helper::get_all_beehiiv_connections();
 
-				if ( ! array_key_exists( $new_connection_name, $all_connections ) ) {
-					$connection_result = Helper::add_beehiiv_connection( $new_connection_name, $api_key, $publication_id );
-					if ( is_wp_error( $connection_result ) ) {
-						return $connection_result;
-					} else {
-						$output['connection_name'] = $new_connection_name;
-					}
+			if ( ! array_key_exists( $new_connection_name, $all_connections ) ) {
+				$connection_result = Helper::add_beehiiv_connection( $new_connection_name, $api_key, $publication_id );
+				if ( is_wp_error( $connection_result ) ) {
+					return $connection_result;
+				} else {
+					$output['connection_name'] = $new_connection_name;
 				}
+			}
 		}
 
 		// Schedule the import if the schedule is enabled.
@@ -649,15 +648,15 @@ class Endpoints {
 			'new_connection_name'   => sanitize_text_field( $request->get_param( 'new_connection_name' ) ),
 			'credentials'           => json_decode( sanitize_text_field( $request->get_param( 'credentials' ) ), true ),
 			'include_as_connection' => sanitize_text_field( $request->get_param( 'include_as_connection' ) ),
-			'audience'          => sanitize_text_field( $request->get_param( 'audience' ) ),
-			'post_status'       => json_decode( sanitize_text_field( $request->get_param( 'post_status' ) ), true ),
-			'schedule_settings' => json_decode( sanitize_text_field( $request->get_param( 'schedule_settings' ) ), true ),
-			'post_type'         => sanitize_text_field( $request->get_param( 'post_type' ) ),
-			'taxonomy'          => sanitize_text_field( $request->get_param( 'taxonomy' ) ),
-			'taxonomy_term'     => sanitize_text_field( $request->get_param( 'taxonomy_term' ) ),
-			'author'            => sanitize_text_field( $request->get_param( 'author' ) ),
-			'import_cm_tags_as' => sanitize_text_field( $request->get_param( 'import_cm_tags_as' ) ),
-			'import_option'     => sanitize_text_field( $request->get_param( 'import_option' ) ),
+			'audience'              => sanitize_text_field( $request->get_param( 'audience' ) ),
+			'post_status'           => json_decode( sanitize_text_field( $request->get_param( 'post_status' ) ), true ),
+			'schedule_settings'     => json_decode( sanitize_text_field( $request->get_param( 'schedule_settings' ) ), true ),
+			'post_type'             => sanitize_text_field( $request->get_param( 'post_type' ) ),
+			'taxonomy'              => sanitize_text_field( $request->get_param( 'taxonomy' ) ),
+			'taxonomy_term'         => sanitize_text_field( $request->get_param( 'taxonomy_term' ) ),
+			'author'                => sanitize_text_field( $request->get_param( 'author' ) ),
+			'import_cm_tags_as'     => sanitize_text_field( $request->get_param( 'import_cm_tags_as' ) ),
+			'import_option'         => sanitize_text_field( $request->get_param( 'import_option' ) ),
 		);
 
 		// Validate all parameters.
@@ -679,14 +678,14 @@ class Endpoints {
 				);
 			}
 
-			$connection = $all_connections[ $connection_name ];
+			$connection            = $all_connections[ $connection_name ];
 			$params['credentials'] = array(
 				'api_key'        => $connection['api_key'],
 				'publication_id' => $connection['publication_id'],
 			);
-		} else if ( 'true' === $params['include_as_connection'] ) {
-				$api_key        = $params['credentials']['api_key'];
-				$publication_id = $params['credentials']['publication_id'];
+		} elseif ( 'true' === $params['include_as_connection'] ) {
+				$api_key             = $params['credentials']['api_key'];
+				$publication_id      = $params['credentials']['publication_id'];
 				$new_connection_name = $params['new_connection_name'];
 
 				// Normalize connection name.
@@ -695,14 +694,14 @@ class Endpoints {
 				// Check if the connection name already exists.
 				$all_connections = Helper::get_all_beehiiv_connections();
 
-				if ( ! array_key_exists( $new_connection_name, $all_connections ) ) {
-					$connection_result = Helper::add_beehiiv_connection( $new_connection_name, $api_key, $publication_id );
-					if ( is_wp_error( $connection_result ) ) {
-						return $connection_result;
-					} else {
-						$output['connection_name'] = $new_connection_name;
-					}
+			if ( ! array_key_exists( $new_connection_name, $all_connections ) ) {
+				$connection_result = Helper::add_beehiiv_connection( $new_connection_name, $api_key, $publication_id );
+				if ( is_wp_error( $connection_result ) ) {
+					return $connection_result;
+				} else {
+					$output['connection_name'] = $new_connection_name;
 				}
+			}
 		}
 
 		// Schedule the import.
