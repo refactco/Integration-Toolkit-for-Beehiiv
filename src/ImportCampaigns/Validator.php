@@ -183,7 +183,7 @@ class Validator {
 				}
 
 				// skip new_connection_name if include_as_connection is not equal to not_set.
-				if ( 'new_connection_name' === $key && 'not_set' === $params['selected_connection'] && 'true' !== $params['include_as_connection'] ) {
+				if ( 'new_connection_name' === $key && 'not_set' === $params['selected_connection'] && true !== (bool)$params['include_as_connection'] ) {
 					continue;
 				}
 

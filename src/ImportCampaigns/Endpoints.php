@@ -276,7 +276,9 @@ class Endpoints {
 				'api_key'        => $connection['api_key'],
 				'publication_id' => $connection['publication_id'],
 			);
-		} elseif ( 'true' === $params['include_as_connection'] ) {
+
+		} else{
+			if ( true === (bool) $params['include_as_connection'] ) {
 				$api_key             = $params['credentials']['api_key'];
 				$publication_id      = $params['credentials']['publication_id'];
 				$new_connection_name = $params['new_connection_name'];
@@ -286,16 +288,30 @@ class Endpoints {
 
 				// Check if the connection name already exists.
 				$all_connections = Helper::get_all_beehiiv_connections();
+				if ( ! array_key_exists( $new_connection_name, $all_connections ) ) {
+					$connection_result = Helper::add_beehiiv_connection( $new_connection_name, $api_key, $publication_id );
 
-			if ( ! array_key_exists( $new_connection_name, $all_connections ) ) {
-				$connection_result = Helper::add_beehiiv_connection( $new_connection_name, $api_key, $publication_id );
-				if ( is_wp_error( $connection_result ) ) {
-					return $connection_result;
+					if ( is_wp_error( $connection_result ) ) {
+						return $connection_result;
+					} else {
+						$output['connection_name'] = $new_connection_name;
+					}
 				} else {
-					$output['connection_name'] = $new_connection_name;
+					return new \WP_Error(
+						'connection_exists',
+						'Connection name is duplicated. Please choose another name.',
+						array( 'status' => 404 )
+					);
 				}
+			} else {
+				return new \WP_Error(
+					'connection_not_found',
+					'included as connection is not set.',
+					array( 'status' => 404 )
+				);
 			}
 		}
+
 
 		// Schedule the import if the schedule is enabled.
 		if ( 'on' === $params['schedule_settings']['enabled'] ) {
@@ -683,7 +699,9 @@ class Endpoints {
 				'api_key'        => $connection['api_key'],
 				'publication_id' => $connection['publication_id'],
 			);
-		} elseif ( 'true' === $params['include_as_connection'] ) {
+
+		} else{
+			if ( true === (bool) $params['include_as_connection'] ) {
 				$api_key             = $params['credentials']['api_key'];
 				$publication_id      = $params['credentials']['publication_id'];
 				$new_connection_name = $params['new_connection_name'];
@@ -693,14 +711,27 @@ class Endpoints {
 
 				// Check if the connection name already exists.
 				$all_connections = Helper::get_all_beehiiv_connections();
+				if ( ! array_key_exists( $new_connection_name, $all_connections ) ) {
+					$connection_result = Helper::add_beehiiv_connection( $new_connection_name, $api_key, $publication_id );
 
-			if ( ! array_key_exists( $new_connection_name, $all_connections ) ) {
-				$connection_result = Helper::add_beehiiv_connection( $new_connection_name, $api_key, $publication_id );
-				if ( is_wp_error( $connection_result ) ) {
-					return $connection_result;
+					if ( is_wp_error( $connection_result ) ) {
+						return $connection_result;
+					} else {
+						$output['connection_name'] = $new_connection_name;
+					}
 				} else {
-					$output['connection_name'] = $new_connection_name;
+					return new \WP_Error(
+						'connection_exists',
+						'Connection name is duplicated. Please choose another name.',
+						array( 'status' => 404 )
+					);
 				}
+			} else {
+				return new \WP_Error(
+					'connection_not_found',
+					'included as connection is not set.',
+					array( 'status' => 404 )
+				);
 			}
 		}
 
