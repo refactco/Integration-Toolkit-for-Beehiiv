@@ -11566,6 +11566,24 @@ function addNewScheduleFormHelper(state, setState, onClose, handleRefreshSchedul
         if (!value) return 'Run time is required.';
         if (!/^(?:[01]\d|2[0-3]):[0-5]\d$/.test(value)) return 'Invalid time format. Use "HH:mm" (e.g., "02:00").';
         break;
+      case 'connectionName':
+        if (!value && state.includeAsConnection) return 'Connection name is required.';
+        break;
+      case 'includeAsConnection':
+        if (!value) {
+          setState(prevState => ({
+            ...prevState,
+            errors: {
+              ...prevState.errors,
+              connectionName: ''
+            },
+            isFormDisabled: false
+          }));
+        } else {
+          if (!state.connectionName) {
+            return 'Connection name is required.';
+          }
+        }
       default:
         return '';
     }
@@ -11614,87 +11632,125 @@ function addNewScheduleFormHelper(state, setState, onClose, handleRefreshSchedul
       runTime,
       runDay,
       contentType,
-      includeAsConnection
+      includeAsConnection,
+      connectionName,
+      selectedConnection
     } = state;
-    const post_status = {};
-    if (publishedCampaigns) {
-      post_status.confirmed = publishedWrodpressPostStatus;
-    }
-    if (draftededCampaigns) {
-      post_status.draft = draftedWrodpressPostStatus;
-    }
-    if (archivedCampaigns) {
-      post_status.archived = archivedWrodpressPostStatus;
-    }
-    const schedule_settings = {};
-    schedule_settings.enabled = 'on';
-    schedule_settings.frequency = frequency;
-    if (frequency === 'hourly') {
-      schedule_settings.specific_hour = runHour;
-    } else if (frequency === 'daily') {
-      schedule_settings.time = runTime;
-    } else {
-      schedule_settings.time = runTime;
-      schedule_settings.specific_day = runDay;
-    }
-    const data = {
-      credentials: JSON.stringify({
-        api_key: apiKey,
-        publication_id: publicationId
-      }),
-      post_status: JSON.stringify(post_status),
-      post_type: selectedPostType,
-      taxonomy: selectedTaxonomy !== null && selectedTaxonomy !== void 0 ? selectedTaxonomy : null,
-      taxonomy_term: selectedTerm !== null && selectedTerm !== void 0 ? selectedTerm : null,
-      author: selectedAuthor !== null && selectedAuthor !== void 0 ? selectedAuthor : null,
-      import_cm_tags_as: importCampaignTagAs !== null && importCampaignTagAs !== void 0 ? importCampaignTagAs : null,
-      import_option: importOption !== null && importOption !== void 0 ? importOption : null,
-      schedule_settings: JSON.stringify(schedule_settings),
-      audience: contentType,
-      include_as_connection: includeAsConnection
-    };
-    try {
-      setState(prevState => ({
-        ...prevState,
-        isFormDisabled: true,
-        disableInput: true
-      }));
-      const response = await apiFetch({
-        path: 'itfb/v1/add-scheduled-import',
-        method: 'POST',
-        data
-      });
-      const {
-        message
-      } = response;
+    if (state.includeAsConnection && !state.connectionName) {
       setState(prevState => ({
         ...prevState,
         errors: {
           ...prevState.errors,
-          requestError: ''
+          connectionName: 'Connection name is required'
         },
-        disableInput: false
+        isFormDisabled: true
       }));
-      if (response.data) {
-        react_toastify__WEBPACK_IMPORTED_MODULE_0__.toast.error(message);
-      } else {
-        onClose();
-        handleRefreshScheduleData();
-        react_toastify__WEBPACK_IMPORTED_MODULE_0__.toast.success(message);
+      react_toastify__WEBPACK_IMPORTED_MODULE_0__.toast.error('Connection name is required');
+      return;
+    } else {
+      const post_status = {};
+      if (publishedCampaigns) {
+        post_status.confirmed = publishedWrodpressPostStatus;
       }
+      if (draftededCampaigns) {
+        post_status.draft = draftedWrodpressPostStatus;
+      }
+      if (archivedCampaigns) {
+        post_status.archived = archivedWrodpressPostStatus;
+      }
+      const schedule_settings = {};
+      schedule_settings.enabled = 'on';
+      schedule_settings.frequency = frequency;
+      if (frequency === 'hourly') {
+        schedule_settings.specific_hour = runHour;
+      } else if (frequency === 'daily') {
+        schedule_settings.time = runTime;
+      } else {
+        schedule_settings.time = runTime;
+        schedule_settings.specific_day = runDay;
+      }
+      const data = {
+        credentials: JSON.stringify({
+          api_key: apiKey,
+          publication_id: publicationId
+        }),
+        post_status: JSON.stringify(post_status),
+        post_type: selectedPostType,
+        taxonomy: selectedTaxonomy !== null && selectedTaxonomy !== void 0 ? selectedTaxonomy : null,
+        taxonomy_term: selectedTerm !== null && selectedTerm !== void 0 ? selectedTerm : null,
+        author: selectedAuthor !== null && selectedAuthor !== void 0 ? selectedAuthor : null,
+        import_cm_tags_as: importCampaignTagAs !== null && importCampaignTagAs !== void 0 ? importCampaignTagAs : null,
+        import_option: importOption !== null && importOption !== void 0 ? importOption : null,
+        schedule_settings: JSON.stringify(schedule_settings),
+        audience: contentType,
+        include_as_connection: includeAsConnection,
+        connection_name: connectionName,
+        selected_connection: selectedConnection
+      };
+      try {
+        setState(prevState => ({
+          ...prevState,
+          isFormDisabled: true,
+          disableInput: true
+        }));
+        const response = await apiFetch({
+          path: 'itfb/v1/add-scheduled-import',
+          method: 'POST',
+          data
+        });
+        const {
+          message
+        } = response;
+        setState(prevState => ({
+          ...prevState,
+          errors: {
+            ...prevState.errors,
+            requestError: ''
+          },
+          disableInput: false
+        }));
+        if (response.data) {
+          react_toastify__WEBPACK_IMPORTED_MODULE_0__.toast.error(message);
+        } else {
+          onClose();
+          handleRefreshScheduleData();
+          react_toastify__WEBPACK_IMPORTED_MODULE_0__.toast.success(message);
+        }
+      } catch (error) {
+        console.log(error);
+        const {
+          message
+        } = error;
+        setState(prevState => ({
+          ...prevState,
+          errors: {
+            ...prevState.errors,
+            requestError: message
+          },
+          isFormDisabled: false,
+          disableInput: false
+        }));
+        react_toastify__WEBPACK_IMPORTED_MODULE_0__.toast.error(message);
+      }
+    }
+  }
+  async function getAllConnections() {
+    try {
+      const response = await apiFetch({
+        path: 'itfb/v1/get-all-connections',
+        method: 'GET'
+      });
+      const {
+        data
+      } = response;
+      setState(prevState => ({
+        ...prevState,
+        connections: data
+      }));
     } catch (error) {
       const {
         message
       } = error;
-      setState(prevState => ({
-        ...prevState,
-        errors: {
-          ...prevState.errors,
-          requestError: message
-        },
-        isFormDisabled: false,
-        disableInput: false
-      }));
       react_toastify__WEBPACK_IMPORTED_MODULE_0__.toast.error(message);
     }
   }
@@ -11702,7 +11758,8 @@ function addNewScheduleFormHelper(state, setState, onClose, handleRefreshSchedul
     getDefaultOptions,
     handleInputChange,
     handleBlur,
-    startImportHandler
+    startImportHandler,
+    getAllConnections
   };
 }
 
@@ -11778,7 +11835,8 @@ const AddNewScheduleForm = ({
     loading: true,
     contentType: 'free',
     includeAsConnection: true,
-    connectionName: ''
+    connectionName: '',
+    selectedConnection: 'not_set'
   });
   const {
     apiKey,
@@ -11811,18 +11869,21 @@ const AddNewScheduleForm = ({
     loading,
     contentType,
     includeAsConnection,
-    connectionName
+    connectionName,
+    selectedConnection
   } = state;
   const helper = (0,_add_new_schedule_form_helper__WEBPACK_IMPORTED_MODULE_2__.addNewScheduleFormHelper)(state, setState, onClose, handleRefreshScheduleData);
   const {
     getDefaultOptions,
     handleInputChange,
     startImportHandler,
-    handleBlur
+    handleBlur,
+    getAllConnections
   } = helper;
   useEffect(() => {
     (async () => {
       await getDefaultOptions();
+      await getAllConnections();
     })();
   }, []);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, disableInput && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_backdrop__WEBPACK_IMPORTED_MODULE_3__["default"], {
@@ -11831,12 +11892,15 @@ const AddNewScheduleForm = ({
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_spinner__WEBPACK_IMPORTED_MODULE_4__["default"], {
     label: "Fetching campaigns from Beehiiv. Please wait...",
     marginBottom: "0px"
-  })), loading ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_spinner__WEBPACK_IMPORTED_MODULE_4__["default"], null) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("form", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Accordion, {
+  })), loading ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_spinner__WEBPACK_IMPORTED_MODULE_4__["default"], null) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("form", {
+    onSubmit: startImportHandler
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Accordion, {
     noDraggable: true,
     transitionTimeout: 300,
     items: [{
       header: 'Step 1: Choose Data from Beehiiv',
       initialEntered: true,
+      active: true,
       content: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Container, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
         className: "label",
         htmlFor: "apiKey"
@@ -11855,7 +11919,7 @@ const AddNewScheduleForm = ({
         required: true,
         hasError: errors.apiKey,
         disabled: disableInput
-      })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+      }), errors.apiKey && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ErrorContainer, null, errors.apiKey)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
         className: "label",
         htmlFor: "publicationId"
       }, "Publication ID", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Tooltip, {
@@ -11873,22 +11937,26 @@ const AddNewScheduleForm = ({
         required: true,
         hasError: errors.publicationId,
         disabled: disableInput
-      })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      }), errors.publicationId && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ErrorContainer, null, errors.publicationId)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
         className: "include-as-connection-container"
       }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Checkbox, {
         label: "Include as Connection",
         checked: includeAsConnection,
         onChange: value => handleInputChange(value, 'includeAsConnection'),
+        onBlur: () => handleBlur('includeAsConnection', includeAsConnection),
         disabled: disableInput
-      }))), errors.apiKey && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ErrorContainer, null, errors.apiKey), errors.publicationId && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ErrorContainer, null, errors.publicationId)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Container, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+      })))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Container, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
         className: "label",
         htmlFor: "connectionName"
       }, "Name of Connection"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Input, {
         type: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.InputType.TEXT,
         value: connectionName,
         onChange: value => handleInputChange(value, 'connectionName'),
+        onBlur: () => handleBlur('connectionName', connectionName),
+        hasError: errors.connectionName,
+        required: includeAsConnection,
         disabled: disableInput
-      })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Divider, null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Container, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+      }), errors.connectionName && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ErrorContainer, null, errors.connectionName)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Divider, null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Container, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
         className: "label",
         htmlFor: "contentType"
       }, "Content Type", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Tooltip, {
@@ -11953,7 +12021,7 @@ const AddNewScheduleForm = ({
       })), errors.campaignStatus && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ErrorContainer, null, errors.campaignStatus)))
     }, {
       header: 'Step 2: Insert Data to WordPress',
-      content: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Container, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+      content: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Container, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
         className: "label",
         htmlFor: "postType"
       }, "Select Post Type", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Tooltip, {
@@ -12086,7 +12154,10 @@ const AddNewScheduleForm = ({
         value: importOption,
         required: true,
         disabled: disableInput
-      })))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Divider, null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Container, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Select, {
+      }))))
+    }, {
+      header: 'Step 3: Choose Frequency',
+      content: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Container, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Select, {
         label: "Frequency",
         options: [{
           label: 'Hourly',
@@ -12160,7 +12231,7 @@ const AddNewScheduleForm = ({
         onBlur: () => handleBlur('runTime', runTime),
         hasError: errors.runTime,
         disabled: disableInput
-      }))), errors.runHour && frequency === 'hourly' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ErrorContainer, null, errors.runHour), errors.runTime && frequency !== 'hourly' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ErrorContainer, null, errors.runTime)))
+      }))), errors.runHour && frequency === 'hourly' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ErrorContainer, null, errors.runHour), errors.runTime && frequency !== 'hourly' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ErrorContainer, null, errors.runTime))
     }]
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     style: {
@@ -12204,6 +12275,7 @@ const Divider = styled_components__WEBPACK_IMPORTED_MODULE_6__.styled.div`
 `;
 const ErrorContainer = styled_components__WEBPACK_IMPORTED_MODULE_6__.styled.div`
 	color: red;
+	margin-top: 0.5rem;
 `;
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (AddNewScheduleForm);
 
@@ -12465,16 +12537,36 @@ const Header = () => {
     setActiveItemIndex(index);
   };
   useEffect(() => {
-    const path = location.pathname;
-    if (path.includes('/import-campaigns')) {
-      const tabPanelItems = document.querySelectorAll('.components-tab-panel__tabs-item');
-      console.log('Tab Panel Items:', tabPanelItems);
+    const handleDOMContentLoaded = () => {
+      const path = location.pathname;
+      if (path.includes('/import-campaigns') || path.includes('/connections')) {
+        const tabPanelItems = document.querySelectorAll('.components-tab-panel__tabs-item');
+        tabPanelItems.forEach(tabPanelItem => {
+          if (path === '/import-campaigns/manual' && tabPanelItem.textContent.trim() === 'Manual Import') {
+            tabPanelItem.click();
+          } else if (path === '/import-campaigns/scheduled' && tabPanelItem.textContent.trim() === 'Scheduled Import') {
+            tabPanelItem.click();
+          } else if (path === '/connections' && tabPanelItem.textContent.trim() === 'Connections') {
+            tabPanelItem.click();
+          } else if (path === '/import-campaigns' && tabPanelItem.textContent.trim() === 'Manual Import') {
+            tabPanelItem.click();
+          }
+        });
+      }
+      const index = items.findIndex(item => {
+        if (item.item === 'settings' && path === '/') return true;
+        return path.includes(item.item);
+      });
+      setActiveItemIndex(index === -1 ? 0 : index);
+    };
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', handleDOMContentLoaded);
+    } else {
+      handleDOMContentLoaded();
     }
-    const index = items.findIndex(item => {
-      if (item.item === 'settings' && path === '/') return true;
-      return path.includes(item.item);
-    });
-    setActiveItemIndex(index === -1 ? 0 : index);
+    return () => {
+      document.removeEventListener('DOMContentLoaded', handleDOMContentLoaded);
+    };
   }, [location.pathname]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Header, {
     logoSource: 'Refact',
@@ -13820,6 +13912,7 @@ const {
 
 
 
+
 const ScheduledImport = () => {
   const [state, setState] = useState({
     loadingScheduledImports: true,
@@ -13883,7 +13976,7 @@ const ScheduledImport = () => {
       await getScheduledImports();
     })();
   }, [refreshScheduleData]);
-  const headers = ['Schedule Id', 'Recurrency ', 'Publication Id'];
+  const headers = ['Recurrency ', 'Publication Id', 'Next run'];
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_custom_section__WEBPACK_IMPORTED_MODULE_4__["default"], {
     title: "Scheduled Imports",
     description: "Schedule your content imports from Beehiiv to your WordPress site.",
@@ -13908,7 +14001,7 @@ const ScheduledImport = () => {
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(StyledWrapper, null, loadingScheduledImports ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_spinner__WEBPACK_IMPORTED_MODULE_2__["default"], null) : rowData.length > 0 ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Table, {
     headers: headers,
     actions: actions,
-    dataRows: rowData,
+    dataRows: rowData.map(item => item.slice(0, 3)),
     noDraggable: true
   }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_schedule_not_found__WEBPACK_IMPORTED_MODULE_7__["default"], {
     handleRefreshScheduleData: handleRefreshScheduleData
@@ -14003,7 +14096,7 @@ function scheduleImportHelper(state, setState) {
       const rowData = [];
       response.map(item => {
         const recurrency = getRecurrenceText(item.params[0].schedule_settings);
-        rowData.push([item.id, recurrency, item.params[0].credentials.publication_id]);
+        rowData.push([recurrency, item.params[0].credentials.publication_id, item.next_run, item.id]);
       });
       setState({
         ...state,
@@ -14064,7 +14157,7 @@ function scheduleImportHelper(state, setState) {
         });
         if (response && response.id) {
           const newScheduledImports = scheduledImports.filter(item => item.id !== selectedRowInfo.id);
-          const newRowData = rowData.filter(item => item[0] !== selectedRowInfo.id);
+          const newRowData = rowData.filter(item => item[3] !== selectedRowInfo.id);
           (0,_common_common_function__WEBPACK_IMPORTED_MODULE_1__.logger)(newScheduledImports, newRowData);
           setState(prevState => ({
             ...prevState,
