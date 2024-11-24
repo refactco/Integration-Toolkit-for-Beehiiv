@@ -11500,8 +11500,7 @@ function addNewScheduleFormHelper(state, setState, onClose, handleRefreshSchedul
         selectedTerm,
         authors,
         selectedAuthor,
-        serverTime: current_server_time,
-        loading: false
+        serverTime: current_server_time
       });
     } catch (error) {
       (0,_common_common_function__WEBPACK_IMPORTED_MODULE_1__.logger)(error);
@@ -11544,18 +11543,22 @@ function addNewScheduleFormHelper(state, setState, onClose, handleRefreshSchedul
         };
         newState.isFormDisabled = true;
       }
+      if (name === 'createNewConnection' && value) {
+        newState.selectedConnection = 'not_set';
+        newState.isFormDisabled = true;
+      }
       return newState;
     });
   }
   function validateInput(name, value) {
     switch (name) {
       case 'apiKey':
-        if (!value) return 'API Key is required.';
-        if (value.length !== 64) return 'API Key must be 64 characters.';
+        if (!value && state.createNewConnection) return 'API Key is required.';
+        if (value.length !== 64 && state.createNewConnection) return 'API Key must be 64 characters.';
         break;
       case 'publicationId':
-        if (!value) return 'Publication ID is required.';
-        if (value.length !== 40) return 'Publication ID must be 40 characters.';
+        if (!value && state.createNewConnection) return 'Publication ID is required.';
+        if (value.length !== 40 && state.createNewConnection) return 'Publication ID must be 40 characters.';
         break;
       case 'runHour':
         if (!value) return 'Run hour is required.';
@@ -11567,7 +11570,7 @@ function addNewScheduleFormHelper(state, setState, onClose, handleRefreshSchedul
         if (!/^(?:[01]\d|2[0-3]):[0-5]\d$/.test(value)) return 'Invalid time format. Use "HH:mm" (e.g., "02:00").';
         break;
       case 'connectionName':
-        if (!value && state.includeAsConnection) return 'Connection name is required.';
+        if (!value && state.includeAsConnection && state.createNewConnection) return 'Connection name is required.';
         break;
       case 'includeAsConnection':
         if (!value) {
@@ -11636,7 +11639,7 @@ function addNewScheduleFormHelper(state, setState, onClose, handleRefreshSchedul
       connectionName,
       selectedConnection
     } = state;
-    if (state.includeAsConnection && !state.connectionName) {
+    if (state.includeAsConnection && !state.connectionName && state.createNewConnection) {
       setState(prevState => ({
         ...prevState,
         errors: {
@@ -11684,7 +11687,7 @@ function addNewScheduleFormHelper(state, setState, onClose, handleRefreshSchedul
         schedule_settings: JSON.stringify(schedule_settings),
         audience: contentType,
         include_as_connection: includeAsConnection,
-        connection_name: connectionName,
+        new_connection_name: connectionName,
         selected_connection: selectedConnection
       };
       try {
@@ -11740,12 +11743,13 @@ function addNewScheduleFormHelper(state, setState, onClose, handleRefreshSchedul
         path: 'itfb/v1/get-all-connections',
         method: 'GET'
       });
-      const {
-        data
-      } = response;
+      const selectedConnection = Object.keys(response).length > 0 ? Object.keys(response)[0] : 'not_set';
       setState(prevState => ({
         ...prevState,
-        connections: data
+        connections: response,
+        loading: false,
+        selectedConnection,
+        isFormDisabled: selectedConnection === 'not_set' ? true : false
       }));
     } catch (error) {
       const {
@@ -11800,6 +11804,7 @@ const {
 
 
 
+
 const AddNewScheduleForm = ({
   onClose,
   handleRefreshScheduleData
@@ -11836,7 +11841,9 @@ const AddNewScheduleForm = ({
     contentType: 'free',
     includeAsConnection: true,
     connectionName: '',
-    selectedConnection: 'not_set'
+    selectedConnection: 'not_set',
+    connections: [],
+    createNewConnection: false
   });
   const {
     apiKey,
@@ -11870,7 +11877,9 @@ const AddNewScheduleForm = ({
     contentType,
     includeAsConnection,
     connectionName,
-    selectedConnection
+    selectedConnection,
+    connections,
+    createNewConnection
   } = state;
   const helper = (0,_add_new_schedule_form_helper__WEBPACK_IMPORTED_MODULE_2__.addNewScheduleFormHelper)(state, setState, onClose, handleRefreshScheduleData);
   const {
@@ -11901,7 +11910,24 @@ const AddNewScheduleForm = ({
       header: 'Step 1: Choose Data from Beehiiv',
       initialEntered: true,
       active: true,
-      content: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Container, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+      content: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Container, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, Object.keys(connections).length > 0 && !createNewConnection ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Select, {
+        label: "Select Connection",
+        options: [...Object.keys(connections).map(connection_name => ({
+          label: connection_name,
+          value: connection_name
+        }))],
+        value: selectedConnection,
+        onChange: value => handleInputChange(value, 'selectedConnection'),
+        required: true,
+        disabled: disableInput
+      }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+        className: "include-as-connection-container"
+      }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Checkbox, {
+        label: "OR create new connection",
+        checked: createNewConnection,
+        onChange: value => handleInputChange(value, 'createNewConnection'),
+        disabled: disableInput
+      })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null)) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
         className: "label",
         htmlFor: "apiKey"
       }, "API Key", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Tooltip, {
@@ -11945,7 +11971,7 @@ const AddNewScheduleForm = ({
         onChange: value => handleInputChange(value, 'includeAsConnection'),
         onBlur: () => handleBlur('includeAsConnection', includeAsConnection),
         disabled: disableInput
-      })))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Container, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+      }))))), createNewConnection ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Container, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
         className: "label",
         htmlFor: "connectionName"
       }, "Name of Connection"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Input, {
@@ -11956,7 +11982,7 @@ const AddNewScheduleForm = ({
         hasError: errors.connectionName,
         required: includeAsConnection,
         disabled: disableInput
-      }), errors.connectionName && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ErrorContainer, null, errors.connectionName)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Divider, null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Container, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+      }), errors.connectionName && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ErrorContainer, null, errors.connectionName)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null))) : null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Divider, null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Container, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
         className: "label",
         htmlFor: "contentType"
       }, "Content Type", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Tooltip, {
