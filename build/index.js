@@ -11461,7 +11461,7 @@ __webpack_require__.r(__webpack_exports__);
 const apiFetch = wp.apiFetch;
 
 
-function addNewScheduleFormHelper(state, setState, onClose, handleRefreshScheduleData) {
+function addNewScheduleFormHelper(state, setState, onClose, handleRefreshScheduleData, scheduleId) {
   async function getDefaultOptions() {
     try {
       const response = await apiFetch({
@@ -11690,14 +11690,22 @@ function addNewScheduleFormHelper(state, setState, onClose, handleRefreshSchedul
         new_connection_name: connectionName,
         selected_connection: selectedConnection
       };
+      if (scheduleId) {
+        data.id = scheduleId;
+      }
+      console.log(scheduleId);
       try {
         setState(prevState => ({
           ...prevState,
           isFormDisabled: true,
           disableInput: true
         }));
+        let path = 'itfb/v1/add-scheduled-import';
+        if (scheduleId) {
+          path = 'itfb/v1/edit-scheduled-import';
+        }
         const response = await apiFetch({
-          path: 'itfb/v1/add-scheduled-import',
+          path,
           method: 'POST',
           data
         });
@@ -11747,7 +11755,7 @@ function addNewScheduleFormHelper(state, setState, onClose, handleRefreshSchedul
       setState(prevState => ({
         ...prevState,
         connections: response,
-        loading: false,
+        loading: scheduleId ? true : false,
         selectedConnection,
         isFormDisabled: selectedConnection === 'not_set' ? true : false
       }));
@@ -11758,12 +11766,83 @@ function addNewScheduleFormHelper(state, setState, onClose, handleRefreshSchedul
       react_toastify__WEBPACK_IMPORTED_MODULE_0__.toast.error(message);
     }
   }
+  async function getScheduleById(id) {
+    try {
+      const response = await apiFetch({
+        path: `itfb/v1/get-scheduled-import-by-id/?id=${id}`,
+        method: 'POST'
+      });
+      console.log(response);
+      const {
+        params
+      } = response;
+      const {
+        audience,
+        author,
+        credentials,
+        import_cm_tags_as,
+        import_option,
+        include_as_connection,
+        new_connection_name,
+        post_status,
+        post_type,
+        schedule_settings,
+        selected_connection,
+        taxonomy,
+        taxonomy_term
+      } = params[0];
+      const {
+        api_key,
+        publication_id
+      } = credentials;
+      const {
+        confirmed,
+        draft,
+        archived
+      } = post_status;
+      const {
+        frequency,
+        specific_hour,
+        specific_day,
+        time
+      } = schedule_settings;
+      setState(prevState => ({
+        ...prevState,
+        apiKey: api_key !== null && api_key !== void 0 ? api_key : '',
+        publicationId: publication_id !== null && publication_id !== void 0 ? publication_id : '',
+        publishedCampaigns: confirmed ? true : false,
+        publishedWrodpressPostStatus: confirmed,
+        draftededCampaigns: draft ? true : false,
+        draftedWrodpressPostStatus: draft,
+        archivedCampaigns: archived ? true : false,
+        archivedWrodpressPostStatus: archived,
+        selectedPostType: post_type,
+        selectedTaxonomy: taxonomy,
+        selectedTerm: taxonomy_term,
+        selectedAuthor: author,
+        importCampaignTagAs: import_cm_tags_as,
+        importOption: import_option,
+        frequency,
+        runHour: specific_hour !== null && specific_hour !== void 0 ? specific_hour : 1,
+        runTime: time !== null && time !== void 0 ? time : '00:00',
+        runDay: specific_day !== null && specific_day !== void 0 ? specific_day : 'monday',
+        contentType: audience,
+        includeAsConnection: include_as_connection === "1" ? true : false,
+        connectionName: new_connection_name,
+        selectedConnection: selected_connection,
+        loading: false
+      }));
+    } catch (error) {
+      react_toastify__WEBPACK_IMPORTED_MODULE_0__.toast.error(error.message);
+    }
+  }
   return {
     getDefaultOptions,
     handleInputChange,
     handleBlur,
     startImportHandler,
-    getAllConnections
+    getAllConnections,
+    getScheduleById
   };
 }
 
@@ -11804,10 +11883,10 @@ const {
 
 
 
-
 const AddNewScheduleForm = ({
   onClose,
-  handleRefreshScheduleData
+  handleRefreshScheduleData,
+  scheduleId = null
 }) => {
   const [state, setState] = useState({
     apiKey: '',
@@ -11881,18 +11960,22 @@ const AddNewScheduleForm = ({
     connections,
     createNewConnection
   } = state;
-  const helper = (0,_add_new_schedule_form_helper__WEBPACK_IMPORTED_MODULE_2__.addNewScheduleFormHelper)(state, setState, onClose, handleRefreshScheduleData);
+  const helper = (0,_add_new_schedule_form_helper__WEBPACK_IMPORTED_MODULE_2__.addNewScheduleFormHelper)(state, setState, onClose, handleRefreshScheduleData, scheduleId);
   const {
     getDefaultOptions,
     handleInputChange,
     startImportHandler,
     handleBlur,
-    getAllConnections
+    getAllConnections,
+    getScheduleById
   } = helper;
   useEffect(() => {
     (async () => {
       await getDefaultOptions();
       await getAllConnections();
+      if (scheduleId) {
+        await getScheduleById(scheduleId);
+      }
     })();
   }, []);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, disableInput && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_backdrop__WEBPACK_IMPORTED_MODULE_3__["default"], {
@@ -12269,7 +12352,7 @@ const AddNewScheduleForm = ({
     type: "submit",
     onClick: startImportHandler,
     disabled: isFormDisabled
-  }, "Start Import")))));
+  }, scheduleId ? 'Edit Schedule' : 'Start Import')))));
 };
 const Container = styled_components__WEBPACK_IMPORTED_MODULE_6__.styled.div`
 	display: flex;
@@ -12330,7 +12413,8 @@ __webpack_require__.r(__webpack_exports__);
 
 const AddNewScheduleModal = ({
   onClose,
-  handleRefreshScheduleData
+  handleRefreshScheduleData,
+  scheduleId = null
 }) => {
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Modal, {
     onRequestClose: onClose,
@@ -12342,7 +12426,8 @@ const AddNewScheduleModal = ({
     }
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_add_new_schedule_form_add_new_schedule_form__WEBPACK_IMPORTED_MODULE_3__["default"], {
     onClose: onClose,
-    handleRefreshScheduleData: handleRefreshScheduleData
+    handleRefreshScheduleData: handleRefreshScheduleData,
+    scheduleId: scheduleId
   })));
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (AddNewScheduleModal);
@@ -13950,7 +14035,8 @@ const ScheduledImport = () => {
     loadingDeleteAction: false,
     showAddNewScheduleModal: false,
     loadingDeleteAction: false,
-    refreshScheduleData: false
+    refreshScheduleData: false,
+    scheduleId: null
   });
   const {
     loadingScheduledImports,
@@ -13960,7 +14046,8 @@ const ScheduledImport = () => {
     showDeleteScheduleModal,
     showAddNewScheduleModal,
     loadingDeleteAction,
-    refreshScheduleData
+    refreshScheduleData,
+    scheduleId
   } = state;
   const closeAddNewScheduleModalHandler = () => {
     setState({
@@ -13982,16 +14069,26 @@ const ScheduledImport = () => {
     getRecurrenceText,
     showDeleteScheduleModalHandler,
     deleteScheduleModalCloseHandler,
-    deleteScheduleHandler
+    deleteScheduleHandler,
+    EditScheduleHandler
   } = helper;
   const actions = [{
+    color: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.ButtonColor.GREEN,
+    variant: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.ButtonVariant.PRIMARY,
+    text: 'Edit',
+    onClick: index => {
+      EditScheduleHandler(index);
+    }
+  }, {
     color: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.ButtonColor.BLUE,
+    variant: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.ButtonVariant.SECONDARY,
     text: 'More Info',
     onClick: index => {
       showMoreInfoModalHandler(index);
     }
   }, {
     color: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.ButtonColor.RED,
+    variant: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.ButtonVariant.SECONDARY,
     text: 'Delete',
     onClick: index => {
       showDeleteScheduleModalHandler(index);
@@ -14002,7 +14099,7 @@ const ScheduledImport = () => {
       await getScheduledImports();
     })();
   }, [refreshScheduleData]);
-  const headers = ['Recurrency ', 'Publication Id', 'Next run'];
+  const headers = ['Recurrency ', 'Publication ID', 'Next Run'];
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_custom_section__WEBPACK_IMPORTED_MODULE_4__["default"], {
     title: "Scheduled Imports",
     description: "Schedule your content imports from Beehiiv to your WordPress site.",
@@ -14044,7 +14141,8 @@ const ScheduledImport = () => {
     deleteScheduleHandler: deleteScheduleHandler
   }), showAddNewScheduleModal ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_add_new_schedule_modal__WEBPACK_IMPORTED_MODULE_8__["default"], {
     onClose: closeAddNewScheduleModalHandler,
-    handleRefreshScheduleData: handleRefreshScheduleData
+    handleRefreshScheduleData: handleRefreshScheduleData,
+    scheduleId: scheduleId
   }) : null);
 };
 const StyledWrapper = styled_components__WEBPACK_IMPORTED_MODULE_9__.styled.div`
@@ -14207,6 +14305,19 @@ function scheduleImportHelper(state, setState) {
       }
     }
   }
+  async function EditScheduleHandler(index) {
+    const row = state.scheduledImports[index];
+    if (row) {
+      const {
+        id
+      } = row;
+      setState({
+        ...state,
+        scheduleId: id,
+        showAddNewScheduleModal: true
+      });
+    }
+  }
   return {
     getScheduledImports,
     moreInfoModalCloseHandler,
@@ -14214,7 +14325,8 @@ function scheduleImportHelper(state, setState) {
     getRecurrenceText,
     deleteScheduleHandler,
     showDeleteScheduleModalHandler,
-    deleteScheduleModalCloseHandler
+    deleteScheduleModalCloseHandler,
+    EditScheduleHandler
   };
 }
 
