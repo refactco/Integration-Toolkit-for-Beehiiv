@@ -675,6 +675,7 @@ class Endpoints {
 			'import_option'         => sanitize_text_field( $request->get_param( 'import_option' ) ),
 		);
 
+		
 		// Validate all parameters.
 		$validation = Validator::validate_all_parameters( $params );
 		if ( is_wp_error( $validation ) ) {
