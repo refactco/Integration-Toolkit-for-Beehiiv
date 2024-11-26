@@ -183,14 +183,13 @@ class Validator {
 				}
 
 				// skip new_connection_name if include_as_connection is not equal to not_set.
-				if ( 'not_set' === $params['selected_connection'] && false == (bool)$params['include_as_connection'] ) {
-					if('new_connection_name' === $key)
+				if ( 'not_set' == $params['selected_connection'] && "false" == $params['include_as_connection'] && 'new_connection_name' == $key) {
 						continue;
 				}
 
 				return new \WP_Error(
 					'missing_parameters',
-					__( 'Missing required parameters.'. $key, 'integration-toolkit-for-beehiiv' ),
+					__( 'Missing required parameters.', 'integration-toolkit-for-beehiiv' ),
 					array( 'status' => 400 )
 				);
 			}

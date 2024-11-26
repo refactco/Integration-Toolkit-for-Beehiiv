@@ -658,12 +658,13 @@ class Endpoints {
 	 * @return \WP_REST_Response | \WP_Error
 	 */
 	public function add_scheduled_import( \WP_REST_Request $request ) {
+
 		// Retrieve the parameters from the request.
 		$params = array(
 			'selected_connection'   => sanitize_text_field( $request->get_param( 'selected_connection' ) ),
 			'new_connection_name'   => sanitize_text_field( $request->get_param( 'new_connection_name' ) ),
 			'credentials'           => json_decode( sanitize_text_field( $request->get_param( 'credentials' ) ), true ),
-			'include_as_connection' => sanitize_text_field( $request->get_param( 'include_as_connection' ) ),
+			'include_as_connection' => sanitize_text_field($request->get_param( 'include_as_connection' )),
 			'audience'              => sanitize_text_field( $request->get_param( 'audience' ) ),
 			'post_status'           => json_decode( sanitize_text_field( $request->get_param( 'post_status' ) ), true ),
 			'schedule_settings'     => json_decode( sanitize_text_field( $request->get_param( 'schedule_settings' ) ), true ),
@@ -674,7 +675,6 @@ class Endpoints {
 			'import_cm_tags_as'     => sanitize_text_field( $request->get_param( 'import_cm_tags_as' ) ),
 			'import_option'         => sanitize_text_field( $request->get_param( 'import_option' ) ),
 		);
-
 		
 		// Validate all parameters.
 		$validation = Validator::validate_all_parameters( $params );
@@ -702,7 +702,7 @@ class Endpoints {
 			);
 
 		} else{
-			if ( true === (bool) $params['include_as_connection'] ) {
+			if ( "true" == $params['include_as_connection'] ) {
 				$api_key             = $params['credentials']['api_key'];
 				$publication_id      = $params['credentials']['publication_id'];
 				$new_connection_name = $params['new_connection_name'];
@@ -727,12 +727,6 @@ class Endpoints {
 						array( 'status' => 404 )
 					);
 				}
-			} else {
-				return new \WP_Error(
-					'connection_not_found',
-					'included as connection is not set.',
-					array( 'status' => 404 )
-				);
 			}
 		}
 
