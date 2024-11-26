@@ -11693,7 +11693,6 @@ function addNewScheduleFormHelper(state, setState, onClose, handleRefreshSchedul
       if (scheduleId) {
         data.id = scheduleId;
       }
-      console.log(scheduleId);
       try {
         setState(prevState => ({
           ...prevState,
@@ -11772,7 +11771,6 @@ function addNewScheduleFormHelper(state, setState, onClose, handleRefreshSchedul
         path: `itfb/v1/get-scheduled-import-by-id/?id=${id}`,
         method: 'POST'
       });
-      console.log(response);
       const {
         params
       } = response;
@@ -12054,7 +12052,7 @@ const AddNewScheduleForm = ({
         onChange: value => handleInputChange(value, 'includeAsConnection'),
         onBlur: () => handleBlur('includeAsConnection', includeAsConnection),
         disabled: disableInput
-      }))))), createNewConnection ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Container, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+      }))))), includeAsConnection && selectedConnection === 'not_set' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Container, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
         className: "label",
         htmlFor: "connectionName"
       }, "Name of Connection"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Input, {
@@ -14286,7 +14284,8 @@ function scheduleImportHelper(state, setState) {
           setState(prevState => ({
             ...prevState,
             scheduledImports: newScheduledImports,
-            rowData: newRowData
+            rowData: newRowData,
+            scheduleId: null
           }));
           react_toastify__WEBPACK_IMPORTED_MODULE_0__.toast.success(response.message);
         } else {
