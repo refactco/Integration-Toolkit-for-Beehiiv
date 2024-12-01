@@ -11457,7 +11457,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/dist/react-toastify.esm.mjs");
 const apiFetch = wp.apiFetch;
 
-function addNewConnectionModalHelper(state, setState, handleRefreshConnectionsData, connectionId, onClose) {
+function addNewConnectionModalHelper(state, setState, handleRefreshConnectionsData, onClose) {
   function handleInputChange(value, name) {
     setState(prevState => {
       const newState = {
@@ -11518,12 +11518,9 @@ function addNewConnectionModalHelper(state, setState, handleRefreshConnectionsDa
         disableInput: true
       }));
       let path = 'itfb/v1/add-connection';
-      if (connectionId) {
-        path = `itfb/v1/add-connection/${connectionId}`;
-      }
       const response = await apiFetch({
         path,
-        method: connectionId ? 'PUT' : 'POST',
+        method: 'POST',
         data
       });
       const {
@@ -11599,28 +11596,19 @@ const FormContainer = styled_components__WEBPACK_IMPORTED_MODULE_5__["default"].
 `;
 const InputWrapper = styled_components__WEBPACK_IMPORTED_MODULE_5__["default"].div`
     width: 100%;
-    margin-bottom: 16px;
-
-    @media (min-width: 768px) {
-        &:nth-child(1) {
-            width: 48%;
-        }
-        &:nth-child(2),
-        &:nth-child(3) {
-            width: 24%;
-        }
+    &:nth-child(3) {
+        margin-bottom: 16px;
     }
 `;
 const AddNewConnectionModal = ({
   onClose,
-  connectionId = null,
   handleRefreshConnectionsData
 }) => {
   const [state, setState] = useState({
     apiKey: '',
     publicationId: '',
     connectionName: '',
-    isFormDisabled: connectionId ? false : true,
+    isFormDisabled: true,
     errors: {},
     disableInput: false
   });
@@ -11632,7 +11620,7 @@ const AddNewConnectionModal = ({
     errors,
     disableInput
   } = state;
-  const helper = (0,_add_new_connection_modal_helper__WEBPACK_IMPORTED_MODULE_3__.addNewConnectionModalHelper)(state, setState, handleRefreshConnectionsData, connectionId, onClose);
+  const helper = (0,_add_new_connection_modal_helper__WEBPACK_IMPORTED_MODULE_3__.addNewConnectionModalHelper)(state, setState, handleRefreshConnectionsData, onClose);
   const {
     handleInputChange,
     handleBlur,
@@ -11640,7 +11628,7 @@ const AddNewConnectionModal = ({
   } = helper;
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Modal, {
     onRequestClose: onClose,
-    size: "fill"
+    size: "large"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_2__.Section, {
     headerProps: {
       title: 'Create a New Connection',
@@ -11700,7 +11688,7 @@ const AddNewConnectionModal = ({
     type: "submit",
     onClick: createNewConnectionHandler,
     disabled: isFormDisabled
-  }, connectionId ? 'Edit Connection' : 'Create Connection'))));
+  }, "Create Connection"))));
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (AddNewConnectionModal);
 
@@ -14953,13 +14941,6 @@ const Connections = () => {
     })();
   }, [refreshConnectionsData]);
   const actions = [{
-    color: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_5__.ButtonColor.GREEN,
-    variant: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_5__.ButtonVariant.PRIMARY,
-    text: 'Edit',
-    onClick: index => {
-      // EditScheduleHandler( index );
-    }
-  }, {
     color: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_5__.ButtonColor.RED,
     variant: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_5__.ButtonVariant.SECONDARY,
     text: 'Delete',
