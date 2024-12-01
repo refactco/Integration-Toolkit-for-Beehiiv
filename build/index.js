@@ -11764,7 +11764,7 @@ function addNewScheduleFormHelper(state, setState, onClose, handleRefreshSchedul
         connections: response,
         loading: scheduleId ? true : false,
         selectedConnection,
-        isFormDisabled: selectedConnection === 'not_set' ? true : false
+        isFormDisabled: selectedConnection === 'not_set' && !scheduleId ? true : false
       }));
     } catch (error) {
       const {
@@ -11922,7 +11922,7 @@ const AddNewScheduleForm = ({
     serverTime: '',
     errors: {},
     disableInput: false,
-    isFormDisabled: true,
+    isFormDisabled: scheduleId ? false : true,
     loading: true,
     contentType: 'free',
     includeAsConnection: true,
@@ -11989,7 +11989,7 @@ const AddNewScheduleForm = ({
     show: true,
     modalClosed: () => (0,_common_common_function__WEBPACK_IMPORTED_MODULE_5__.logger)('Fetching Campaigns ...')
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_spinner__WEBPACK_IMPORTED_MODULE_4__["default"], {
-    label: "Fetching campaigns from Beehiiv. Please wait...",
+    label: scheduleId ? 'Please wait ...' : `Fetching campaigns from Beehiiv. Please wait...`,
     marginBottom: "0px"
   })), loading ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_spinner__WEBPACK_IMPORTED_MODULE_4__["default"], null) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("form", {
     onSubmit: startImportHandler
@@ -14025,7 +14025,6 @@ const {
   useState,
   useEffect
 } = wp.element;
-
 
 
 
