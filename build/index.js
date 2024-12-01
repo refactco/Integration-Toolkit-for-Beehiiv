@@ -11461,7 +11461,7 @@ __webpack_require__.r(__webpack_exports__);
 const apiFetch = wp.apiFetch;
 
 
-function addNewScheduleFormHelper(state, setState, onClose, handleRefreshScheduleData, scheduleId) {
+function addNewScheduleFormHelper(state, setState, onClose, handleRefreshScheduleData, scheduleId, setSchedule) {
   async function getDefaultOptions() {
     try {
       const response = await apiFetch({
@@ -11686,12 +11686,14 @@ function addNewScheduleFormHelper(state, setState, onClose, handleRefreshSchedul
         import_option: importOption !== null && importOption !== void 0 ? importOption : null,
         schedule_settings: JSON.stringify(schedule_settings),
         audience: contentType,
-        include_as_connection: includeAsConnection,
+        include_as_connection: includeAsConnection ? "true" : "false",
         new_connection_name: connectionName,
         selected_connection: selectedConnection
       };
       if (scheduleId) {
         data.id = scheduleId;
+        data.include_as_connection = "false";
+        data.selected_connection = "not_set";
       }
       try {
         setState(prevState => ({
@@ -11719,6 +11721,12 @@ function addNewScheduleFormHelper(state, setState, onClose, handleRefreshSchedul
           },
           disableInput: false
         }));
+        if (scheduleId) {
+          setSchedule(prevState => ({
+            ...prevState,
+            scheduleId: null
+          }));
+        }
         if (response.data) {
           react_toastify__WEBPACK_IMPORTED_MODULE_0__.toast.error(message);
         } else {
@@ -11884,7 +11892,8 @@ const {
 const AddNewScheduleForm = ({
   onClose,
   handleRefreshScheduleData,
-  scheduleId = null
+  scheduleId = null,
+  setSchedule = null
 }) => {
   const [state, setState] = useState({
     apiKey: '',
@@ -11958,7 +11967,7 @@ const AddNewScheduleForm = ({
     connections,
     createNewConnection
   } = state;
-  const helper = (0,_add_new_schedule_form_helper__WEBPACK_IMPORTED_MODULE_2__.addNewScheduleFormHelper)(state, setState, onClose, handleRefreshScheduleData, scheduleId);
+  const helper = (0,_add_new_schedule_form_helper__WEBPACK_IMPORTED_MODULE_2__.addNewScheduleFormHelper)(state, setState, onClose, handleRefreshScheduleData, scheduleId, setSchedule);
   const {
     getDefaultOptions,
     handleInputChange,
@@ -11991,7 +12000,7 @@ const AddNewScheduleForm = ({
       header: 'Step 1: Choose Data from Beehiiv',
       initialEntered: true,
       active: true,
-      content: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Container, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, Object.keys(connections).length > 0 && !createNewConnection ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Select, {
+      content: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Container, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, Object.keys(connections).length > 0 && !createNewConnection && !scheduleId ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Select, {
         label: "Select Connection",
         options: [...Object.keys(connections).map(connection_name => ({
           label: connection_name,
@@ -12008,7 +12017,7 @@ const AddNewScheduleForm = ({
         checked: createNewConnection,
         onChange: value => handleInputChange(value, 'createNewConnection'),
         disabled: disableInput
-      })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null)) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+      })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null)) : !scheduleId ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
         className: "label",
         htmlFor: "apiKey"
       }, "API Key", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Tooltip, {
@@ -12052,7 +12061,7 @@ const AddNewScheduleForm = ({
         onChange: value => handleInputChange(value, 'includeAsConnection'),
         onBlur: () => handleBlur('includeAsConnection', includeAsConnection),
         disabled: disableInput
-      }))))), includeAsConnection && selectedConnection === 'not_set' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Container, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+      }))) : null)), includeAsConnection && selectedConnection === 'not_set' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Container, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
         className: "label",
         htmlFor: "connectionName"
       }, "Name of Connection"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Input, {
@@ -12063,7 +12072,7 @@ const AddNewScheduleForm = ({
         hasError: errors.connectionName,
         required: includeAsConnection,
         disabled: disableInput
-      }), errors.connectionName && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ErrorContainer, null, errors.connectionName)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null))) : null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Divider, null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Container, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+      }), errors.connectionName && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ErrorContainer, null, errors.connectionName)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null))) : null, !scheduleId ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Divider, null) : null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Container, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
         className: "label",
         htmlFor: "contentType"
       }, "Content Type", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Tooltip, {
@@ -12412,7 +12421,8 @@ __webpack_require__.r(__webpack_exports__);
 const AddNewScheduleModal = ({
   onClose,
   handleRefreshScheduleData,
-  scheduleId = null
+  scheduleId = null,
+  setSchedule = null
 }) => {
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Modal, {
     onRequestClose: onClose,
@@ -12425,7 +12435,8 @@ const AddNewScheduleModal = ({
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_add_new_schedule_form_add_new_schedule_form__WEBPACK_IMPORTED_MODULE_3__["default"], {
     onClose: onClose,
     handleRefreshScheduleData: handleRefreshScheduleData,
-    scheduleId: scheduleId
+    scheduleId: scheduleId,
+    setSchedule: setSchedule
   })));
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (AddNewScheduleModal);
@@ -14050,7 +14061,8 @@ const ScheduledImport = () => {
   const closeAddNewScheduleModalHandler = () => {
     setState({
       ...state,
-      showAddNewScheduleModal: false
+      showAddNewScheduleModal: false,
+      scheduleId: null
     });
   };
   const handleRefreshScheduleData = () => {
@@ -14140,7 +14152,8 @@ const ScheduledImport = () => {
   }), showAddNewScheduleModal ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_add_new_schedule_modal__WEBPACK_IMPORTED_MODULE_8__["default"], {
     onClose: closeAddNewScheduleModalHandler,
     handleRefreshScheduleData: handleRefreshScheduleData,
-    scheduleId: scheduleId
+    scheduleId: scheduleId,
+    setSchedule: setState
   }) : null);
 };
 const StyledWrapper = styled_components__WEBPACK_IMPORTED_MODULE_9__.styled.div`
