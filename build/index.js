@@ -1823,9 +1823,9 @@ function HeaderMenuItemsDesktop(props) {
                             onSelectItem === null || onSelectItem === void 0 ? void 0 : onSelectItem(index);
                             (_a = item.onClick) === null || _a === void 0 ? void 0 : _a.call(item, event);
                         } }), index) }, index));
-            }), (0, jsx_runtime_1.jsx)(sub_header_1.SubHeader, { subHeaderItems: subHeaderItems, subHeaderType: subHeaderType, activeItemIndex: activeSubItemIndex, onSubItemClick: function (index) {
+            }), subHeaderItems ? ((0, jsx_runtime_1.jsx)(sub_header_1.SubHeader, { subHeaderItems: subHeaderItems, subHeaderType: subHeaderType, activeItemIndex: activeSubItemIndex, onSubItemClick: function (index) {
                     onSelectSubItem === null || onSelectSubItem === void 0 ? void 0 : onSelectSubItem(index);
-                } })] }));
+                } })) : null] }));
 }
 exports.HeaderMenuItemsDesktop = HeaderMenuItemsDesktop;
 
@@ -11405,6 +11405,48 @@ async function delay(ms) {
 
 /***/ }),
 
+/***/ "./lib/components/about-plugin.js":
+/*!****************************************!*\
+  !*** ./lib/components/about-plugin.js ***!
+  \****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   AboutPlugin: () => (/* binding */ AboutPlugin)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
+
+
+function AboutPlugin() {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(AboutPluginWrapper, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", null, "About RE/beehiiv"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "Boost your productivity with our streamlined plugin, designed to simplify your workflow and integrate seamlessly with your favorite tools. Whether you're automating tasks, tracking key metrics, or improving efficiency, this plugin delivers the flexibility and ease you need to stay focused on what matters most. Get started today and experience a smarter, more effective way to work."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(PluginInfo, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "Version: 00000"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "Latest Changes: [Date]")));
+}
+;
+const AboutPluginWrapper = styled_components__WEBPACK_IMPORTED_MODULE_1__.styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    & > * {
+        flex: 1;
+        margin:0;
+    }
+`;
+const PluginInfo = styled_components__WEBPACK_IMPORTED_MODULE_1__.styled.div`
+    display: flex;
+    flex-direction: row;
+    gap: 18px;
+    align-items: center;
+    & > * {
+        margin: 0;
+    }
+`;
+
+/***/ }),
+
 /***/ "./lib/components/add-button.js":
 /*!**************************************!*\
   !*** ./lib/components/add-button.js ***!
@@ -12734,6 +12776,71 @@ const BackdropContainer = styled_components__WEBPACK_IMPORTED_MODULE_1__["defaul
 
 /***/ }),
 
+/***/ "./lib/components/collect-data.js":
+/*!****************************************!*\
+  !*** ./lib/components/collect-data.js ***!
+  \****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   CollectData: () => (/* binding */ CollectData)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
+/* harmony import */ var _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @refactco/ui-kit */ "./node_modules/@refactco/ui-kit/dist/ui-kit-expose.js");
+
+
+
+function CollectData() {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(CollectDataWrapper, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(TooltipContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", null, "Help RE/beehiiv better to everyone."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Tooltip, {
+    id: "collect-data-tooltip",
+    mode: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.TooltipMode.DARK,
+    place: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.TooltipPlace.TOP,
+    content: "We collect your info to enhance the experience."
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
+    xmlns: "http://www.w3.org/2000/svg",
+    width: "24",
+    height: "24",
+    viewBox: "0 0 24 24",
+    fill: "none"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    "fill-rule": "evenodd",
+    "clip-rule": "evenodd",
+    d: "M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 9.34784 20.9464 6.8043 19.0711 4.92893C17.1957 3.05357 14.6522 2 12 2ZM13 17.5C13 17.7761 12.7761 18 12.5 18H11.5C11.2239 18 11 17.7761 11 17.5V16.5C11 16.2239 11.2239 16 11.5 16H12.5C12.7761 16 13 16.2239 13 16.5V17.5ZM13.88 12.29C15.0655 11.9063 15.8716 10.806 15.88 9.56V9C15.88 8.23618 15.5766 7.50364 15.0365 6.96353C14.4964 6.42343 13.7638 6.12 13 6.12H11C9.40942 6.12 8.12 7.40942 8.12 9V9.5C8.12 9.77614 8.34386 10 8.62 10H9.38C9.65614 10 9.88 9.77614 9.88 9.5V9C9.88 8.38144 10.3814 7.88 11 7.88H13C13.3039 7.86914 13.5992 7.98233 13.8179 8.19356C14.0367 8.40479 14.1602 8.6959 14.16 9V9.56C14.161 10.0423 13.8557 10.4721 13.4 10.63L12.45 10.94C11.6818 11.1939 11.1622 11.9109 11.16 12.72V13.5C11.16 13.7761 11.3839 14 11.66 14H12.42C12.6961 14 12.92 13.7761 12.92 13.5V12.72C12.92 12.6675 12.9516 12.6202 13 12.6L13.88 12.29Z",
+    fill: "#798686"
+  })))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "Can we collect your info to enhance the experience? "));
+}
+const CollectDataWrapper = styled_components__WEBPACK_IMPORTED_MODULE_2__.styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    & > * {
+        flex: 1;
+        margin:0;
+    }
+    & > p {
+        margin-top: 4px;
+        color: #798686;
+    }
+`;
+const TooltipContainer = styled_components__WEBPACK_IMPORTED_MODULE_2__.styled.div`
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+    align-items: center;
+    & > h2 {
+        margin: 0;
+    }
+    & > svg {
+        cursor: pointer;
+    }
+`;
+
+/***/ }),
+
 /***/ "./lib/components/connection-not-found.js":
 /*!************************************************!*\
   !*** ./lib/components/connection-not-found.js ***!
@@ -12924,7 +13031,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @refactco/ui-kit */ "./node_modules/@refactco/ui-kit/dist/ui-kit-expose.js");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
+/* harmony import */ var _icon_plugin_logo__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./icon/plugin-logo */ "./lib/components/icon/plugin-logo.tsx");
 
 /* eslint-disable react-hooks/exhaustive-deps */
 const {
@@ -12933,9 +13041,10 @@ const {
 } = wp.element;
 
 
+
 const Header = () => {
-  const navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_2__.useNavigate)();
-  const location = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_2__.useLocation)();
+  const navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_3__.useNavigate)();
+  const location = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_3__.useLocation)();
   const [activeItemIndex, setActiveItemIndex] = useState(0);
   const items = [{
     item: 'import-campaigns',
@@ -13005,13 +13114,177 @@ const Header = () => {
     };
   }, [location.pathname]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Header, {
-    logoSource: 'Refact',
+    logoSource: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_icon_plugin_logo__WEBPACK_IMPORTED_MODULE_2__.PluginLogo, null),
     items: items,
     onSelectItem: handleSelectItem,
     activeItemIndex: activeItemIndex
   });
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Header);
+
+/***/ }),
+
+/***/ "./lib/components/icon/plugin-logo.tsx":
+/*!*********************************************!*\
+  !*** ./lib/components/icon/plugin-logo.tsx ***!
+  \*********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   PluginLogo: () => (/* binding */ PluginLogo)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+
+function PluginLogo() {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
+    xmlns: "http://www.w3.org/2000/svg",
+    width: "156",
+    height: "24",
+    viewBox: "0 0 156 24",
+    fill: "none"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    d: "M10.6081 14.954C12.6831 13.8139 13.718 11.8267 13.7127 8.99228C13.7653 8.1212 13.635 7.24872 13.3301 6.43073C13.0252 5.61274 12.5525 4.86723 11.9421 4.24185C10.5503 3.04402 8.74274 2.4385 6.90797 2.55545H0V23.9324H4.32741V16.1021H6.47921L9.71086 23.9165H14.3638V23.7107L10.6081 14.954ZM8.73422 11.6446C8.50408 11.934 8.20665 12.1632 7.86767 12.3122C7.5287 12.4612 7.15841 12.5255 6.78887 12.4997H4.32741V6.16577H6.86827C8.5463 6.16577 9.38531 7.23726 9.38531 9.38023C9.41877 10.1853 9.19039 10.9795 8.73422 11.6446Z",
+    fill: "white"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    d: "M29.5224 6.12633V2.52393H17.2389V23.9009H24.9647L25.997 20.3143H21.5663V14.6771H27.6167L28.6172 11.1934H21.5663V6.12633H29.5224Z",
+    fill: "white"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    "fill-rule": "evenodd",
+    "clip-rule": "evenodd",
+    d: "M35.1077 2.52393L29.1173 23.9998H32.1506L38.1139 2.52393H35.1077Z",
+    fill: "white"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    d: "M59.7237 15.634C59.7237 20.7078 56.2174 23.9666 51.6386 23.9666C49.4523 23.9666 47.7198 23.2653 46.5648 21.8628V23.7191H42.0685V1.40252H46.771V9.28138C47.9673 7.96136 49.6173 7.30135 51.6386 7.30135C56.1762 7.30135 59.7237 10.5601 59.7237 15.634ZM54.9387 15.634C54.9387 12.8289 53.1649 11.1377 50.8136 11.1377C48.4623 11.1377 46.6885 12.8289 46.6885 15.634C46.6885 18.439 48.4623 20.1303 50.8136 20.1303C53.1649 20.1303 54.9387 18.439 54.9387 15.634Z",
+    fill: "url(#paint0_linear_1801_2300)"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    d: "M75.069 18.6453L77.5852 21.3678C76.1002 23.1003 73.8314 23.9666 70.9026 23.9666C65.2926 23.9666 61.6625 20.4603 61.6625 15.634C61.6625 10.8077 65.3338 7.30136 70.3251 7.30136C74.9039 7.30136 78.6577 10.3127 78.699 15.5102L66.6951 17.8203C67.3963 19.429 68.8814 20.2128 70.9851 20.2128C72.7177 20.2128 73.9552 19.7178 75.069 18.6453ZM66.2413 15.139L74.1202 13.6127C73.6664 11.9627 72.2639 10.8489 70.2839 10.8489C67.9738 10.8489 66.3238 12.4164 66.2413 15.139Z",
+    fill: "url(#paint1_linear_1801_2300)"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    d: "M94.0442 18.6453L96.5605 21.3678C95.0755 23.1003 92.8067 23.9666 89.8779 23.9666C84.2678 23.9666 80.6378 20.4603 80.6378 15.634C80.6378 10.8077 84.3091 7.30136 89.3004 7.30136C93.8792 7.30136 97.633 10.3127 97.6743 15.5102L85.7116 17.8203C86.4129 19.429 87.8979 20.2128 90.0017 20.2128C91.6929 20.2128 92.9305 19.7178 94.0442 18.6453ZM85.2166 15.139L93.0955 13.6127C92.6417 11.9627 91.2392 10.8489 89.2592 10.8489C86.9491 10.8489 85.3404 12.4164 85.2166 15.139Z",
+    fill: "url(#paint2_linear_1801_2300)"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    d: "M117.392 14.479V23.7603H112.689V15.1802C112.689 12.5814 111.493 11.3439 109.389 11.3439C107.121 11.3439 105.512 12.7464 105.512 15.7165V23.7191H100.809V1.40252H105.512V9.24013C106.791 7.96136 108.606 7.30135 110.668 7.30135C114.505 7.30135 117.392 9.52888 117.392 14.479Z",
+    fill: "url(#paint3_linear_1801_2300)"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    d: "M121.063 2.64004C121.063 1.15502 122.26 0 123.992 0C125.725 0 126.921 1.07252 126.921 2.51629C126.921 4.08381 125.725 5.23882 123.992 5.23882C122.26 5.23882 121.063 4.12506 121.063 2.64004ZM121.641 7.54886H126.343V23.7603H121.641C121.641 23.7191 121.641 7.54886 121.641 7.54886Z",
+    fill: "url(#paint4_linear_1801_2300)"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    d: "M130.138 2.64004C130.138 1.15502 131.335 0 133.067 0C134.8 0 135.996 1.07252 135.996 2.51629C135.996 4.08381 134.8 5.23882 133.067 5.23882C131.335 5.23882 130.138 4.12506 130.138 2.64004ZM130.716 7.54886H135.419V23.7603H130.716C130.716 23.7191 130.716 7.54886 130.716 7.54886Z",
+    fill: "url(#paint5_linear_1801_2300)"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    d: "M155.838 7.54885L148.99 23.7603H144.122L137.316 7.54885H142.184L146.68 18.5628L151.3 7.54885C151.341 7.54885 155.838 7.54885 155.838 7.54885Z",
+    fill: "url(#paint6_linear_1801_2300)"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("defs", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("linearGradient", {
+    id: "paint0_linear_1801_2300",
+    x1: "37.7372",
+    y1: "0.066069",
+    x2: "133.296",
+    y2: "50.6318",
+    gradientUnits: "userSpaceOnUse"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("stop", {
+    "stop-color": "#D963B0"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("stop", {
+    offset: "0.503787",
+    "stop-color": "#9586EC"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("stop", {
+    offset: "1",
+    "stop-color": "#12C2E9"
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("linearGradient", {
+    id: "paint1_linear_1801_2300",
+    x1: "37.7372",
+    y1: "0.066069",
+    x2: "133.296",
+    y2: "50.6318",
+    gradientUnits: "userSpaceOnUse"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("stop", {
+    "stop-color": "#D963B0"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("stop", {
+    offset: "0.503787",
+    "stop-color": "#9586EC"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("stop", {
+    offset: "1",
+    "stop-color": "#12C2E9"
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("linearGradient", {
+    id: "paint2_linear_1801_2300",
+    x1: "37.7372",
+    y1: "0.066069",
+    x2: "133.296",
+    y2: "50.6318",
+    gradientUnits: "userSpaceOnUse"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("stop", {
+    "stop-color": "#D963B0"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("stop", {
+    offset: "0.503787",
+    "stop-color": "#9586EC"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("stop", {
+    offset: "1",
+    "stop-color": "#12C2E9"
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("linearGradient", {
+    id: "paint3_linear_1801_2300",
+    x1: "37.7372",
+    y1: "0.066069",
+    x2: "133.296",
+    y2: "50.6318",
+    gradientUnits: "userSpaceOnUse"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("stop", {
+    "stop-color": "#D963B0"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("stop", {
+    offset: "0.503787",
+    "stop-color": "#9586EC"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("stop", {
+    offset: "1",
+    "stop-color": "#12C2E9"
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("linearGradient", {
+    id: "paint4_linear_1801_2300",
+    x1: "37.7372",
+    y1: "0.066069",
+    x2: "133.296",
+    y2: "50.6318",
+    gradientUnits: "userSpaceOnUse"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("stop", {
+    "stop-color": "#D963B0"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("stop", {
+    offset: "0.503787",
+    "stop-color": "#9586EC"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("stop", {
+    offset: "1",
+    "stop-color": "#12C2E9"
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("linearGradient", {
+    id: "paint5_linear_1801_2300",
+    x1: "37.7372",
+    y1: "0.066069",
+    x2: "133.296",
+    y2: "50.6318",
+    gradientUnits: "userSpaceOnUse"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("stop", {
+    "stop-color": "#D963B0"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("stop", {
+    offset: "0.503787",
+    "stop-color": "#9586EC"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("stop", {
+    offset: "1",
+    "stop-color": "#12C2E9"
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("linearGradient", {
+    id: "paint6_linear_1801_2300",
+    x1: "37.7372",
+    y1: "0.066069",
+    x2: "133.296",
+    y2: "50.6318",
+    gradientUnits: "userSpaceOnUse"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("stop", {
+    "stop-color": "#D963B0"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("stop", {
+    offset: "0.503787",
+    "stop-color": "#9586EC"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("stop", {
+    offset: "1",
+    "stop-color": "#12C2E9"
+  }))));
+}
 
 /***/ }),
 
@@ -13329,6 +13602,78 @@ const Label = styled_components__WEBPACK_IMPORTED_MODULE_1__["default"].p`
 	font-size: 16px;
 `;
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Spinner);
+
+/***/ }),
+
+/***/ "./lib/components/subscription-box.js":
+/*!********************************************!*\
+  !*** ./lib/components/subscription-box.js ***!
+  \********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   SubscriptionBox: () => (/* binding */ SubscriptionBox)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
+/* harmony import */ var _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @refactco/ui-kit */ "./node_modules/@refactco/ui-kit/dist/ui-kit-expose.js");
+
+const {
+  useState
+} = wp.element;
+
+
+function SubscriptionBox() {
+  const [email, setEmail] = useState('');
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(SubscriptionBoxWrapper, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", null, "Get Weekly media tech news in easy-to-read chunks."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "Boost your productivity with our streamlined plugin, designed to simplify your workflow and integrate seamlessly with your favorite tools."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(SubscriptionForm, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Input, {
+    type: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.InputType.TEXT,
+    value: email,
+    onChange: value => setEmail(value),
+    required: true,
+    placeholder: "Enter your email address"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "No Spam. Unsubscribe any time.")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Button, {
+    type: "submit"
+  }, "Subscribe")));
+}
+const SubscriptionBoxWrapper = styled_components__WEBPACK_IMPORTED_MODULE_2__.styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    & > * {
+        flex: 1;
+        margin:0;
+    }
+    & > p {
+        margin-top: 15px;
+        color: #798686;
+    }
+`;
+const SubscriptionForm = styled_components__WEBPACK_IMPORTED_MODULE_2__.styled.form`
+    display: flex;
+    flex-direction: column;
+    margin-top: 16px;
+    width: 100%;
+    gap: 11px;
+    @media (min-width: 768px) {
+  	    margin-top: 31px;
+        flex-direction: row;
+  }
+}`;
+const InputContainer = styled_components__WEBPACK_IMPORTED_MODULE_2__.styled.div`
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 4px;
+     & > * {
+        margin:0;
+    }
+    & > p {
+        color: #798686;
+    }
+`;
 
 /***/ }),
 
@@ -14858,22 +15203,47 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @refactco/ui-kit */ "./node_modules/@refactco/ui-kit/dist/ui-kit-expose.js");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/dist/index.js");
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
+/* harmony import */ var _components_about_plugin__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../components/about-plugin */ "./lib/components/about-plugin.js");
+/* harmony import */ var _components_subscription_box__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../components/subscription-box */ "./lib/components/subscription-box.js");
+/* harmony import */ var _components_collect_data__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../components/collect-data */ "./lib/components/collect-data.js");
 
 /* eslint-disable react/no-unescaped-entities */
 
 
 
+
+
+
 const About = () => {
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Section, {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(AboutContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Section, {
     headerProps: {
-      title: 'Refact.co',
-      description: 'Product Design Studio for Audience-first Media'
+      title: 'About'
     }
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "We help digital newsrooms and publication media design scalable publishing platforms, collect and make sense of their data, and optimize their audience's experience."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Link, {
-    to: 'https://refact.co'
-  }, "Refact.co"));
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(AboutLayout, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_about_plugin__WEBPACK_IMPORTED_MODULE_2__.AboutPlugin, null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Divider, null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_subscription_box__WEBPACK_IMPORTED_MODULE_3__.SubscriptionBox, null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Divider, null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_collect_data__WEBPACK_IMPORTED_MODULE_4__.CollectData, null)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "With this plugin, you can import campaigns from other services into your Beehiiv account.")))));
 };
+const AboutContainer = styled_components__WEBPACK_IMPORTED_MODULE_5__.styled.div`
+	margin-top: -70px;
+`;
+const AboutLayout = styled_components__WEBPACK_IMPORTED_MODULE_5__.styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+   & > * {
+    flex: 1;
+  }
+
+  @media (min-width: 768px) {
+	flex-direction: row;
+  	gap: 103px;
+  }
+`;
+const Divider = styled_components__WEBPACK_IMPORTED_MODULE_5__.styled.div`
+  width: 100%;
+  height: 1px;
+  background-color: #e5e5e5;
+  margin: 24px 0;
+`;
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (About);
 
 /***/ }),
