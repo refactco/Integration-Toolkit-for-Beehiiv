@@ -911,3 +911,7 @@
 .components-modal__content.has-scrolled-content:not(.hide-header) .components-modal__header {
  border-width: 0 !important;
 }
+.szh-accordion__item {
+	margin-bottom: 40px;
+	border-bottom: 1px solid #d7dbdb !important;
+}

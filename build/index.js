@@ -12682,7 +12682,7 @@ const AddNewScheduleModal = ({
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_2__.Section, {
     headerProps: {
       title: 'Import Campaign Data',
-      description: 'Manually import content from Beehiiv to your WordPress site.'
+      description: 'Schedule import content from Beehiiv to your WordPress site.'
     }
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_add_new_schedule_form_add_new_schedule_form__WEBPACK_IMPORTED_MODULE_3__["default"], {
     onClose: onClose,
@@ -13024,6 +13024,7 @@ const Header = () => {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   StyledWrapper: () => (/* binding */ StyledWrapper),
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
@@ -13047,7 +13048,7 @@ const ImportPercentage = ({
     url.hash = `#/import-campaigns/scheduled?scheduleId=${scheduleId}`;
     window.open(url.toString(), '_blank');
   };
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, scheduleId && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "Click on the following link to get full information about the scheduled task with this ID:", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(StyledWrapper, null, scheduleId && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "Click on the following link to get full information about the scheduled task with this ID:", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "span-link",
     onClick: handleClick
   }, ' ', scheduleId)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null, progressValue, " %"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Progress, {
@@ -13063,6 +13064,9 @@ const ImportPercentage = ({
     disabled: loadingJobAction
   }, "Cancel")));
 };
+const StyledWrapper = styled_components__WEBPACK_IMPORTED_MODULE_2__["default"].div`
+	padding-right: 20px;
+`;
 const ButtonContainer = styled_components__WEBPACK_IMPORTED_MODULE_2__["default"].div`
 	display: flex;
 	gap: 16px;
@@ -13428,6 +13432,10 @@ function manaulImportHelper(state, setState, groupName, setGroupName, removeGrou
         };
         newState.isFormDisabled = true;
       }
+      if (name === 'createNewConnection' && value) {
+        newState.selectedConnection = 'not_set';
+        newState.isFormDisabled = true;
+      }
       return newState;
     });
   }
@@ -13450,6 +13458,24 @@ function manaulImportHelper(state, setState, groupName, setGroupName, removeGrou
         if (!value) return 'Run time is required.';
         if (!/^(?:[01]\d|2[0-3]):[0-5]\d$/.test(value)) return 'Invalid time format. Use "HH:mm" (e.g., "02:00").';
         break;
+      case 'connectionName':
+        if (!value && state.includeAsConnection && state.createNewConnection) return 'Connection name is required.';
+        break;
+      case 'includeAsConnection':
+        if (!value) {
+          setState(prevState => ({
+            ...prevState,
+            errors: {
+              ...prevState.errors,
+              connectionName: ''
+            },
+            isFormDisabled: false
+          }));
+        } else {
+          if (!state.connectionName) {
+            return 'Connection name is required.';
+          }
+        }
       default:
         return '';
     }
@@ -13568,10 +13594,10 @@ function manaulImportHelper(state, setState, groupName, setGroupName, removeGrou
         });
       }
     }
-    setState(prevState => ({
-      ...prevState,
-      loading: false
-    }));
+    // setState( ( prevState ) => ( {
+    // 	...prevState,
+    // 	loading: false,
+    // } ) );
   }
   async function startImportHandler(event) {
     event.preventDefault();
@@ -13595,7 +13621,10 @@ function manaulImportHelper(state, setState, groupName, setGroupName, removeGrou
       runHour,
       runTime,
       runDay,
-      contentType
+      contentType,
+      includeAsConnection,
+      connectionName,
+      selectedConnection
     } = state;
     const post_status = {};
     if (publishedCampaigns) {
@@ -13636,7 +13665,10 @@ function manaulImportHelper(state, setState, groupName, setGroupName, removeGrou
       import_cm_tags_as: importCampaignTagAs !== null && importCampaignTagAs !== void 0 ? importCampaignTagAs : null,
       import_option: importOption !== null && importOption !== void 0 ? importOption : null,
       schedule_settings: JSON.stringify(schedule_settings),
-      audience: contentType
+      audience: contentType,
+      include_as_connection: includeAsConnection ? "true" : "false",
+      new_connection_name: connectionName,
+      selected_connection: selectedConnection
     };
     try {
       setState(prevState => ({
@@ -13772,13 +13804,35 @@ function manaulImportHelper(state, setState, groupName, setGroupName, removeGrou
       });
     }
   }
+  async function getAllConnections() {
+    try {
+      const response = await apiFetch({
+        path: 'itfb/v1/get-all-connections',
+        method: 'GET'
+      });
+      const selectedConnection = Object.keys(response).length > 0 ? Object.keys(response)[0] : 'not_set';
+      setState(prevState => ({
+        ...prevState,
+        connections: response,
+        loading: false,
+        selectedConnection,
+        isFormDisabled: selectedConnection === 'not_set' ? true : false
+      }));
+    } catch (error) {
+      const {
+        message
+      } = error;
+      react_toastify__WEBPACK_IMPORTED_MODULE_0__.toast.error(message);
+    }
+  }
   return {
     getDefaultOptions,
     handleInputChange,
     handleBlur,
     startImportHandler,
     checkCurrentImportStatus,
-    jobActionHandler
+    jobActionHandler,
+    getAllConnections
   };
 }
 
@@ -13794,6 +13848,7 @@ function manaulImportHelper(state, setState, groupName, setGroupName, removeGrou
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   InputContainer: () => (/* binding */ InputContainer),
+/* harmony export */   StyledWrapper: () => (/* binding */ StyledWrapper),
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
@@ -13860,7 +13915,12 @@ const ManualImport = () => {
     jobAction: 'pause',
     loadingJobAction: false,
     scheduleId: null,
-    contentType: 'free'
+    contentType: 'free',
+    selectedConnection: 'not_set',
+    connections: [],
+    createNewConnection: false,
+    includeAsConnection: true,
+    connectionName: ''
   });
   const {
     apiKey,
@@ -13898,7 +13958,12 @@ const ManualImport = () => {
     jobAction,
     loadingJobAction,
     scheduleId,
-    contentType
+    contentType,
+    selectedConnection,
+    connections,
+    createNewConnection,
+    includeAsConnection,
+    connectionName
   } = state;
   const [groupName, setGroupName, removeGroupName] = (0,_hooks_useLocalStorage__WEBPACK_IMPORTED_MODULE_7__["default"])('groupName', null);
   const [totalQueuedCampaigns, setTotalQueuedCampaigns, removeTotalQueuedCampaigns] = (0,_hooks_useLocalStorage__WEBPACK_IMPORTED_MODULE_7__["default"])('totalQueuedCampaigns', null);
@@ -13910,12 +13975,14 @@ const ManualImport = () => {
     startImportHandler,
     handleBlur,
     checkCurrentImportStatus,
-    jobActionHandler
+    jobActionHandler,
+    getAllConnections
   } = helper;
   useEffect(() => {
     (async () => {
       await getDefaultOptions();
       await checkCurrentImportStatus();
+      await getAllConnections();
     })();
   }, []);
   useEffect(() => {
@@ -13925,7 +13992,7 @@ const ManualImport = () => {
       }
     };
   }, [intervalId]);
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, disableInput && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_backdrop__WEBPACK_IMPORTED_MODULE_3__["default"], {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(StyledWrapper, null, disableInput && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_backdrop__WEBPACK_IMPORTED_MODULE_3__["default"], {
     show: true,
     modalClosed: () => (0,_common_common_function__WEBPACK_IMPORTED_MODULE_6__.logger)('Fetching Campaigns ...')
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_spinner__WEBPACK_IMPORTED_MODULE_4__["default"], {
@@ -13937,12 +14004,36 @@ const ManualImport = () => {
     jobActionHandler: jobActionHandler,
     loadingJobAction: loadingJobAction,
     scheduleId: scheduleId
-  }) : loading ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_spinner__WEBPACK_IMPORTED_MODULE_4__["default"], null) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h1", null, "Import Campaign Data"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("form", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Accordion, {
+  }) : loading ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_spinner__WEBPACK_IMPORTED_MODULE_4__["default"], null) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Section, {
+    headerProps: {
+      title: 'Import Campaign Data',
+      description: 'Manually import content from Beehiiv to your WordPress site.'
+    }
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("form", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Accordion, {
     noDraggable: true,
     transitionTimeout: 300,
     items: [{
       header: 'Step 1: Choose Data from Beehiiv',
-      content: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Container, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+      initialEntered: true,
+      active: true,
+      content: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Container, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, Object.keys(connections).length > 0 && !createNewConnection ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Select, {
+        label: "Select Connection",
+        options: [...Object.keys(connections).map(connection_name => ({
+          label: connection_name,
+          value: connection_name
+        }))],
+        value: selectedConnection,
+        onChange: value => handleInputChange(value, 'selectedConnection'),
+        required: true,
+        disabled: disableInput
+      }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+        className: "include-as-connection-container"
+      }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Checkbox, {
+        label: "OR create new connection",
+        checked: createNewConnection,
+        onChange: value => handleInputChange(value, 'createNewConnection'),
+        disabled: disableInput
+      })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null)) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
         className: "label",
         htmlFor: "apiKey"
       }, "API Key", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Tooltip, {
@@ -13960,7 +14051,7 @@ const ManualImport = () => {
         required: true,
         hasError: errors.apiKey,
         disabled: disableInput
-      })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+      }), errors.apiKey && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ErrorContainer, null, errors.apiKey)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
         className: "label",
         htmlFor: "publicationId"
       }, "Publication ID", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Tooltip, {
@@ -13978,7 +14069,26 @@ const ManualImport = () => {
         required: true,
         hasError: errors.publicationId,
         disabled: disableInput
-      }))), errors.apiKey && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ErrorContainer, null, errors.apiKey), errors.publicationId && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ErrorContainer, null, errors.publicationId), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Divider, null)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Container, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+      }), errors.publicationId && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ErrorContainer, null, errors.publicationId)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+        className: "include-as-connection-container"
+      }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Checkbox, {
+        label: "Include as Connection",
+        checked: includeAsConnection,
+        onChange: value => handleInputChange(value, 'includeAsConnection'),
+        onBlur: () => handleBlur('includeAsConnection', includeAsConnection),
+        disabled: disableInput
+      }))))), includeAsConnection && selectedConnection === 'not_set' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Container, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+        className: "label",
+        htmlFor: "connectionName"
+      }, "Name of Connection"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Input, {
+        type: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.InputType.TEXT,
+        value: connectionName,
+        onChange: value => handleInputChange(value, 'connectionName'),
+        onBlur: () => handleBlur('connectionName', connectionName),
+        hasError: errors.connectionName,
+        required: includeAsConnection,
+        disabled: disableInput
+      }), errors.connectionName && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ErrorContainer, null, errors.connectionName)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null))) : null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Divider, null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Container, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
         className: "label",
         htmlFor: "contentType"
       }, "Content Type", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Tooltip, {
@@ -14003,7 +14113,7 @@ const ManualImport = () => {
         value: contentType,
         required: true,
         disabled: disableInput
-      })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Divider, null))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null, "Select type of campaigns that you want migrated from Beehiiv", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Tooltip, {
+      })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null, "Select type of campaigns that you want migrated from Beehiiv", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Tooltip, {
         id: "campaignType",
         mode: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.TooltipMode.DARK,
         place: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.TooltipPlace.TOP,
@@ -14043,7 +14153,7 @@ const ManualImport = () => {
       })), errors.campaignStatus && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ErrorContainer, null, errors.campaignStatus)))
     }, {
       header: 'Step 2: Import Data to WordPress',
-      content: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Container, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+      content: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Container, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
         className: "label",
         htmlFor: "postType"
       }, "Select Post Type", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Tooltip, {
@@ -14176,7 +14286,10 @@ const ManualImport = () => {
         value: importOption,
         required: true,
         disabled: disableInput
-      })))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Divider, null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Toggle, {
+      }))))
+    }, {
+      header: 'Step 3: Schedule Import',
+      content: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Toggle, {
         label: "Schedule",
         onChange: value => handleInputChange(value, 'enableSchedule'),
         checked: enableSchedule,
@@ -14276,6 +14389,13 @@ const ManualImport = () => {
     disabled: isFormDisabled
   }, "Start Import")))));
 };
+const StyledWrapper = styled_components__WEBPACK_IMPORTED_MODULE_8__.styled.div`
+	background-color: #fff;
+	position: relative;
+	min-height: 307px;
+	padding-bottom: 20px;
+	padding-right: 20px;
+`;
 const Container = styled_components__WEBPACK_IMPORTED_MODULE_8__.styled.div`
 	display: flex;
 	flex-direction: column;
