@@ -21,7 +21,7 @@
 	--toastify-toast-max-height: 800px;
 	--toastify-toast-bd-radius: 6px;
 	--toastify-font-family: sans-serif;
-	--toastify-z-index: 9999;
+	--toastify-z-index: 100001;
 	--toastify-text-color-light: #757575;
 	--toastify-text-color-dark: #fff;
 	--toastify-text-color-info: #fff;
@@ -900,4 +900,18 @@
 	color: #00e;
 	text-decoration: underline;
 	cursor: pointer;
+}
+
+.include-as-connection-container{
+	margin-top: 40px;
+}
+.components-modal__content {
+	margin-top: 0 !important;
+}
+.components-modal__content.has-scrolled-content:not(.hide-header) .components-modal__header {
+ border-width: 0 !important;
+}
+.szh-accordion__item {
+	margin-bottom: 40px;
+	border-bottom: 1px solid #d7dbdb !important;
 }

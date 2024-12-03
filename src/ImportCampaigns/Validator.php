@@ -38,10 +38,31 @@ class Validator {
 	 */
 	public static function validate_all_parameters( $params ) {
 
-		// Validate credentials.
-		$valid_credentials = self::validate_credentials( $params['credentials'] );
-		if ( is_wp_error( $valid_credentials ) ) {
-			return $valid_credentials;
+		if ( 'not_set' === $params['selected_connection'] ) {
+			// Validate credentials.
+			$valid_credentials = self::validate_credentials( $params['credentials'] );
+			if ( is_wp_error( $valid_credentials ) ) {
+				return $valid_credentials;
+			}
+
+			// validate connection name if include_as_connection is set to true.
+			if ( isset( $params ['include_as_connection'] ) && 'true' === $params['include_as_connection'] ) {
+				if ( ! isset( $params['new_connection_name'] ) || empty( $params['new_connection_name'] ) ) {
+					return new \WP_Error( 'missing_connection_name', __( 'Connection name is required.', 'integration-toolkit-for-beehiiv' ), array( 'status' => 400 ) );
+				}
+
+				$new_connection_name = strtolower( trim( str_replace( ' ', '_', $params['new_connection_name'] ) ) );
+
+				$all_connections = Helper::get_all_beehiiv_connections();
+
+				if ( array_key_exists( $new_connection_name, $all_connections ) ) {
+					return new \WP_Error(
+						'connection_exists',
+						'Connection name is duplicated. Please choose a different name.',
+						array( 'status' => 404 )
+					);
+				}
+			}
 		}
 
 		// Validate basic parameters.
@@ -150,8 +171,20 @@ class Validator {
 		// Validate each parameter.
 		foreach ( $params as $key => $param ) {
 			if ( empty( $param ) ) {
+
+				// Skip taxonomy and taxonomy_term if the post type has no taxonomies.
 				if ( in_array( $key, array( 'taxonomy', 'taxonomy_term' ) ) && ! $post_type_has_taxonomies ) {
 					continue;
+				}
+
+				// skip new_connection_name and include_as_connection and credentials if selected_connection is set.
+				if ( in_array( $key, array( 'new_connection_name', 'include_as_connection', 'credentials' ) ) && 'not_set' !== $params['selected_connection'] ) {
+					continue;
+				}
+
+				// skip new_connection_name if include_as_connection is not equal to not_set.
+				if ( 'not_set' == $params['selected_connection'] && "false" == $params['include_as_connection'] && 'new_connection_name' == $key) {
+						continue;
 				}
 
 				return new \WP_Error(

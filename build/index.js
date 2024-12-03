@@ -1823,9 +1823,9 @@ function HeaderMenuItemsDesktop(props) {
                             onSelectItem === null || onSelectItem === void 0 ? void 0 : onSelectItem(index);
                             (_a = item.onClick) === null || _a === void 0 ? void 0 : _a.call(item, event);
                         } }), index) }, index));
-            }), (0, jsx_runtime_1.jsx)(sub_header_1.SubHeader, { subHeaderItems: subHeaderItems, subHeaderType: subHeaderType, activeItemIndex: activeSubItemIndex, onSubItemClick: function (index) {
+            }), subHeaderItems ? ((0, jsx_runtime_1.jsx)(sub_header_1.SubHeader, { subHeaderItems: subHeaderItems, subHeaderType: subHeaderType, activeItemIndex: activeSubItemIndex, onSubItemClick: function (index) {
                     onSelectSubItem === null || onSelectSubItem === void 0 ? void 0 : onSelectSubItem(index);
-                } })] }));
+                } })) : null] }));
 }
 exports.HeaderMenuItemsDesktop = HeaderMenuItemsDesktop;
 
@@ -11405,49 +11405,52 @@ async function delay(ms) {
 
 /***/ }),
 
-/***/ "./lib/components/backdrop.js":
-/*!************************************!*\
-  !*** ./lib/components/backdrop.js ***!
-  \************************************/
+/***/ "./lib/components/about-plugin.js":
+/*!****************************************!*\
+  !*** ./lib/components/about-plugin.js ***!
+  \****************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */   AboutPlugin: () => (/* binding */ AboutPlugin)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
 
 
-const Backdrop = ({
-  show,
-  modalClosed,
-  children
-}) => show ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(BackdropContainer, {
-  onClick: modalClosed
-}, children) : null;
-const BackdropContainer = styled_components__WEBPACK_IMPORTED_MODULE_1__["default"].div`
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background: rgba( 0, 0, 0, 0.5 );
-	z-index: 100;
-	display: flex;
-	justify-content: center;
-	align-items: center;
+function AboutPlugin() {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(AboutPluginWrapper, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", null, "About RE/beehiiv"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "Boost your productivity with our streamlined plugin, designed to simplify your workflow and integrate seamlessly with your favorite tools. Whether you're automating tasks, tracking key metrics, or improving efficiency, this plugin delivers the flexibility and ease you need to stay focused on what matters most. Get started today and experience a smarter, more effective way to work."));
+}
+;
+const AboutPluginWrapper = styled_components__WEBPACK_IMPORTED_MODULE_1__.styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    & > * {
+        flex: 1;
+        margin:0;
+    }
 `;
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Backdrop);
+const PluginInfo = styled_components__WEBPACK_IMPORTED_MODULE_1__.styled.div`
+    display: flex;
+    flex-direction: row;
+    gap: 18px;
+    align-items: center;
+    & > * {
+        margin: 0;
+    }
+`;
 
 /***/ }),
 
-/***/ "./lib/components/header.js":
-/*!**********************************!*\
-  !*** ./lib/components/header.js ***!
-  \**********************************/
+/***/ "./lib/components/add-button.js":
+/*!**************************************!*\
+  !*** ./lib/components/add-button.js ***!
+  \**************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -11458,262 +11461,291 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @refactco/ui-kit */ "./node_modules/@refactco/ui-kit/dist/ui-kit-expose.js");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
 
-/* eslint-disable react-hooks/exhaustive-deps */
+
+const AddButton = ({
+  children,
+  icon,
+  iconPosition = 'left',
+  buttonColor = _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.ButtonColor.GREEN,
+  onClick
+}) => {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Button, {
+    color: buttonColor,
+    icon: icon !== null && icon !== void 0 ? icon : null,
+    iconPosition: iconPosition,
+    style: {
+      display: 'flex',
+      alignItems: 'center'
+    },
+    onClick: onClick
+  }, children);
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (AddButton);
+
+/***/ }),
+
+/***/ "./lib/components/add-new-connection-modal/add-new-connection-modal-helper.js":
+/*!************************************************************************************!*\
+  !*** ./lib/components/add-new-connection-modal/add-new-connection-modal-helper.js ***!
+  \************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   addNewConnectionModalHelper: () => (/* binding */ addNewConnectionModalHelper)
+/* harmony export */ });
+/* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/dist/react-toastify.esm.mjs");
+const apiFetch = wp.apiFetch;
+
+function addNewConnectionModalHelper(state, setState, handleRefreshConnectionsData, onClose) {
+  function handleInputChange(value, name) {
+    setState(prevState => {
+      const newState = {
+        ...prevState,
+        [name]: value
+      };
+      return newState;
+    });
+  }
+  function validateInput(name, value) {
+    switch (name) {
+      case 'apiKey':
+        if (!value) return 'API Key is required.';
+        if (value.length !== 64) return 'API Key must be 64 characters.';
+        break;
+      case 'publicationId':
+        if (!value) return 'Publication ID is required.';
+        if (value.length !== 40) return 'Publication ID must be 40 characters.';
+        break;
+      case 'connectionName':
+        if (!value) return 'Connection Name is required.';
+        break;
+      default:
+        return '';
+    }
+  }
+  function handleBlur(name, value) {
+    const error = validateInput(name, value);
+    setState(prevState => {
+      const newErrors = {
+        ...prevState.errors,
+        [name]: error
+      };
+      const isFormDisabled = Object.values(newErrors).some(err => err);
+      return {
+        ...prevState,
+        errors: newErrors,
+        isFormDisabled
+      };
+    });
+  }
+  const createNewConnectionHandler = async event => {
+    event.preventDefault();
+    const {
+      apiKey,
+      publicationId,
+      connectionName
+    } = state;
+    const data = {
+      api_key: apiKey,
+      publication_id: publicationId,
+      connection_name: connectionName
+    };
+    try {
+      setState(prevState => ({
+        ...prevState,
+        isFormDisabled: true,
+        disableInput: true
+      }));
+      let path = 'itfb/v1/add-connection';
+      const response = await apiFetch({
+        path,
+        method: 'POST',
+        data
+      });
+      const {
+        message
+      } = response;
+      if (response.data) {
+        react_toastify__WEBPACK_IMPORTED_MODULE_0__.toast.error(message);
+      } else {
+        onClose();
+        handleRefreshConnectionsData();
+        react_toastify__WEBPACK_IMPORTED_MODULE_0__.toast.success(message);
+      }
+    } catch (error) {
+      console.log(error);
+      const {
+        message
+      } = error;
+      setState(prevState => ({
+        ...prevState,
+        errors: {},
+        isFormDisabled: false,
+        disableInput: false
+      }));
+      react_toastify__WEBPACK_IMPORTED_MODULE_0__.toast.error(message);
+    }
+  };
+  return {
+    handleInputChange,
+    handleBlur,
+    createNewConnectionHandler
+  };
+}
+
+/***/ }),
+
+/***/ "./lib/components/add-new-connection-modal/add-new-connection-modal.js":
+/*!*****************************************************************************!*\
+  !*** ./lib/components/add-new-connection-modal/add-new-connection-modal.js ***!
+  \*****************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @refactco/ui-kit */ "./node_modules/@refactco/ui-kit/dist/ui-kit-expose.js");
+/* harmony import */ var _add_new_connection_modal_helper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./add-new-connection-modal-helper */ "./lib/components/add-new-connection-modal/add-new-connection-modal-helper.js");
+/* harmony import */ var _add_new_schedule_form_add_new_schedule_form__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../add-new-schedule-form/add-new-schedule-form */ "./lib/components/add-new-schedule-form/add-new-schedule-form.js");
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
+
+
+
 const {
-  useState,
-  useEffect
+  useState
 } = wp.element;
 
 
-const Header = () => {
-  const navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_2__.useNavigate)();
-  const location = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_2__.useLocation)();
-  const [activeItemIndex, setActiveItemIndex] = useState(0);
-  const items = [{
-    item: 'import-campaigns',
-    title: 'Import Campaigns',
-    subHeaderItems: [{
-      name: 'import_campaigns_title',
-      title: 'Import your campaigns from Beehive'
-    }],
-    onClick: () => {
-      navigate('/import-campaigns');
+
+
+const FormContainer = styled_components__WEBPACK_IMPORTED_MODULE_5__["default"].div`
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    @media (min-width: 768px) {
+        flex-direction: row;
+        flex-wrap: wrap;
     }
-  }, {
-    item: 'about',
-    title: 'About',
-    onClick: () => {
-      navigate('/about');
+`;
+const InputWrapper = styled_components__WEBPACK_IMPORTED_MODULE_5__["default"].div`
+    width: 100%;
+    &:nth-child(3) {
+        margin-bottom: 16px;
     }
-  }];
-  const handleSelectItem = index => {
-    setActiveItemIndex(index);
-  };
-  useEffect(() => {
-    const path = location.pathname;
-    const index = items.findIndex(item => {
-      if (item.item === 'settings' && path === '/') return true;
-      return path.includes(item.item);
-    });
-    setActiveItemIndex(index === -1 ? 0 : index);
-  }, [location.pathname]);
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Header, {
-    logoSource: 'Refact',
-    items: items,
-    onSelectItem: handleSelectItem,
-    activeItemIndex: activeItemIndex
+`;
+const AddNewConnectionModal = ({
+  onClose,
+  handleRefreshConnectionsData
+}) => {
+  const [state, setState] = useState({
+    apiKey: '',
+    publicationId: '',
+    connectionName: '',
+    isFormDisabled: true,
+    errors: {},
+    disableInput: false
   });
-};
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Header);
-
-/***/ }),
-
-/***/ "./lib/components/import-percentage.js":
-/*!*********************************************!*\
-  !*** ./lib/components/import-percentage.js ***!
-  \*********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @refactco/ui-kit */ "./node_modules/@refactco/ui-kit/dist/ui-kit-expose.js");
-/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
-
-/* eslint-disable  jsx-a11y/click-events-have-key-events */
-/* eslint-disable  jsx-a11y/no-static-element-interactions */
-
-
-const ImportPercentage = ({
-  progressValue,
-  jobAction,
-  jobActionHandler,
-  loadingJobAction,
-  scheduleId
-}) => {
-  const handleClick = () => {
-    const url = new URL(window.location.href);
-    url.hash = `#/import-campaigns/scheduled?scheduleId=${scheduleId}`;
-    window.open(url.toString(), '_blank');
-  };
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, scheduleId && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "Click on the following link to get full information about the scheduled task with this ID:", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "span-link",
-    onClick: handleClick
-  }, ' ', scheduleId)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null, progressValue, " %"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Progress, {
-    value: progressValue,
-    max: "100"
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ButtonContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Button, {
-    color: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.ButtonColor.GREEN,
-    onClick: () => jobActionHandler(jobAction),
-    disabled: loadingJobAction
-  }, jobAction === 'pause' ? 'Pause' : 'Resume'), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Button, {
-    color: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.ButtonColor.RED,
-    onClick: () => jobActionHandler('cancel'),
-    disabled: loadingJobAction
-  }, "Cancel")));
-};
-const ButtonContainer = styled_components__WEBPACK_IMPORTED_MODULE_2__["default"].div`
-	display: flex;
-	gap: 16px;
-	margin-top: 20px;
-`;
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ImportPercentage);
-
-/***/ }),
-
-/***/ "./lib/components/layout.js":
-/*!**********************************!*\
-  !*** ./lib/components/layout.js ***!
-  \**********************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @refactco/ui-kit */ "./node_modules/@refactco/ui-kit/dist/ui-kit-expose.js");
-
-
-const Layout = ({
-  children
-}) => {
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Container, null, children));
-};
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Layout);
-
-/***/ }),
-
-/***/ "./lib/components/modal.js":
-/*!*********************************!*\
-  !*** ./lib/components/modal.js ***!
-  \*********************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _backdrop__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./backdrop */ "./lib/components/backdrop.js");
-/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
-
-/* eslint-disable import/no-extraneous-dependencies */
-
-
-
-const Modal = ({
-  show,
-  modalClosed,
-  children
-}) => {
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_backdrop__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    show: show,
-    modalClosed: modalClosed
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ModalContainer, {
-    className: "Modal",
-    style: {
-      transform: show ? 'translateX(0)' : 'translateX(-100vw)',
-      opacity: show ? '1' : '0'
+  const {
+    apiKey,
+    publicationId,
+    connectionName,
+    isFormDisabled,
+    errors,
+    disableInput
+  } = state;
+  const helper = (0,_add_new_connection_modal_helper__WEBPACK_IMPORTED_MODULE_3__.addNewConnectionModalHelper)(state, setState, handleRefreshConnectionsData, onClose);
+  const {
+    handleInputChange,
+    handleBlur,
+    createNewConnectionHandler
+  } = helper;
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Modal, {
+    onRequestClose: onClose,
+    size: "large"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_2__.Section, {
+    headerProps: {
+      title: 'Create a New Connection',
+      description: 'Create a new connection to use in manual/scheduled imports.'
     }
-  }, children));
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("form", {
+    onSubmit: createNewConnectionHandler
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(FormContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputWrapper, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+    className: "label",
+    htmlFor: "apiKey"
+  }, "API Key", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_2__.Tooltip, {
+    id: "apiKey",
+    mode: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_2__.TooltipMode.DARK,
+    place: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_2__.TooltipPlace.TOP,
+    content: "The API Key is a unique identifier that allows you to access your Beehiiv account data. You can find your API Key by logging into your Beehiiv account and go to Settings > Integrations > which will open up the API tab"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "question-icon"
+  }, "?"))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_2__.Input, {
+    type: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_2__.InputType.TEXT,
+    value: apiKey,
+    onChange: value => handleInputChange(value, 'apiKey'),
+    onBlur: () => handleBlur('apiKey', apiKey),
+    required: true,
+    hasError: errors.apiKey,
+    disabled: disableInput,
+    autoFocus: true
+  }), errors.apiKey && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_add_new_schedule_form_add_new_schedule_form__WEBPACK_IMPORTED_MODULE_4__.ErrorContainer, null, errors.apiKey)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputWrapper, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+    className: "label",
+    htmlFor: "publicationId"
+  }, "Publication ID", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_2__.Tooltip, {
+    id: "publicationId",
+    mode: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_2__.TooltipMode.DARK,
+    place: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_2__.TooltipPlace.TOP,
+    content: "The Publication ID is a unique identifier that allows you to access your Beehiiv account data. You can find your Publication ID by logging into your Beehiiv account and go to Settings > Integrations > which will open up the API tab"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "question-icon"
+  }, "?"))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_2__.Input, {
+    type: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_2__.InputType.TEXT,
+    value: publicationId,
+    onChange: value => handleInputChange(value, 'publicationId'),
+    onBlur: () => handleBlur('publicationId', publicationId),
+    required: true,
+    hasError: errors.publicationId,
+    disabled: disableInput
+  }), errors.publicationId && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_add_new_schedule_form_add_new_schedule_form__WEBPACK_IMPORTED_MODULE_4__.ErrorContainer, null, errors.publicationId)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputWrapper, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+    className: "label",
+    htmlFor: "connectionName"
+  }, "Name of Connection"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_2__.Input, {
+    type: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_2__.InputType.TEXT,
+    value: connectionName,
+    onChange: value => handleInputChange(value, 'connectionName'),
+    onBlur: () => handleBlur('connectionName', connectionName),
+    hasError: errors.connectionName,
+    required: true,
+    disabled: disableInput
+  }), errors.connectionName && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_add_new_schedule_form_add_new_schedule_form__WEBPACK_IMPORTED_MODULE_4__.ErrorContainer, null, errors.connectionName))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_2__.Button, {
+    type: "submit",
+    onClick: createNewConnectionHandler,
+    disabled: isFormDisabled
+  }, "Create Connection"))));
 };
-const ModalContainer = styled_components__WEBPACK_IMPORTED_MODULE_2__["default"].div`
-	position: fixed;
-	z-index: 500;
-	background-color: white;
-	width: 85%;
-	border: 1px solid #ccc;
-	border-radius: 5px;
-	box-shadow: 1px 1px 1px #eee;
-	padding: 16px;
-	left: 5%;
-	top: 20%;
-	box-sizing: border-box;
-	transition: all 0.3s ease-out;
-	overflow-y: scroll;
-
-	@media ( min-width: 780px ) {
-		width: 500px;
-		left: calc( 50% - 250px );
-		top: 20%;
-		overflow-y: hidden;
-	}
-`;
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,react__WEBPACK_IMPORTED_MODULE_0__.memo)(Modal));
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (AddNewConnectionModal);
 
 /***/ }),
 
-/***/ "./lib/components/spinner.js":
-/*!***********************************!*\
-  !*** ./lib/components/spinner.js ***!
-  \***********************************/
+/***/ "./lib/components/add-new-schedule-form/add-new-schedule-form-helper.js":
+/*!******************************************************************************!*\
+  !*** ./lib/components/add-new-schedule-form/add-new-schedule-form-helper.js ***!
+  \******************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
-
-
-const Spinner = ({
-  label
-}) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(SpinnerContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Loader, null), label && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Label, null, label));
-const spin = (0,styled_components__WEBPACK_IMPORTED_MODULE_1__.keyframes)`
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-`;
-const SpinnerContainer = styled_components__WEBPACK_IMPORTED_MODULE_1__["default"].div`
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	position: absolute;
-	flex-direction: column;
-	gap: 8px;
-	top: 50%;
-	left: 50%;
-	transform: translate( -50%, -50% );
-`;
-const Loader = styled_components__WEBPACK_IMPORTED_MODULE_1__["default"].div`
-	border: 4px solid rgba( 0, 0, 0, 0.1 );
-	border-top: 4px solid #2e9e62;
-	border-radius: 50%;
-	width: 40px;
-	height: 40px;
-	animation: ${spin} 1s linear infinite;
-`;
-const Label = styled_components__WEBPACK_IMPORTED_MODULE_1__["default"].p`
-	color: #fff;
-	font-size: 16px;
-`;
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Spinner);
-
-/***/ }),
-
-/***/ "./lib/container/manaulImport/manaulImportHelper.js":
-/*!**********************************************************!*\
-  !*** ./lib/container/manaulImport/manaulImportHelper.js ***!
-  \**********************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   manaulImportHelper: () => (/* binding */ manaulImportHelper)
+/* harmony export */   addNewScheduleFormHelper: () => (/* binding */ addNewScheduleFormHelper)
 /* harmony export */ });
 /* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/dist/react-toastify.esm.mjs");
 /* harmony import */ var _common_common_function__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../common/common-function */ "./lib/common/common-function.js");
@@ -11722,7 +11754,7 @@ __webpack_require__.r(__webpack_exports__);
 const apiFetch = wp.apiFetch;
 
 
-function manaulImportHelper(state, setState, groupName, setGroupName, removeGroupName, setTotalQueuedCampaigns, removeTotalQueuedCampaigns) {
+function addNewScheduleFormHelper(state, setState, onClose, handleRefreshScheduleData, scheduleId, setSchedule) {
   async function getDefaultOptions() {
     try {
       const response = await apiFetch({
@@ -11783,6 +11815,7 @@ function manaulImportHelper(state, setState, groupName, setGroupName, removeGrou
         newState.taxonomies = selectedPostType ? selectedPostType.taxonomies : [];
         newState.selectedTaxonomy = newState.taxonomies.length > 0 ? newState.taxonomies[0].taxonomy_slug : '';
         newState.selectedTerm = newState.taxonomies.length > 0 && newState.terms.length > 0 ? newState.terms[0].term_id : '';
+        newState.terms = newState.selectedTaxonomy ? newState.taxonomies.find(pt => pt.taxonomy_slug === newState.selectedTaxonomy).terms : [];
       }
       if (name === 'selectedTaxonomy') {
         const selectedTaxonomy = state.taxonomies.find(pt => pt.taxonomy_slug === value);
@@ -11803,18 +11836,22 @@ function manaulImportHelper(state, setState, groupName, setGroupName, removeGrou
         };
         newState.isFormDisabled = true;
       }
+      if (name === 'createNewConnection' && value) {
+        newState.selectedConnection = 'not_set';
+        newState.isFormDisabled = true;
+      }
       return newState;
     });
   }
   function validateInput(name, value) {
     switch (name) {
       case 'apiKey':
-        if (!value) return 'API Key is required.';
-        if (value.length !== 64) return 'API Key must be 64 characters.';
+        if (!value && state.createNewConnection) return 'API Key is required.';
+        if (value.length !== 64 && state.createNewConnection) return 'API Key must be 64 characters.';
         break;
       case 'publicationId':
-        if (!value) return 'Publication ID is required.';
-        if (value.length !== 40) return 'Publication ID must be 40 characters.';
+        if (!value && state.createNewConnection) return 'Publication ID is required.';
+        if (value.length !== 40 && state.createNewConnection) return 'Publication ID must be 40 characters.';
         break;
       case 'runHour':
         if (!value) return 'Run hour is required.';
@@ -11825,6 +11862,24 @@ function manaulImportHelper(state, setState, groupName, setGroupName, removeGrou
         if (!value) return 'Run time is required.';
         if (!/^(?:[01]\d|2[0-3]):[0-5]\d$/.test(value)) return 'Invalid time format. Use "HH:mm" (e.g., "02:00").';
         break;
+      case 'connectionName':
+        if (!value && state.includeAsConnection && state.createNewConnection) return 'Connection name is required.';
+        break;
+      case 'includeAsConnection':
+        if (!value) {
+          setState(prevState => ({
+            ...prevState,
+            errors: {
+              ...prevState.errors,
+              connectionName: ''
+            },
+            isFormDisabled: false
+          }));
+        } else {
+          if (!state.connectionName) {
+            return 'Connection name is required.';
+          }
+        }
       default:
         return '';
     }
@@ -11851,103 +11906,6 @@ function manaulImportHelper(state, setState, groupName, setGroupName, removeGrou
       }));
     }
   }
-  async function getImportStatus(group_name) {
-    let response = null;
-    try {
-      response = await apiFetch({
-        path: `itfb/v1/import-status?group_name=${group_name}`
-      });
-    } catch (error) {
-      (0,_common_common_function__WEBPACK_IMPORTED_MODULE_1__.logger)('ImportStatus request error:', error);
-    }
-    return response;
-  }
-  function updateProgress(response, intervalId) {
-    const {
-      remaining_campaigns,
-      status
-    } = response;
-    const totalQueuedCampaigns = window.localStorage.getItem('totalQueuedCampaigns');
-    const totalCampaignsNumber = Number(totalQueuedCampaigns);
-    const remainingCampaigns = Number(remaining_campaigns);
-    const progressValue = (totalCampaignsNumber - remainingCampaigns) / totalCampaignsNumber * 100;
-    setState(prevState => ({
-      ...prevState,
-      progressValue: Math.floor(progressValue),
-      startImporting: true
-    }));
-    if (intervalId && status !== 'active') {
-      clearAllIntervals();
-      setState(prevState => {
-        return {
-          ...prevState,
-          intervalId: [],
-          progressValue: 100
-        };
-      });
-    }
-  }
-  const clearAllIntervals = () => {
-    const {
-      intervalId
-    } = state;
-    intervalId.forEach(id => clearInterval(id));
-    setState(prevState => ({
-      ...prevState,
-      intervalId: []
-    }));
-  };
-  async function importStatus(group_name) {
-    const intervalId = setInterval(async () => {
-      const response = await getImportStatus(group_name);
-      if (response && response.status === 'active') {
-        updateProgress(response, intervalId);
-      }
-      if (response && response.status === 'not_active' || response.status === 'active' && Number(response.remaining_campaigns === 0)) {
-        clearAllIntervals();
-        react_toastify__WEBPACK_IMPORTED_MODULE_0__.toast.success('Import completed successfully');
-        removeGroupName();
-        removeTotalQueuedCampaigns();
-        setState(prevState => {
-          return {
-            ...prevState,
-            progressValue: 100,
-            loadingJobAction: true
-          };
-        });
-        await (0,_common_common_function__WEBPACK_IMPORTED_MODULE_1__.delay)(5000);
-        window.location.reload();
-      }
-    }, 10000);
-    return intervalId;
-  }
-  async function checkCurrentImportStatus() {
-    if (groupName) {
-      const response = await getImportStatus(groupName);
-      if (response && response.status === 'active') {
-        updateProgress(response);
-        clearAllIntervals();
-        const newIntervalId = importStatus();
-        setState(prevState => ({
-          ...prevState,
-          intervalId: [...state.intervalId, newIntervalId]
-        }));
-      }
-      if (response && response.status === 'paused') {
-        updateProgress(response);
-        setState(prevState => {
-          return {
-            ...prevState,
-            jobAction: 'resume'
-          };
-        });
-      }
-    }
-    setState(prevState => ({
-      ...prevState,
-      loading: false
-    }));
-  }
   async function startImportHandler(event) {
     event.preventDefault();
     const {
@@ -11965,28 +11923,38 @@ function manaulImportHelper(state, setState, groupName, setGroupName, removeGrou
       selectedAuthor,
       importCampaignTagAs,
       importOption,
-      enableSchedule,
       frequency,
       runHour,
       runTime,
       runDay,
-      contentType
+      contentType,
+      includeAsConnection,
+      connectionName,
+      selectedConnection
     } = state;
-    const post_status = {};
-    if (publishedCampaigns) {
-      post_status.confirmed = publishedWrodpressPostStatus;
-    }
-    if (draftededCampaigns) {
-      post_status.draft = draftedWrodpressPostStatus;
-    }
-    if (archivedCampaigns) {
-      post_status.archived = archivedWrodpressPostStatus;
-    }
-    const schedule_settings = {};
-    if (!enableSchedule) {
-      schedule_settings.enabled = 'off';
-    }
-    if (enableSchedule) {
+    if (state.includeAsConnection && !state.connectionName && state.createNewConnection) {
+      setState(prevState => ({
+        ...prevState,
+        errors: {
+          ...prevState.errors,
+          connectionName: 'Connection name is required'
+        },
+        isFormDisabled: true
+      }));
+      react_toastify__WEBPACK_IMPORTED_MODULE_0__.toast.error('Connection name is required');
+      return;
+    } else {
+      const post_status = {};
+      if (publishedCampaigns) {
+        post_status.confirmed = publishedWrodpressPostStatus;
+      }
+      if (draftededCampaigns) {
+        post_status.draft = draftedWrodpressPostStatus;
+      }
+      if (archivedCampaigns) {
+        post_status.archived = archivedWrodpressPostStatus;
+      }
+      const schedule_settings = {};
       schedule_settings.enabled = 'on';
       schedule_settings.frequency = frequency;
       if (frequency === 'hourly') {
@@ -11997,143 +11965,174 @@ function manaulImportHelper(state, setState, groupName, setGroupName, removeGrou
         schedule_settings.time = runTime;
         schedule_settings.specific_day = runDay;
       }
-    }
-    const data = {
-      credentials: JSON.stringify({
-        api_key: apiKey,
-        publication_id: publicationId
-      }),
-      post_status: JSON.stringify(post_status),
-      post_type: selectedPostType,
-      taxonomy: selectedTaxonomy !== null && selectedTaxonomy !== void 0 ? selectedTaxonomy : null,
-      taxonomy_term: selectedTerm !== null && selectedTerm !== void 0 ? selectedTerm : null,
-      author: selectedAuthor !== null && selectedAuthor !== void 0 ? selectedAuthor : null,
-      import_cm_tags_as: importCampaignTagAs !== null && importCampaignTagAs !== void 0 ? importCampaignTagAs : null,
-      import_option: importOption !== null && importOption !== void 0 ? importOption : null,
-      schedule_settings: JSON.stringify(schedule_settings),
-      audience: contentType
-    };
-    try {
-      setState(prevState => ({
-        ...prevState,
-        isFormDisabled: true,
-        disableInput: true
-      }));
-      const response = await apiFetch({
-        path: 'itfb/v1/import-campaigns',
-        method: 'POST',
-        data
-      });
-      const {
-        group_name,
-        message,
-        total_queued_campaigns
-      } = response;
-      let scheduleId = null;
-      if (response.schedule_id) {
-        scheduleId = response.schedule_id;
-      }
-      setState(prevState => ({
-        ...prevState,
-        errors: {
-          ...prevState.errors,
-          requestError: ''
-        },
-        startImporting: true,
-        scheduleId
-      }));
-      react_toastify__WEBPACK_IMPORTED_MODULE_0__.toast.success(message);
-      setGroupName(group_name);
-      setTotalQueuedCampaigns(total_queued_campaigns);
-      const newIntervalId = await importStatus(group_name);
-      setState(prevState => ({
-        ...prevState,
-        intervalId: [...state.intervalId, newIntervalId],
-        disableInput: false
-      }));
-    } catch (error) {
-      const {
-        message
-      } = error;
-      setState(prevState => ({
-        ...prevState,
-        errors: {
-          ...prevState.errors,
-          requestError: message
-        },
-        isFormDisabled: false,
-        disableInput: false
-      }));
-      react_toastify__WEBPACK_IMPORTED_MODULE_0__.toast.error(message);
-    }
-  }
-  async function jobActionHandler(jobAction) {
-    setState(prevState => {
-      return {
-        ...prevState,
-        loadingJobAction: true
+      const data = {
+        credentials: JSON.stringify({
+          api_key: apiKey,
+          publication_id: publicationId
+        }),
+        post_status: JSON.stringify(post_status),
+        post_type: selectedPostType,
+        taxonomy: selectedTaxonomy !== null && selectedTaxonomy !== void 0 ? selectedTaxonomy : null,
+        taxonomy_term: selectedTerm !== null && selectedTerm !== void 0 ? selectedTerm : null,
+        author: selectedAuthor !== null && selectedAuthor !== void 0 ? selectedAuthor : null,
+        import_cm_tags_as: importCampaignTagAs !== null && importCampaignTagAs !== void 0 ? importCampaignTagAs : null,
+        import_option: importOption !== null && importOption !== void 0 ? importOption : null,
+        schedule_settings: JSON.stringify(schedule_settings),
+        audience: contentType,
+        include_as_connection: includeAsConnection ? "true" : "false",
+        new_connection_name: connectionName,
+        selected_connection: selectedConnection
       };
-    });
-    try {
-      clearAllIntervals();
-      const response = await apiFetch({
-        path: `itfb/v1/manage-import-job?job_action=${jobAction}`,
-        method: 'POST'
-      });
-      if (response) {
+      if (scheduleId) {
+        data.id = scheduleId;
+        data.include_as_connection = "false";
+        data.selected_connection = "not_set";
+      }
+      try {
+        setState(prevState => ({
+          ...prevState,
+          isFormDisabled: true,
+          disableInput: true
+        }));
+        let path = 'itfb/v1/add-scheduled-import';
+        if (scheduleId) {
+          path = 'itfb/v1/edit-scheduled-import';
+        }
+        const response = await apiFetch({
+          path,
+          method: 'POST',
+          data
+        });
         const {
           message
         } = response;
-        if (jobAction === 'cancel') {
-          react_toastify__WEBPACK_IMPORTED_MODULE_0__.toast.warning(message);
-          removeGroupName();
-          removeTotalQueuedCampaigns();
-          setState(prevState => {
-            return {
-              ...prevState,
-              progressValue: 0,
-              startImporting: false,
-              intervalId: [],
-              loadingJobAction: false
-            };
-          });
+        setState(prevState => ({
+          ...prevState,
+          errors: {
+            ...prevState.errors,
+            requestError: ''
+          },
+          disableInput: false
+        }));
+        if (scheduleId) {
+          setSchedule(prevState => ({
+            ...prevState,
+            scheduleId: null
+          }));
         }
-        if (jobAction === 'pause') {
-          react_toastify__WEBPACK_IMPORTED_MODULE_0__.toast.warning(message);
-          setState(prevState => {
-            return {
-              ...prevState,
-              jobAction: 'resume',
-              intervalId: []
-            };
-          });
-        }
-        if (jobAction === 'resume') {
+        if (response.data) {
+          react_toastify__WEBPACK_IMPORTED_MODULE_0__.toast.error(message);
+        } else {
+          onClose();
+          handleRefreshScheduleData();
           react_toastify__WEBPACK_IMPORTED_MODULE_0__.toast.success(message);
-          setState(prevState => ({
-            ...prevState,
-            jobAction: 'pause',
-            loadingJobAction: false
-          }));
-          const newIntervalId = await importStatus();
-          setState(prevState => ({
-            ...prevState,
-            intervalId: [...state.intervalId, newIntervalId]
-          }));
         }
+      } catch (error) {
+        console.log(error);
+        const {
+          message
+        } = error;
+        setState(prevState => ({
+          ...prevState,
+          errors: {
+            ...prevState.errors,
+            requestError: message
+          },
+          isFormDisabled: false,
+          disableInput: false
+        }));
+        react_toastify__WEBPACK_IMPORTED_MODULE_0__.toast.error(message);
       }
+    }
+  }
+  async function getAllConnections() {
+    try {
+      const response = await apiFetch({
+        path: 'itfb/v1/get-all-connections',
+        method: 'GET'
+      });
+      const selectedConnection = Object.keys(response).length > 0 ? Object.keys(response)[0] : 'not_set';
+      setState(prevState => ({
+        ...prevState,
+        connections: response,
+        loading: scheduleId ? true : false,
+        selectedConnection,
+        isFormDisabled: selectedConnection === 'not_set' && !scheduleId ? true : false
+      }));
     } catch (error) {
       const {
         message
       } = error;
       react_toastify__WEBPACK_IMPORTED_MODULE_0__.toast.error(message);
-    } finally {
-      setState(prevState => {
-        return {
-          ...prevState,
-          loadingJobAction: false
-        };
+    }
+  }
+  async function getScheduleById(id) {
+    try {
+      const response = await apiFetch({
+        path: `itfb/v1/get-scheduled-import-by-id/?id=${id}`,
+        method: 'POST'
       });
+      const {
+        params
+      } = response;
+      const {
+        audience,
+        author,
+        credentials,
+        import_cm_tags_as,
+        import_option,
+        include_as_connection,
+        new_connection_name,
+        post_status,
+        post_type,
+        schedule_settings,
+        selected_connection,
+        taxonomy,
+        taxonomy_term
+      } = params[0];
+      const {
+        api_key,
+        publication_id
+      } = credentials;
+      const {
+        confirmed,
+        draft,
+        archived
+      } = post_status;
+      const {
+        frequency,
+        specific_hour,
+        specific_day,
+        time
+      } = schedule_settings;
+      setState(prevState => ({
+        ...prevState,
+        apiKey: api_key !== null && api_key !== void 0 ? api_key : '',
+        publicationId: publication_id !== null && publication_id !== void 0 ? publication_id : '',
+        publishedCampaigns: confirmed ? true : false,
+        publishedWrodpressPostStatus: confirmed,
+        draftededCampaigns: draft ? true : false,
+        draftedWrodpressPostStatus: draft,
+        archivedCampaigns: archived ? true : false,
+        archivedWrodpressPostStatus: archived,
+        selectedPostType: post_type,
+        selectedTaxonomy: taxonomy,
+        selectedTerm: taxonomy_term,
+        selectedAuthor: author,
+        importCampaignTagAs: import_cm_tags_as,
+        importOption: import_option,
+        frequency,
+        runHour: specific_hour !== null && specific_hour !== void 0 ? specific_hour : 1,
+        runTime: time !== null && time !== void 0 ? time : '00:00',
+        runDay: specific_day !== null && specific_day !== void 0 ? specific_day : 'monday',
+        contentType: audience,
+        includeAsConnection: include_as_connection === "1" ? true : false,
+        connectionName: new_connection_name,
+        selectedConnection: selected_connection,
+        loading: false
+      }));
+    } catch (error) {
+      react_toastify__WEBPACK_IMPORTED_MODULE_0__.toast.error(error.message);
     }
   }
   return {
@@ -12141,35 +12140,34 @@ function manaulImportHelper(state, setState, groupName, setGroupName, removeGrou
     handleInputChange,
     handleBlur,
     startImportHandler,
-    checkCurrentImportStatus,
-    jobActionHandler
+    getAllConnections,
+    getScheduleById
   };
 }
 
 /***/ }),
 
-/***/ "./lib/container/manaulImport/manualImport.js":
-/*!****************************************************!*\
-  !*** ./lib/container/manaulImport/manualImport.js ***!
-  \****************************************************/
+/***/ "./lib/components/add-new-schedule-form/add-new-schedule-form.js":
+/*!***********************************************************************!*\
+  !*** ./lib/components/add-new-schedule-form/add-new-schedule-form.js ***!
+  \***********************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   ErrorContainer: () => (/* binding */ ErrorContainer),
 /* harmony export */   InputContainer: () => (/* binding */ InputContainer),
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @refactco/ui-kit */ "./node_modules/@refactco/ui-kit/dist/ui-kit-expose.js");
-/* harmony import */ var _manaulImportHelper__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./manaulImportHelper */ "./lib/container/manaulImport/manaulImportHelper.js");
-/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
-/* harmony import */ var _components_backdrop__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../components/backdrop */ "./lib/components/backdrop.js");
-/* harmony import */ var _components_spinner__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../components/spinner */ "./lib/components/spinner.js");
-/* harmony import */ var _components_import_percentage__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../components/import-percentage */ "./lib/components/import-percentage.js");
-/* harmony import */ var _common_common_function__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../common/common-function */ "./lib/common/common-function.js");
-/* harmony import */ var _hooks_useLocalStorage__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../hooks/useLocalStorage */ "./lib/hooks/useLocalStorage.js");
+/* harmony import */ var _add_new_schedule_form_helper__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./add-new-schedule-form-helper */ "./lib/components/add-new-schedule-form/add-new-schedule-form-helper.js");
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
+/* harmony import */ var _backdrop__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ..//backdrop */ "./lib/components/backdrop.js");
+/* harmony import */ var _spinner__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../spinner */ "./lib/components/spinner.js");
+/* harmony import */ var _common_common_function__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../common/common-function */ "./lib/common/common-function.js");
 
 /* eslint-disable camelcase */
 /* eslint-disable no-nested-ternary */
@@ -12185,9 +12183,12 @@ const {
 
 
 
-
-
-const ManualImport = () => {
+const AddNewScheduleForm = ({
+  onClose,
+  handleRefreshScheduleData,
+  scheduleId = null,
+  setSchedule = null
+}) => {
   const [state, setState] = useState({
     apiKey: '',
     clientId: '',
@@ -12208,7 +12209,6 @@ const ManualImport = () => {
     selectedAuthor: '',
     importCampaignTagAs: 'post_tag',
     importOption: 'new',
-    enableSchedule: false,
     frequency: 'hourly',
     runHour: 1,
     runDay: 'monday',
@@ -12216,15 +12216,14 @@ const ManualImport = () => {
     serverTime: '',
     errors: {},
     disableInput: false,
-    isFormDisabled: true,
-    intervalId: [],
-    startImporting: false,
-    progressValue: 0,
+    isFormDisabled: scheduleId ? false : true,
     loading: true,
-    jobAction: 'pause',
-    loadingJobAction: false,
-    scheduleId: null,
-    contentType: 'free'
+    contentType: 'free',
+    includeAsConnection: true,
+    connectionName: '',
+    selectedConnection: 'not_set',
+    connections: [],
+    createNewConnection: false
   });
   const {
     apiKey,
@@ -12246,7 +12245,6 @@ const ManualImport = () => {
     selectedAuthor,
     importCampaignTagAs,
     importOption,
-    enableSchedule,
     frequency,
     runHour,
     runDay,
@@ -12255,56 +12253,65 @@ const ManualImport = () => {
     errors,
     disableInput,
     isFormDisabled,
-    intervalId,
-    startImporting,
-    progressValue,
     loading,
-    jobAction,
-    loadingJobAction,
-    scheduleId,
-    contentType
+    contentType,
+    includeAsConnection,
+    connectionName,
+    selectedConnection,
+    connections,
+    createNewConnection
   } = state;
-  const [groupName, setGroupName, removeGroupName] = (0,_hooks_useLocalStorage__WEBPACK_IMPORTED_MODULE_7__["default"])('groupName', null);
-  const [totalQueuedCampaigns, setTotalQueuedCampaigns, removeTotalQueuedCampaigns] = (0,_hooks_useLocalStorage__WEBPACK_IMPORTED_MODULE_7__["default"])('totalQueuedCampaigns', null);
-  const helper = (0,_manaulImportHelper__WEBPACK_IMPORTED_MODULE_2__.manaulImportHelper)(state, setState, groupName, setGroupName, removeGroupName, setTotalQueuedCampaigns, removeTotalQueuedCampaigns);
+  const helper = (0,_add_new_schedule_form_helper__WEBPACK_IMPORTED_MODULE_2__.addNewScheduleFormHelper)(state, setState, onClose, handleRefreshScheduleData, scheduleId, setSchedule);
   const {
     getDefaultOptions,
     handleInputChange,
     startImportHandler,
     handleBlur,
-    checkCurrentImportStatus,
-    jobActionHandler
+    getAllConnections,
+    getScheduleById
   } = helper;
   useEffect(() => {
     (async () => {
       await getDefaultOptions();
-      await checkCurrentImportStatus();
+      await getAllConnections();
+      if (scheduleId) {
+        await getScheduleById(scheduleId);
+      }
     })();
   }, []);
-  useEffect(() => {
-    return () => {
-      if (intervalId) {
-        clearInterval(state.intervalId);
-      }
-    };
-  }, [intervalId]);
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, disableInput && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_backdrop__WEBPACK_IMPORTED_MODULE_3__["default"], {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, disableInput && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_backdrop__WEBPACK_IMPORTED_MODULE_3__["default"], {
     show: true,
-    modalClosed: () => (0,_common_common_function__WEBPACK_IMPORTED_MODULE_6__.logger)('Fetching Campaigns ...')
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_spinner__WEBPACK_IMPORTED_MODULE_4__["default"], {
-    label: "Fetching campaigns from Beehiiv. Please wait..."
-  })), startImporting ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_import_percentage__WEBPACK_IMPORTED_MODULE_5__["default"], {
-    progressValue: progressValue,
-    jobAction: jobAction,
-    jobActionHandler: jobActionHandler,
-    loadingJobAction: loadingJobAction,
-    scheduleId: scheduleId
-  }) : loading ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_spinner__WEBPACK_IMPORTED_MODULE_4__["default"], null) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h1", null, "Import Campaign Data"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("form", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Accordion, {
+    modalClosed: () => (0,_common_common_function__WEBPACK_IMPORTED_MODULE_5__.logger)('Fetching Campaigns ...')
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_spinner__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    label: scheduleId ? 'Please wait ...' : `Fetching campaigns from Beehiiv. Please wait...`,
+    marginBottom: "0px"
+  })), loading ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_spinner__WEBPACK_IMPORTED_MODULE_4__["default"], null) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("form", {
+    onSubmit: startImportHandler
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Accordion, {
     noDraggable: true,
     transitionTimeout: 300,
     items: [{
       header: 'Step 1: Choose Data from Beehiiv',
-      content: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Container, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+      initialEntered: true,
+      active: true,
+      content: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Container, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, Object.keys(connections).length > 0 && !createNewConnection && !scheduleId ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Select, {
+        label: "Select Connection",
+        options: [...Object.keys(connections).map(connection_name => ({
+          label: connection_name,
+          value: connection_name
+        }))],
+        value: selectedConnection,
+        onChange: value => handleInputChange(value, 'selectedConnection'),
+        required: true,
+        disabled: disableInput
+      }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+        className: "include-as-connection-container"
+      }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Checkbox, {
+        label: "OR create new connection",
+        checked: createNewConnection,
+        onChange: value => handleInputChange(value, 'createNewConnection'),
+        disabled: disableInput
+      })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null)) : !scheduleId ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
         className: "label",
         htmlFor: "apiKey"
       }, "API Key", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Tooltip, {
@@ -12322,7 +12329,7 @@ const ManualImport = () => {
         required: true,
         hasError: errors.apiKey,
         disabled: disableInput
-      })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+      }), errors.apiKey && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ErrorContainer, null, errors.apiKey)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
         className: "label",
         htmlFor: "publicationId"
       }, "Publication ID", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Tooltip, {
@@ -12340,7 +12347,26 @@ const ManualImport = () => {
         required: true,
         hasError: errors.publicationId,
         disabled: disableInput
-      }))), errors.apiKey && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ErrorContainer, null, errors.apiKey), errors.publicationId && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ErrorContainer, null, errors.publicationId), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Divider, null)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Container, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+      }), errors.publicationId && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ErrorContainer, null, errors.publicationId)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+        className: "include-as-connection-container"
+      }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Checkbox, {
+        label: "Include as Connection",
+        checked: includeAsConnection,
+        onChange: value => handleInputChange(value, 'includeAsConnection'),
+        onBlur: () => handleBlur('includeAsConnection', includeAsConnection),
+        disabled: disableInput
+      }))) : null)), includeAsConnection && selectedConnection === 'not_set' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Container, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+        className: "label",
+        htmlFor: "connectionName"
+      }, "Name of Connection"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Input, {
+        type: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.InputType.TEXT,
+        value: connectionName,
+        onChange: value => handleInputChange(value, 'connectionName'),
+        onBlur: () => handleBlur('connectionName', connectionName),
+        hasError: errors.connectionName,
+        required: includeAsConnection,
+        disabled: disableInput
+      }), errors.connectionName && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ErrorContainer, null, errors.connectionName)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null))) : null, !scheduleId ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Divider, null) : null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Container, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
         className: "label",
         htmlFor: "contentType"
       }, "Content Type", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Tooltip, {
@@ -12358,11 +12384,14 @@ const ManualImport = () => {
         }, {
           label: 'Premium',
           value: 'premium'
+        }, {
+          label: 'All',
+          value: 'all'
         }],
         value: contentType,
         required: true,
         disabled: disableInput
-      })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Divider, null))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null, "Select type of campaigns that you want migrated from Beehiiv", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Tooltip, {
+      })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null, "Select type of campaigns that you want migrated from Beehiiv", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Tooltip, {
         id: "campaignType",
         mode: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.TooltipMode.DARK,
         place: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.TooltipPlace.TOP,
@@ -12401,8 +12430,8 @@ const ManualImport = () => {
         disabled: disableInput
       })), errors.campaignStatus && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ErrorContainer, null, errors.campaignStatus)))
     }, {
-      header: 'Step 2: Import Data to WordPress',
-      content: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Container, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+      header: 'Step 2: Insert Data to WordPress',
+      content: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Container, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
         className: "label",
         htmlFor: "postType"
       }, "Select Post Type", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Tooltip, {
@@ -12535,7 +12564,2516 @@ const ManualImport = () => {
         value: importOption,
         required: true,
         disabled: disableInput
-      })))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Divider, null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Toggle, {
+      }))))
+    }, {
+      header: 'Step 3: Choose Frequency',
+      content: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Container, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Select, {
+        label: "Frequency",
+        options: [{
+          label: 'Hourly',
+          value: 'hourly'
+        }, {
+          label: 'Daily',
+          value: 'daily'
+        }, {
+          label: 'Weekly',
+          value: 'weekly'
+        }],
+        value: frequency,
+        onChange: value => handleInputChange(value, 'frequency'),
+        disabled: disableInput
+      }), frequency === 'hourly' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Input, {
+        type: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.InputType.NUMBER,
+        label: "Defines the hour",
+        help: "Enter the desired time intervals in hours and set the frequency of auto imports from your to your WordPress site.",
+        placeholder: "1-24",
+        min: "1",
+        max: "24",
+        value: runHour,
+        onChange: value => handleInputChange(value, 'runHour'),
+        onBlur: () => handleBlur('runHour', runHour),
+        hasError: errors.runHour,
+        disabled: disableInput
+      })), frequency === 'daily' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Input, {
+        type: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.InputType.TEXT,
+        label: "Specifies the time",
+        help: `Important: The time refers to your server current time, which is not necessarily in your personal timezone. Current Server Time :  ${serverTime})`,
+        placeholder: "Use \"HH:mm\" (e.g., \"02:00\")",
+        value: runTime,
+        onChange: value => handleInputChange(value, 'runTime'),
+        onBlur: () => handleBlur('runTime', runTime),
+        hasError: errors.runTime,
+        disabled: disableInput
+      })), frequency === 'weekly' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Select, {
+        label: "Specifies the days",
+        options: [{
+          label: 'Monday',
+          value: 'monday'
+        }, {
+          label: 'Tuesday',
+          value: 'tuesday'
+        }, {
+          label: 'Wednesday',
+          value: 'wednesday'
+        }, {
+          label: 'Thursday',
+          value: 'thursday'
+        }, {
+          label: 'Friday',
+          value: 'friday'
+        }, {
+          label: 'Saturday ',
+          value: 'saturday '
+        }, {
+          label: 'Sunday ',
+          value: 'sunday '
+        }],
+        value: runDay,
+        onChange: value => handleInputChange(value, 'runDay'),
+        disabled: disableInput
+      }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Input, {
+        type: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.InputType.TEXT,
+        label: "Specifies the time",
+        help: `Important: The time refers to your server current time, which is not necessarily in your personal timezone. Current Server Time :  ${serverTime}`,
+        placeholder: "Use \"HH:mm\" (e.g., \"02:00\")",
+        value: runTime,
+        onChange: value => handleInputChange(value, 'runTime'),
+        onBlur: () => handleBlur('runTime', runTime),
+        hasError: errors.runTime,
+        disabled: disableInput
+      }))), errors.runHour && frequency === 'hourly' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ErrorContainer, null, errors.runHour), errors.runTime && frequency !== 'hourly' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ErrorContainer, null, errors.runTime))
+    }]
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    style: {
+      display: 'flex',
+      gap: '4px',
+      marginTop: '20px'
+    }
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Button, {
+    type: "submit",
+    onClick: startImportHandler,
+    disabled: isFormDisabled
+  }, scheduleId ? 'Edit Schedule' : 'Start Import')))));
+};
+const Container = styled_components__WEBPACK_IMPORTED_MODULE_6__.styled.div`
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+`;
+const InputContainer = styled_components__WEBPACK_IMPORTED_MODULE_6__.styled.div`
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	padding-bottom: ${({
+  paddingBottom
+}) => paddingBottom || '1rem'};
+	gap: ${({
+  gap
+}) => gap || '1rem'};
+	> * {
+		flex: 1;
+	}
+	@media ( max-width: 782px ) {
+		flex-direction: column;
+	}
+`;
+const Divider = styled_components__WEBPACK_IMPORTED_MODULE_6__.styled.div`
+	width: 100%;
+	height: 1px;
+	margin-bottom: 1rem;
+	background: #d7dbdb;
+`;
+const ErrorContainer = styled_components__WEBPACK_IMPORTED_MODULE_6__.styled.div`
+	color: red;
+	margin-top: 0.5rem;
+`;
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (AddNewScheduleForm);
+
+/***/ }),
+
+/***/ "./lib/components/add-new-schedule-modal.js":
+/*!**************************************************!*\
+  !*** ./lib/components/add-new-schedule-modal.js ***!
+  \**************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @refactco/ui-kit */ "./node_modules/@refactco/ui-kit/dist/ui-kit-expose.js");
+/* harmony import */ var _add_new_schedule_form_add_new_schedule_form__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./add-new-schedule-form/add-new-schedule-form */ "./lib/components/add-new-schedule-form/add-new-schedule-form.js");
+
+
+
+
+const AddNewScheduleModal = ({
+  onClose,
+  handleRefreshScheduleData,
+  scheduleId = null,
+  setSchedule = null
+}) => {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Modal, {
+    onRequestClose: onClose,
+    size: "fill"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_2__.Section, {
+    headerProps: {
+      title: 'Import Campaign Data',
+      description: 'Schedule import content from Beehiiv to your WordPress site.'
+    }
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_add_new_schedule_form_add_new_schedule_form__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    onClose: onClose,
+    handleRefreshScheduleData: handleRefreshScheduleData,
+    scheduleId: scheduleId,
+    setSchedule: setSchedule
+  })));
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (AddNewScheduleModal);
+
+/***/ }),
+
+/***/ "./lib/components/backdrop.js":
+/*!************************************!*\
+  !*** ./lib/components/backdrop.js ***!
+  \************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
+
+
+const Backdrop = ({
+  show,
+  modalClosed,
+  children
+}) => show ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(BackdropContainer, {
+  onClick: modalClosed
+}, children) : null;
+const BackdropContainer = styled_components__WEBPACK_IMPORTED_MODULE_1__["default"].div`
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba( 0, 0, 0, 0.5 );
+	z-index: 100;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+`;
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Backdrop);
+
+/***/ }),
+
+/***/ "./lib/components/collect-data.js":
+/*!****************************************!*\
+  !*** ./lib/components/collect-data.js ***!
+  \****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   CollectData: () => (/* binding */ CollectData)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
+/* harmony import */ var _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @refactco/ui-kit */ "./node_modules/@refactco/ui-kit/dist/ui-kit-expose.js");
+
+const {
+  useState
+} = wp.element;
+
+
+function CollectData() {
+  const [state, setState] = useState({
+    radioState: "true"
+  });
+  const {
+    radioState
+  } = state;
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(CollectDataWrapper, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(TooltipContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", null, "Help RE/beehiiv better to everyone."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Tooltip, {
+    id: "collect-data-tooltip",
+    mode: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.TooltipMode.DARK,
+    place: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.TooltipPlace.TOP,
+    content: "We collect your info to enhance the experience."
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
+    xmlns: "http://www.w3.org/2000/svg",
+    width: "24",
+    height: "24",
+    viewBox: "0 0 24 24",
+    fill: "none"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    "fill-rule": "evenodd",
+    "clip-rule": "evenodd",
+    d: "M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 9.34784 20.9464 6.8043 19.0711 4.92893C17.1957 3.05357 14.6522 2 12 2ZM13 17.5C13 17.7761 12.7761 18 12.5 18H11.5C11.2239 18 11 17.7761 11 17.5V16.5C11 16.2239 11.2239 16 11.5 16H12.5C12.7761 16 13 16.2239 13 16.5V17.5ZM13.88 12.29C15.0655 11.9063 15.8716 10.806 15.88 9.56V9C15.88 8.23618 15.5766 7.50364 15.0365 6.96353C14.4964 6.42343 13.7638 6.12 13 6.12H11C9.40942 6.12 8.12 7.40942 8.12 9V9.5C8.12 9.77614 8.34386 10 8.62 10H9.38C9.65614 10 9.88 9.77614 9.88 9.5V9C9.88 8.38144 10.3814 7.88 11 7.88H13C13.3039 7.86914 13.5992 7.98233 13.8179 8.19356C14.0367 8.40479 14.1602 8.6959 14.16 9V9.56C14.161 10.0423 13.8557 10.4721 13.4 10.63L12.45 10.94C11.6818 11.1939 11.1622 11.9109 11.16 12.72V13.5C11.16 13.7761 11.3839 14 11.66 14H12.42C12.6961 14 12.92 13.7761 12.92 13.5V12.72C12.92 12.6675 12.9516 12.6202 13 12.6L13.88 12.29Z",
+    fill: "#798686"
+  })))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "Can we collect your info to enhance the experience? "), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(CollectDataForm, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Radio, {
+    onChange: value => {
+      setState({
+        ...state,
+        radioState: value
+      });
+    },
+    label: "",
+    options: [{
+      label: 'Yes, you can collect my data',
+      value: "true"
+    }, {
+      label: 'No, you cant collect my data',
+      value: "false"
+    }],
+    selected: radioState
+  })));
+}
+const CollectDataWrapper = styled_components__WEBPACK_IMPORTED_MODULE_2__.styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    & > * {
+        flex: 1;
+        margin:0;
+    }
+    & > p {
+        margin-top: 4px;
+        color: #798686;
+    }
+`;
+const TooltipContainer = styled_components__WEBPACK_IMPORTED_MODULE_2__.styled.div`
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+    align-items: center;
+    & > h2 {
+        margin: 0;
+    }
+    & > svg {
+        cursor: pointer;
+    }
+`;
+const CollectDataForm = styled_components__WEBPACK_IMPORTED_MODULE_2__.styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 28px;
+    color: #002729;
+    font-weight: 600;
+    font-size: 14px;
+`;
+
+/***/ }),
+
+/***/ "./lib/components/connection-not-found.js":
+/*!************************************************!*\
+  !*** ./lib/components/connection-not-found.js ***!
+  \************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _add_button__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./add-button */ "./lib/components/add-button.js");
+/* harmony import */ var _schedule_not_found__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./schedule-not-found */ "./lib/components/schedule-not-found.js");
+/* harmony import */ var _add_new_connection_modal_add_new_connection_modal__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./add-new-connection-modal/add-new-connection-modal */ "./lib/components/add-new-connection-modal/add-new-connection-modal.js");
+
+
+const {
+  useState
+} = wp.element;
+
+
+const ConnectionNotFound = ({
+  handleRefreshConnectionsData
+}) => {
+  const [showAddNewConnectionModal, setShowAddNewConnectionModal] = useState(false);
+  const closeAddNewConnectionModalHandler = () => {
+    setShowAddNewConnectionModal(false);
+  };
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_schedule_not_found__WEBPACK_IMPORTED_MODULE_2__.StyledContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_schedule_not_found__WEBPACK_IMPORTED_MODULE_2__.StyledWrapper, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
+    xmlns: "http://www.w3.org/2000/svg",
+    width: "65",
+    height: "64",
+    viewBox: "0 0 65 64",
+    fill: "none"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    d: "M24.4208 29.3334H40.4208C41.8875 29.3334 43.0875 30.5334 43.0875 32.0001C43.0875 33.4667 41.8875 34.6667 40.4208 34.6667H24.4208C22.9541 34.6667 21.7541 33.4667 21.7541 32.0001C21.7541 30.5334 22.9541 29.3334 24.4208 29.3334ZM56.2341 32.0001C57.8875 32.0001 59.0875 30.4267 58.7141 28.8267C57.9992 25.9289 56.3346 23.354 53.9856 21.5125C51.6367 19.6711 48.7388 18.6692 45.7541 18.6667H37.6208C36.2341 18.6667 35.0875 19.8134 35.0875 21.2001C35.0875 22.5867 36.2341 23.7334 37.6208 23.7334H45.7541C49.6208 23.7334 52.8741 26.4001 53.7808 29.9734C54.0741 31.1467 55.0341 32.0001 56.2341 32.0001ZM10.9808 30.3467C11.7275 26.4267 15.4075 23.7334 19.4075 23.7334H27.2208C28.6075 23.7334 29.7541 22.5867 29.7541 21.2001C29.7541 19.8134 28.6075 18.6667 27.2208 18.6667H19.6741C12.7141 18.6667 6.50079 23.7601 5.83412 30.6934C5.64976 32.5447 5.85524 34.4141 6.43735 36.1811C7.01946 37.9481 7.96527 39.5736 9.21386 40.9528C10.4624 42.332 11.9861 43.4344 13.6867 44.1889C15.3873 44.9434 17.227 45.3333 19.0875 45.3334H27.2208C28.6075 45.3334 29.7541 44.1867 29.7541 42.8001C29.7541 41.4134 28.6075 40.2668 27.2208 40.2668H19.0875C17.8626 40.263 16.6537 39.9879 15.5478 39.4614C14.4419 38.9348 13.4663 38.1698 12.6913 37.2213C11.9162 36.2729 11.3608 35.1645 11.0651 33.9759C10.7693 32.7872 10.7405 31.5478 10.9808 30.3467ZM48.4208 32.0001C46.9541 32.0001 45.7541 33.2001 45.7541 34.6667V40.0001H40.4208C38.9541 40.0001 37.7541 41.2001 37.7541 42.6667C37.7541 44.1334 38.9541 45.3334 40.4208 45.3334H45.7541V50.6667C45.7541 52.1334 46.9541 53.3334 48.4208 53.3334C49.8875 53.3334 51.0875 52.1334 51.0875 50.6667V45.3334H56.4208C57.8875 45.3334 59.0875 44.1334 59.0875 42.6667C59.0875 41.2001 57.8875 40.0001 56.4208 40.0001H51.0875V34.6667C51.0875 33.2001 49.8875 32.0001 48.4208 32.0001Z",
+    fill: "#D7DBDB"
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", null, "No Connection Found/Available.")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_add_button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    icon: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
+      xmlns: "http://www.w3.org/2000/svg",
+      width: "24",
+      height: "24",
+      viewBox: "0 0 24 24",
+      fill: "none"
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+      d: "M19 11.5V12.5C19 12.7761 18.7761 13 18.5 13H13V18.5C13 18.7761 12.7761 19 12.5 19H11.5C11.2239 19 11 18.7761 11 18.5V13H5.5C5.22386 13 5 12.7761 5 12.5V11.5C5 11.2239 5.22386 11 5.5 11H11V5.5C11 5.22386 11.2239 5 11.5 5H12.5C12.7761 5 13 5.22386 13 5.5V11H18.5C18.7761 11 19 11.2239 19 11.5Z",
+      fill: "white"
+    })),
+    onClick: () => {
+      setShowAddNewConnectionModal(true);
+    }
+  }, "Add a New Connection"), showAddNewConnectionModal ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_add_new_connection_modal_add_new_connection_modal__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    onClose: closeAddNewConnectionModalHandler,
+    handleRefreshConnectionsData: handleRefreshConnectionsData
+  }) : null);
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ConnectionNotFound);
+
+/***/ }),
+
+/***/ "./lib/components/custom-section.js":
+/*!******************************************!*\
+  !*** ./lib/components/custom-section.js ***!
+  \******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
+/* harmony import */ var _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @refactco/ui-kit */ "./node_modules/@refactco/ui-kit/dist/ui-kit-expose.js");
+/* harmony import */ var _add_button__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./add-button */ "./lib/components/add-button.js");
+
+
+
+
+const CustomSection = ({
+  title,
+  description,
+  showButton,
+  buttonText,
+  buttonIcon,
+  iconPosition = 'left',
+  buttonColor = _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.ButtonColor.GREEN,
+  onClick
+}) => {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(StyledSection, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(StyledH2, null, title), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(StyledParagraph, null, " ", description)), showButton ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_add_button__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    icon: buttonIcon,
+    onClick: onClick,
+    iconPosition: iconPosition,
+    color: buttonColor
+  }, buttonText) : null);
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (CustomSection);
+const StyledSection = styled_components__WEBPACK_IMPORTED_MODULE_3__.styled.div`
+	background-color: #fff;
+	padding: 32px;
+	border-radius: 4px;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	border-bottom: 1px solid #d7dbdb;
+`;
+const StyledH2 = styled_components__WEBPACK_IMPORTED_MODULE_3__.styled.h2`
+	color: #002729;
+	font-size: 22px;
+	font-weight: 600;
+	line-height: 28px;
+	margin: 0;
+`;
+const StyledParagraph = styled_components__WEBPACK_IMPORTED_MODULE_3__.styled.p`
+	color: #798686;
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 28px;
+	margin: 4px 0 0 0;
+`;
+
+/***/ }),
+
+/***/ "./lib/components/delete-modal.js":
+/*!****************************************!*\
+  !*** ./lib/components/delete-modal.js ***!
+  \****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _modal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modal */ "./lib/components/modal.js");
+/* harmony import */ var _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @refactco/ui-kit */ "./node_modules/@refactco/ui-kit/dist/ui-kit-expose.js");
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
+
+
+
+
+const DeleteModal = ({
+  show,
+  selectedRowInfo,
+  onClose,
+  loadingDeleteAction,
+  deleteScheduleHandler,
+  title,
+  textButton
+}) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_modal__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  show: show,
+  modalClosed: onClose
+}, selectedRowInfo && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null, title), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ButtonContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_2__.Button, {
+  color: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_2__.ButtonColor.RED,
+  disabled: loadingDeleteAction,
+  onClick: deleteScheduleHandler
+}, textButton), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_2__.Button, {
+  onClick: onClose,
+  disabled: loadingDeleteAction
+}, "Cancel"))));
+const ButtonContainer = styled_components__WEBPACK_IMPORTED_MODULE_3__.styled.div`
+	display: flex;
+	justify-content: flex-start;
+	margin-top: 20px;
+	gap: 1rem;
+`;
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (DeleteModal);
+
+/***/ }),
+
+/***/ "./lib/components/header.js":
+/*!**********************************!*\
+  !*** ./lib/components/header.js ***!
+  \**********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @refactco/ui-kit */ "./node_modules/@refactco/ui-kit/dist/ui-kit-expose.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
+/* harmony import */ var _icon_plugin_logo__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./icon/plugin-logo */ "./lib/components/icon/plugin-logo.tsx");
+
+/* eslint-disable react-hooks/exhaustive-deps */
+const {
+  useState,
+  useEffect
+} = wp.element;
+
+
+
+const Header = () => {
+  const navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_3__.useNavigate)();
+  const location = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_3__.useLocation)();
+  const [activeItemIndex, setActiveItemIndex] = useState(0);
+  const items = [{
+    item: 'import-campaigns',
+    title: 'Import Campaigns',
+    subHeaderItems: [{
+      name: 'import_campaigns_manual',
+      title: 'Manual Import',
+      onClick: () => {
+        navigate('/import-campaigns/manual');
+      }
+    }, {
+      name: 'import_campaigns_scheduled',
+      title: 'Scheduled Import',
+      onClick: () => {
+        navigate('/import-campaigns/scheduled');
+      }
+    }, {
+      name: 'import_campaigns_connections',
+      title: 'Connections',
+      onClick: () => {
+        navigate('/connections');
+      }
+    }],
+    onClick: () => {
+      navigate('/import-campaigns');
+    }
+  }, {
+    item: 'about',
+    title: 'About',
+    onClick: () => {
+      navigate('/about');
+    }
+  }];
+  const handleSelectItem = index => {
+    setActiveItemIndex(index);
+  };
+  useEffect(() => {
+    const handleDOMContentLoaded = () => {
+      const path = location.pathname;
+      if (path.includes('/import-campaigns') || path.includes('/connections')) {
+        const tabPanelItems = document.querySelectorAll('.components-tab-panel__tabs-item');
+        tabPanelItems.forEach(tabPanelItem => {
+          if (path === '/import-campaigns/manual' && tabPanelItem.textContent.trim() === 'Manual Import') {
+            tabPanelItem.click();
+          } else if (path === '/import-campaigns/scheduled' && tabPanelItem.textContent.trim() === 'Scheduled Import') {
+            tabPanelItem.click();
+          } else if (path === '/connections' && tabPanelItem.textContent.trim() === 'Connections') {
+            tabPanelItem.click();
+          } else if (path === '/import-campaigns' && tabPanelItem.textContent.trim() === 'Manual Import') {
+            tabPanelItem.click();
+          }
+        });
+      }
+      const index = items.findIndex(item => {
+        if (item.item === 'settings' && path === '/') return true;
+        return path.includes(item.item);
+      });
+      setActiveItemIndex(index === -1 ? 0 : index);
+    };
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', handleDOMContentLoaded);
+    } else {
+      handleDOMContentLoaded();
+    }
+    return () => {
+      document.removeEventListener('DOMContentLoaded', handleDOMContentLoaded);
+    };
+  }, [location.pathname]);
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Header, {
+    logoSource: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_icon_plugin_logo__WEBPACK_IMPORTED_MODULE_2__.PluginLogo, null),
+    items: items,
+    onSelectItem: handleSelectItem,
+    activeItemIndex: activeItemIndex
+  });
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Header);
+
+/***/ }),
+
+/***/ "./lib/components/icon/campaign-url-builder.tsx":
+/*!******************************************************!*\
+  !*** ./lib/components/icon/campaign-url-builder.tsx ***!
+  \******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   CampaignUrlBuilderIcon: () => (/* binding */ CampaignUrlBuilderIcon)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+
+function CampaignUrlBuilderIcon() {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
+    xmlns: "http://www.w3.org/2000/svg",
+    width: "33",
+    height: "33",
+    viewBox: "0 0 33 33",
+    fill: "currentColor"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    d: "M17.579 24.1739C17.7233 24.3176 17.8377 24.4884 17.9158 24.6764C17.9938 24.8644 18.034 25.066 18.034 25.2696C18.034 25.4732 17.9938 25.6748 17.9158 25.8628C17.8377 26.0509 17.7233 26.2216 17.579 26.3653L16.8133 27.131C15.3624 28.582 13.3945 29.3971 11.3426 29.3971C9.29062 29.3971 7.32273 28.582 5.87178 27.131C4.42084 25.6801 3.60571 23.7122 3.60571 21.6602C3.60571 19.6083 4.42084 17.6404 5.87178 16.1895L8.981 13.0815C10.3751 11.684 12.2508 10.8724 14.2239 10.8129C16.197 10.7535 18.1182 11.4507 19.5939 12.7619C19.7462 12.8973 19.8704 13.0614 19.9593 13.2448C20.0483 13.4282 20.1002 13.6274 20.1122 13.8309C20.1241 14.0343 20.0959 14.2382 20.0291 14.4308C19.9623 14.6234 19.8582 14.8009 19.7228 14.9533C19.5873 15.1056 19.4232 15.2298 19.2398 15.3187C19.0564 15.4077 18.8572 15.4596 18.6538 15.4716C18.4503 15.4835 18.2464 15.4553 18.0538 15.3885C17.8612 15.3217 17.6837 15.2176 17.5314 15.0822C16.6464 14.2963 15.4947 13.8782 14.3117 13.9134C13.1287 13.9486 12.0038 14.4345 11.1673 15.2717L8.06061 18.3757C7.19018 19.2461 6.70118 20.4267 6.70118 21.6577C6.70118 22.8886 7.19018 24.0692 8.06061 24.9396C8.93104 25.8101 10.1116 26.2991 11.3426 26.2991C12.5735 26.2991 13.7541 25.8101 14.6245 24.9396L15.3902 24.1739C15.5339 24.0301 15.7045 23.916 15.8923 23.8382C16.0801 23.7603 16.2814 23.7202 16.4846 23.7202C16.6879 23.7202 16.8892 23.7603 17.077 23.8382C17.2648 23.916 17.4354 24.0301 17.579 24.1739ZM27.1284 5.86923C25.6763 4.42052 23.7088 3.60693 21.6576 3.60693C19.6064 3.60693 17.639 4.42052 16.1869 5.86923L15.4212 6.63494C15.1306 6.92554 14.9673 7.31967 14.9673 7.73064C14.9673 8.14161 15.1306 8.53575 15.4212 8.82634C15.7118 9.11694 16.1059 9.2802 16.5169 9.2802C16.9278 9.2802 17.322 9.11694 17.6126 8.82634L18.3783 8.06064C19.2487 7.19021 20.4293 6.70121 21.6602 6.70121C22.8912 6.70121 24.0717 7.19021 24.9422 8.06064C25.8126 8.93107 26.3016 10.1116 26.3016 11.3426C26.3016 12.5736 25.8126 13.7541 24.9422 14.6245L21.8342 17.7338C20.9969 18.5706 19.8715 19.0558 18.6882 19.09C17.5049 19.1243 16.3532 18.7051 15.4689 17.9181C15.3165 17.7827 15.139 17.6786 14.9464 17.6118C14.7538 17.545 14.5499 17.5167 14.3465 17.5287C14.143 17.5407 13.9438 17.5926 13.7604 17.6815C13.577 17.7705 13.4129 17.8947 13.2774 18.047C13.142 18.1994 13.0379 18.3769 12.9711 18.5695C12.9043 18.7621 12.8761 18.9659 12.888 19.1694C12.9 19.3729 12.9519 19.572 13.0409 19.7555C13.1298 19.9389 13.254 20.103 13.4064 20.2384C14.881 21.5492 16.8009 22.2469 18.7731 22.1887C20.7452 22.1304 22.6206 21.3207 24.0153 19.9252L27.1246 16.8172C28.575 15.3655 29.39 13.3975 29.3907 11.3453C29.3914 9.29318 28.5778 7.32461 27.1284 5.87181V5.86923Z",
+    fill: "#2E9E62"
+  }));
+}
+
+/***/ }),
+
+/***/ "./lib/components/icon/everhour-time-off.tsx":
+/*!***************************************************!*\
+  !*** ./lib/components/icon/everhour-time-off.tsx ***!
+  \***************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   EverhourTimeOffIcon: () => (/* binding */ EverhourTimeOffIcon)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+
+function EverhourTimeOffIcon() {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
+    xmlns: "http://www.w3.org/2000/svg",
+    width: "81",
+    height: "81",
+    viewBox: "0 0 81 81",
+    fill: "currentColor"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    d: "M40.1303 80.2594C62.2936 80.2594 80.2606 62.2925 80.2606 40.1292C80.2606 17.9658 62.2936 -0.00109863 40.1303 -0.00109863C17.9669 -0.00109863 0 17.9658 0 40.1292C0 62.2925 17.9669 80.2594 40.1303 80.2594Z",
+    fill: "#333333"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    d: "M40.1296 75.2438C59.5226 75.2438 75.2436 59.5228 75.2436 40.1298C75.2436 20.7369 59.5226 5.01587 40.1296 5.01587C20.7367 5.01587 5.01562 20.7369 5.01562 40.1298C5.01562 59.5228 20.7367 75.2438 40.1296 75.2438Z",
+    fill: "white",
+    stroke: "#333333",
+    "stroke-width": "2.50814"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    d: "M40.13 44.3177C42.4433 44.3177 44.3186 42.4424 44.3186 40.1291C44.3186 37.8158 42.4433 35.9405 40.13 35.9405C37.8167 35.9405 35.9414 37.8158 35.9414 40.1291C35.9414 42.4424 37.8167 44.3177 40.13 44.3177Z",
+    fill: "#333333"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    d: "M54.3265 28.4402C55.7117 28.4402 56.8346 27.3172 56.8346 25.932C56.8346 24.5468 55.7117 23.4239 54.3265 23.4239C52.9413 23.4239 51.8184 24.5468 51.8184 25.932C51.8184 27.3172 52.9413 28.4402 54.3265 28.4402Z",
+    fill: "#333333"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    d: "M40.13 24.2523C42.4433 24.2523 44.3186 22.377 44.3186 20.0637C44.3186 17.7504 42.4433 15.8751 40.13 15.8751C37.8167 15.8751 35.9414 17.7504 35.9414 20.0637C35.9414 22.377 37.8167 24.2523 40.13 24.2523Z",
+    fill: "#333333"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    d: "M60.1964 44.3177C62.5097 44.3177 64.385 42.4424 64.385 40.1291C64.385 37.8158 62.5097 35.9405 60.1964 35.9405C57.8831 35.9405 56.0078 37.8158 56.0078 40.1291C56.0078 42.4424 57.8831 44.3177 60.1964 44.3177Z",
+    fill: "#333333"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    d: "M54.3273 58.5131C56.6406 58.5131 58.5159 56.6378 58.5159 54.3245C58.5159 52.0112 56.6406 50.1359 54.3273 50.1359C52.014 50.1359 50.1387 52.0112 50.1387 54.3245C50.1387 56.6378 52.014 58.5131 54.3273 58.5131Z",
+    fill: "#333333"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    d: "M40.13 64.3824C42.4433 64.3824 44.3186 62.5071 44.3186 60.1938C44.3186 57.8805 42.4433 56.0052 40.13 56.0052C37.8167 56.0052 35.9414 57.8805 35.9414 60.1938C35.9414 62.5071 37.8167 64.3824 40.13 64.3824Z",
+    fill: "#333333"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    d: "M25.9347 58.5131C28.248 58.5131 30.1233 56.6378 30.1233 54.3245C30.1233 52.0112 28.248 50.1359 25.9347 50.1359C23.6214 50.1359 21.7461 52.0112 21.7461 54.3245C21.7461 56.6378 23.6214 58.5131 25.9347 58.5131Z",
+    fill: "#333333"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    d: "M20.0656 44.3177C22.3789 44.3177 24.2542 42.4424 24.2542 40.1291C24.2542 37.8158 22.3789 35.9405 20.0656 35.9405C17.7523 35.9405 15.877 37.8158 15.877 40.1291C15.877 42.4424 17.7523 44.3177 20.0656 44.3177Z",
+    fill: "#333333"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    d: "M25.9347 30.1217C28.248 30.1217 30.1233 28.2464 30.1233 25.9331C30.1233 23.6198 28.248 21.7445 25.9347 21.7445C23.6214 21.7445 21.7461 23.6198 21.7461 25.9331C21.7461 28.2464 23.6214 30.1217 25.9347 30.1217Z",
+    fill: "#333333"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    d: "M37.1699 37.1695L52.8458 24.4532L55.8054 27.4129L43.0891 43.0887L37.1699 37.1695Z",
+    fill: "#333333"
+  }));
+}
+
+/***/ }),
+
+/***/ "./lib/components/icon/passwordless-login.tsx":
+/*!****************************************************!*\
+  !*** ./lib/components/icon/passwordless-login.tsx ***!
+  \****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   PasswordlessLoginIcon: () => (/* binding */ PasswordlessLoginIcon)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+
+function PasswordlessLoginIcon() {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
+    xmlns: "http://www.w3.org/2000/svg",
+    width: "63",
+    height: "72",
+    viewBox: "0 0 63 72",
+    fill: "currentColor"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    d: "M13.3125 13.9688C9.63636 13.9688 6.65625 16.9489 6.65625 20.625V29.5C6.65625 33.1762 9.63636 36.1562 13.3125 36.1562H31.0625C32.2879 36.1562 33.2812 35.1629 33.2812 33.9375C33.2812 32.7121 32.2879 31.7187 31.0625 31.7187H13.3125C12.0871 31.7187 11.0937 30.7254 11.0937 29.5V20.625C11.0937 19.3996 12.0871 18.4062 13.3125 18.4062H48.8125C50.0379 18.4062 51.0312 19.3996 51.0312 20.625V33.9375C51.0312 35.1629 52.0246 36.1562 53.25 36.1562C54.4754 36.1562 55.4687 35.1629 55.4687 33.9375V20.625C55.4687 16.9489 52.4887 13.9688 48.8125 13.9688H13.3125Z",
+    fill: "#002729"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    d: "M22.1875 25.0625C22.1875 27.5133 20.2008 29.5 17.75 29.5C15.2992 29.5 13.3125 27.5133 13.3125 25.0625C13.3125 22.6117 15.2992 20.625 17.75 20.625C20.2008 20.625 22.1875 22.6117 22.1875 25.0625Z",
+    fill: "#002729"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    d: "M31.0625 29.5C33.5133 29.5 35.5 27.5133 35.5 25.0625C35.5 22.6117 33.5133 20.625 31.0625 20.625C28.6117 20.625 26.625 22.6117 26.625 25.0625C26.625 27.5133 28.6117 29.5 31.0625 29.5Z",
+    fill: "#002729"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    d: "M48.8125 25.0625C48.8125 27.5133 46.8258 29.5 44.375 29.5C41.9242 29.5 39.9375 27.5133 39.9375 25.0625C39.9375 22.6117 41.9242 20.625 44.375 20.625C46.8258 20.625 48.8125 22.6117 48.8125 25.0625Z",
+    fill: "#002729"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    d: "M48.0781 37.8054C48.9889 36.9856 49.0628 35.5829 48.2429 34.6719C47.4231 33.7611 46.0204 33.6874 45.1094 34.5071L39.198 39.8274L36.9843 37.8352C36.0735 37.0156 34.6706 37.0892 33.8508 38C33.0312 38.911 33.1049 40.3137 34.0157 41.1336L37.7136 44.4617C38.5574 45.2212 39.8383 45.2212 40.6821 44.4617L48.0781 37.8054Z",
+    fill: "#002729"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    "fill-rule": "evenodd",
+    "clip-rule": "evenodd",
+    d: "M6.65625 0.65625C2.98011 0.65625 0 3.63636 0 7.3125V32.4707C0 36.7313 0.0667844 41.7481 2.28462 46.0825C4.25676 49.9369 7.3544 53.4165 11.7802 57.3002C16.1986 61.1775 22.0854 65.5788 29.7463 71.2238C30.5291 71.8004 31.5959 71.8004 32.3786 71.2238C40.0395 65.5788 45.9263 61.1775 50.3447 57.3002C54.7705 53.4165 57.8683 49.9369 59.8403 46.0825C62.0582 41.7481 62.125 36.7313 62.125 32.4707V7.3125C62.125 3.63636 59.145 0.65625 55.4687 0.65625H6.65625ZM4.4375 7.3125C4.4375 6.08712 5.43087 5.09375 6.65625 5.09375H55.4687C56.6941 5.09375 57.6875 6.08712 57.6875 7.3125V32.4707C57.6875 36.8642 57.5503 40.8163 55.8898 44.0612C54.2854 47.1969 51.66 50.2422 47.4178 53.965C43.414 57.4784 38.0997 61.4866 31.0625 66.6807C24.0253 61.4866 18.7109 57.4784 14.7071 53.965C10.4648 50.2422 7.83944 47.1969 6.23504 44.0612C4.57464 40.8163 4.4375 36.8642 4.4375 32.4707V7.3125Z",
+    fill: "#002729"
+  }));
+}
+
+/***/ }),
+
+/***/ "./lib/components/icon/plugin-logo.tsx":
+/*!*********************************************!*\
+  !*** ./lib/components/icon/plugin-logo.tsx ***!
+  \*********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   PluginLogo: () => (/* binding */ PluginLogo)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+
+function PluginLogo() {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
+    xmlns: "http://www.w3.org/2000/svg",
+    width: "156",
+    height: "24",
+    viewBox: "0 0 156 24",
+    fill: "currentColor"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    d: "M10.6081 14.954C12.6831 13.8139 13.718 11.8267 13.7127 8.99228C13.7653 8.1212 13.635 7.24872 13.3301 6.43073C13.0252 5.61274 12.5525 4.86723 11.9421 4.24185C10.5503 3.04402 8.74274 2.4385 6.90797 2.55545H0V23.9324H4.32741V16.1021H6.47921L9.71086 23.9165H14.3638V23.7107L10.6081 14.954ZM8.73422 11.6446C8.50408 11.934 8.20665 12.1632 7.86767 12.3122C7.5287 12.4612 7.15841 12.5255 6.78887 12.4997H4.32741V6.16577H6.86827C8.5463 6.16577 9.38531 7.23726 9.38531 9.38023C9.41877 10.1853 9.19039 10.9795 8.73422 11.6446Z",
+    fill: "white"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    d: "M29.5224 6.12633V2.52393H17.2389V23.9009H24.9647L25.997 20.3143H21.5663V14.6771H27.6167L28.6172 11.1934H21.5663V6.12633H29.5224Z",
+    fill: "white"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    "fill-rule": "evenodd",
+    "clip-rule": "evenodd",
+    d: "M35.1077 2.52393L29.1173 23.9998H32.1506L38.1139 2.52393H35.1077Z",
+    fill: "white"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    d: "M59.7237 15.634C59.7237 20.7078 56.2174 23.9666 51.6386 23.9666C49.4523 23.9666 47.7198 23.2653 46.5648 21.8628V23.7191H42.0685V1.40252H46.771V9.28138C47.9673 7.96136 49.6173 7.30135 51.6386 7.30135C56.1762 7.30135 59.7237 10.5601 59.7237 15.634ZM54.9387 15.634C54.9387 12.8289 53.1649 11.1377 50.8136 11.1377C48.4623 11.1377 46.6885 12.8289 46.6885 15.634C46.6885 18.439 48.4623 20.1303 50.8136 20.1303C53.1649 20.1303 54.9387 18.439 54.9387 15.634Z",
+    fill: "url(#paint0_linear_1801_2300)"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    d: "M75.069 18.6453L77.5852 21.3678C76.1002 23.1003 73.8314 23.9666 70.9026 23.9666C65.2926 23.9666 61.6625 20.4603 61.6625 15.634C61.6625 10.8077 65.3338 7.30136 70.3251 7.30136C74.9039 7.30136 78.6577 10.3127 78.699 15.5102L66.6951 17.8203C67.3963 19.429 68.8814 20.2128 70.9851 20.2128C72.7177 20.2128 73.9552 19.7178 75.069 18.6453ZM66.2413 15.139L74.1202 13.6127C73.6664 11.9627 72.2639 10.8489 70.2839 10.8489C67.9738 10.8489 66.3238 12.4164 66.2413 15.139Z",
+    fill: "url(#paint1_linear_1801_2300)"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    d: "M94.0442 18.6453L96.5605 21.3678C95.0755 23.1003 92.8067 23.9666 89.8779 23.9666C84.2678 23.9666 80.6378 20.4603 80.6378 15.634C80.6378 10.8077 84.3091 7.30136 89.3004 7.30136C93.8792 7.30136 97.633 10.3127 97.6743 15.5102L85.7116 17.8203C86.4129 19.429 87.8979 20.2128 90.0017 20.2128C91.6929 20.2128 92.9305 19.7178 94.0442 18.6453ZM85.2166 15.139L93.0955 13.6127C92.6417 11.9627 91.2392 10.8489 89.2592 10.8489C86.9491 10.8489 85.3404 12.4164 85.2166 15.139Z",
+    fill: "url(#paint2_linear_1801_2300)"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    d: "M117.392 14.479V23.7603H112.689V15.1802C112.689 12.5814 111.493 11.3439 109.389 11.3439C107.121 11.3439 105.512 12.7464 105.512 15.7165V23.7191H100.809V1.40252H105.512V9.24013C106.791 7.96136 108.606 7.30135 110.668 7.30135C114.505 7.30135 117.392 9.52888 117.392 14.479Z",
+    fill: "url(#paint3_linear_1801_2300)"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    d: "M121.063 2.64004C121.063 1.15502 122.26 0 123.992 0C125.725 0 126.921 1.07252 126.921 2.51629C126.921 4.08381 125.725 5.23882 123.992 5.23882C122.26 5.23882 121.063 4.12506 121.063 2.64004ZM121.641 7.54886H126.343V23.7603H121.641C121.641 23.7191 121.641 7.54886 121.641 7.54886Z",
+    fill: "url(#paint4_linear_1801_2300)"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    d: "M130.138 2.64004C130.138 1.15502 131.335 0 133.067 0C134.8 0 135.996 1.07252 135.996 2.51629C135.996 4.08381 134.8 5.23882 133.067 5.23882C131.335 5.23882 130.138 4.12506 130.138 2.64004ZM130.716 7.54886H135.419V23.7603H130.716C130.716 23.7191 130.716 7.54886 130.716 7.54886Z",
+    fill: "url(#paint5_linear_1801_2300)"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    d: "M155.838 7.54885L148.99 23.7603H144.122L137.316 7.54885H142.184L146.68 18.5628L151.3 7.54885C151.341 7.54885 155.838 7.54885 155.838 7.54885Z",
+    fill: "url(#paint6_linear_1801_2300)"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("defs", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("linearGradient", {
+    id: "paint0_linear_1801_2300",
+    x1: "37.7372",
+    y1: "0.066069",
+    x2: "133.296",
+    y2: "50.6318",
+    gradientUnits: "userSpaceOnUse"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("stop", {
+    "stop-color": "#D963B0"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("stop", {
+    offset: "0.503787",
+    "stop-color": "#9586EC"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("stop", {
+    offset: "1",
+    "stop-color": "#12C2E9"
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("linearGradient", {
+    id: "paint1_linear_1801_2300",
+    x1: "37.7372",
+    y1: "0.066069",
+    x2: "133.296",
+    y2: "50.6318",
+    gradientUnits: "userSpaceOnUse"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("stop", {
+    "stop-color": "#D963B0"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("stop", {
+    offset: "0.503787",
+    "stop-color": "#9586EC"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("stop", {
+    offset: "1",
+    "stop-color": "#12C2E9"
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("linearGradient", {
+    id: "paint2_linear_1801_2300",
+    x1: "37.7372",
+    y1: "0.066069",
+    x2: "133.296",
+    y2: "50.6318",
+    gradientUnits: "userSpaceOnUse"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("stop", {
+    "stop-color": "#D963B0"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("stop", {
+    offset: "0.503787",
+    "stop-color": "#9586EC"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("stop", {
+    offset: "1",
+    "stop-color": "#12C2E9"
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("linearGradient", {
+    id: "paint3_linear_1801_2300",
+    x1: "37.7372",
+    y1: "0.066069",
+    x2: "133.296",
+    y2: "50.6318",
+    gradientUnits: "userSpaceOnUse"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("stop", {
+    "stop-color": "#D963B0"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("stop", {
+    offset: "0.503787",
+    "stop-color": "#9586EC"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("stop", {
+    offset: "1",
+    "stop-color": "#12C2E9"
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("linearGradient", {
+    id: "paint4_linear_1801_2300",
+    x1: "37.7372",
+    y1: "0.066069",
+    x2: "133.296",
+    y2: "50.6318",
+    gradientUnits: "userSpaceOnUse"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("stop", {
+    "stop-color": "#D963B0"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("stop", {
+    offset: "0.503787",
+    "stop-color": "#9586EC"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("stop", {
+    offset: "1",
+    "stop-color": "#12C2E9"
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("linearGradient", {
+    id: "paint5_linear_1801_2300",
+    x1: "37.7372",
+    y1: "0.066069",
+    x2: "133.296",
+    y2: "50.6318",
+    gradientUnits: "userSpaceOnUse"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("stop", {
+    "stop-color": "#D963B0"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("stop", {
+    offset: "0.503787",
+    "stop-color": "#9586EC"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("stop", {
+    offset: "1",
+    "stop-color": "#12C2E9"
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("linearGradient", {
+    id: "paint6_linear_1801_2300",
+    x1: "37.7372",
+    y1: "0.066069",
+    x2: "133.296",
+    y2: "50.6318",
+    gradientUnits: "userSpaceOnUse"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("stop", {
+    "stop-color": "#D963B0"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("stop", {
+    offset: "0.503787",
+    "stop-color": "#9586EC"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("stop", {
+    offset: "1",
+    "stop-color": "#12C2E9"
+  }))));
+}
+
+/***/ }),
+
+/***/ "./lib/components/icon/refact-logo.tsx":
+/*!*********************************************!*\
+  !*** ./lib/components/icon/refact-logo.tsx ***!
+  \*********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   RefactLogo: () => (/* binding */ RefactLogo)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+
+function RefactLogo() {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
+    xmlns: "http://www.w3.org/2000/svg",
+    width: "104",
+    height: "24",
+    viewBox: "0 0 104 24",
+    fill: "currentColor"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("g", {
+    "clip-path": "url(#clip0_1823_2003)"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    d: "M12.0217 13.7742C14.2617 12.5399 15.3789 10.3885 15.3732 7.31996C15.43 6.37691 15.2893 5.43237 14.9602 4.5468C14.631 3.66123 14.1207 2.85414 13.4617 2.1771C11.9593 0.88032 10.0081 0.224773 8.02745 0.351384H0.570312V23.4942H5.24174V15.0171H7.5646L11.0532 23.4771H16.076V23.2542L12.0217 13.7742ZM9.99888 10.1914C9.75045 10.5047 9.42937 10.7528 9.06345 10.9141C8.69753 11.0754 8.2978 11.1451 7.89889 11.1171H5.24174V4.25995H7.98459C9.79602 4.25995 10.7017 5.41995 10.7017 7.73995C10.7379 8.6115 10.4913 9.47136 9.99888 10.1914Z",
+    fill: "#003233"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    d: "M32.4397 4.21737V0.317383H19.1797V23.4602H27.5197L28.634 19.5774H23.8511V13.4745H30.3825L31.4625 9.70306H23.8511V4.21737H32.4397Z",
+    fill: "#003233"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    d: "M49.361 4.21737V0.317383H39.0753L36.5039 9.42881V23.4773H41.1839V14.0488H48.4525V10.1659H41.1839V4.21737H49.361Z",
+    fill: "#003233"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    d: "M60.6841 0.317383H56.3984L49.1641 23.4602H54.1098L55.3526 18.7202H61.7298L62.9641 23.4602H67.9612L60.6841 0.317383ZM56.3984 14.8374L58.5669 6.5831L60.7269 14.8374H56.3984Z",
+    fill: "#003233"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    d: "M79.6771 19.0117C79.3423 19.3414 78.9365 19.59 78.4908 19.7386C78.0451 19.8872 77.5713 19.9317 77.1056 19.8688C76.5888 19.9173 76.0685 19.8231 75.6015 19.5964C75.1345 19.3697 74.7387 19.0192 74.4571 18.5831C73.9428 17.726 73.6857 16.1402 73.6857 13.8431V9.47168C73.6262 7.99525 73.9201 6.52595 74.5428 5.18596C74.8225 4.74442 75.2185 4.38845 75.6872 4.15712C76.1559 3.92578 76.6793 3.82799 77.1999 3.87451C77.6713 3.81273 78.1506 3.86452 78.5979 4.02554C79.0452 4.18657 79.4475 4.45219 79.7714 4.80024C80.3448 5.8477 80.6065 7.03739 80.5256 8.22881H85.2228C85.2034 6.00513 84.4127 3.85711 82.9857 2.15164C81.6742 0.737356 79.7628 0.0345243 77.2342 0.0345243C76.1042 -0.0230995 74.976 0.178673 73.936 0.624386C72.896 1.0701 71.9718 1.74793 71.2342 2.60595C69.7942 4.32024 69.0742 6.77168 69.0742 9.96025V13.8517C69.0742 17.0488 69.7685 19.5002 71.1656 21.2231C71.8964 22.0893 72.8195 22.7729 73.8611 23.2193C74.9028 23.6657 76.0344 23.8627 77.1657 23.7945C78.2177 23.8612 79.2723 23.7149 80.2665 23.3644C81.2606 23.0139 82.1738 22.4663 82.9514 21.7545C84.3228 20.4002 85.0599 18.4031 85.1799 15.7545H80.4999C80.5462 16.8969 80.2604 18.0283 79.6771 19.0117Z",
+    fill: "#003233"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    d: "M87.5625 0.317383V4.21737H93.1939V23.4773H97.8825V4.21737H103.608V0.317383H87.5625Z",
+    fill: "#003233"
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("defs", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("clipPath", {
+    id: "clip0_1823_2003"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("rect", {
+    width: "104",
+    height: "24",
+    fill: "white"
+  }))));
+}
+
+/***/ }),
+
+/***/ "./lib/components/import-percentage.js":
+/*!*********************************************!*\
+  !*** ./lib/components/import-percentage.js ***!
+  \*********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   StyledWrapper: () => (/* binding */ StyledWrapper),
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @refactco/ui-kit */ "./node_modules/@refactco/ui-kit/dist/ui-kit-expose.js");
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
+
+/* eslint-disable  jsx-a11y/click-events-have-key-events */
+/* eslint-disable  jsx-a11y/no-static-element-interactions */
+
+
+const ImportPercentage = ({
+  progressValue,
+  jobAction,
+  jobActionHandler,
+  loadingJobAction,
+  scheduleId
+}) => {
+  const handleClick = () => {
+    const url = new URL(window.location.href);
+    url.hash = `#/import-campaigns/scheduled?scheduleId=${scheduleId}`;
+    window.open(url.toString(), '_blank');
+  };
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(StyledWrapper, null, scheduleId && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "Click on the following link to get full information about the scheduled task with this ID:", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "span-link",
+    onClick: handleClick
+  }, ' ', scheduleId)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null, progressValue, " %"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Progress, {
+    value: progressValue,
+    max: "100"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ButtonContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Button, {
+    color: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.ButtonColor.GREEN,
+    onClick: () => jobActionHandler(jobAction),
+    disabled: loadingJobAction
+  }, jobAction === 'pause' ? 'Pause' : 'Resume'), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Button, {
+    color: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.ButtonColor.RED,
+    onClick: () => jobActionHandler('cancel'),
+    disabled: loadingJobAction
+  }, "Cancel")));
+};
+const StyledWrapper = styled_components__WEBPACK_IMPORTED_MODULE_2__["default"].div`
+	padding-right: 20px;
+`;
+const ButtonContainer = styled_components__WEBPACK_IMPORTED_MODULE_2__["default"].div`
+	display: flex;
+	gap: 16px;
+	margin-top: 20px;
+`;
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ImportPercentage);
+
+/***/ }),
+
+/***/ "./lib/components/info-modal.js":
+/*!**************************************!*\
+  !*** ./lib/components/info-modal.js ***!
+  \**************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _modal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modal */ "./lib/components/modal.js");
+
+/* eslint-disable react/no-unescaped-entities   */
+
+const InfoModal = ({
+  show,
+  selectedRowInfo,
+  onClose,
+  getRecurrenceText
+}) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_modal__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  show: show,
+  modalClosed: onClose
+}, selectedRowInfo && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null, "Schedule Information"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, "Schedule Id:"), " ", selectedRowInfo.id, " ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, "Publication Id:"), ' ', selectedRowInfo.params[0].credentials.publication_id, ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, "Content Type:"), ' ', selectedRowInfo.params[0].audience, " ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "Campaign tags are imported as", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, selectedRowInfo.params[0].import_cm_tags_as), " , with the import option set to", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, selectedRowInfo.params[0].import_option), ".", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "The post type specified is", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, selectedRowInfo.params[0].post_type), ". ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "This schedule recurs", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, getRecurrenceText(selectedRowInfo.params[0].schedule_settings)), ".", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), ' '), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "The taxonomy used is", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, selectedRowInfo.params[0].taxonomy), ".", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "Campaign status on Beehiiv is mapped to the post status on WordPress as follows:", ' ', selectedRowInfo.params[0].post_status.confirmed && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, "'Confirmed'"), " corresponds to", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, selectedRowInfo.params[0].post_status.confirmed)), selectedRowInfo.params[0].post_status.draft && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, selectedRowInfo.params[0].post_status.confirmed ? ',' : '', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, "'Draft'"), " corresponds to", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, selectedRowInfo.params[0].post_status.draft)), selectedRowInfo.params[0].post_status.archived && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, selectedRowInfo.params[0].post_status.draft || selectedRowInfo.params[0].post_status.confirmed ? ', and ' : '', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, "'Archived'"), " corresponds to", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, selectedRowInfo.params[0].post_status.archived)), ".")));
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (InfoModal);
+
+/***/ }),
+
+/***/ "./lib/components/layout.js":
+/*!**********************************!*\
+  !*** ./lib/components/layout.js ***!
+  \**********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @refactco/ui-kit */ "./node_modules/@refactco/ui-kit/dist/ui-kit-expose.js");
+
+
+const Layout = ({
+  children
+}) => {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Container, null, children));
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Layout);
+
+/***/ }),
+
+/***/ "./lib/components/modal.js":
+/*!*********************************!*\
+  !*** ./lib/components/modal.js ***!
+  \*********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _backdrop__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./backdrop */ "./lib/components/backdrop.js");
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
+
+/* eslint-disable import/no-extraneous-dependencies */
+
+
+
+const Modal = ({
+  show,
+  modalClosed,
+  children
+}) => {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_backdrop__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    show: show,
+    modalClosed: modalClosed
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ModalContainer, {
+    className: "Modal",
+    style: {
+      transform: show ? 'translateX(0)' : 'translateX(-100vw)',
+      opacity: show ? '1' : '0'
+    }
+  }, children));
+};
+const ModalContainer = styled_components__WEBPACK_IMPORTED_MODULE_2__["default"].div`
+	position: fixed;
+	z-index: 500;
+	background-color: white;
+	width: 85%;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	box-shadow: 1px 1px 1px #eee;
+	padding: 16px;
+	left: 5%;
+	top: 20%;
+	box-sizing: border-box;
+	transition: all 0.3s ease-out;
+	overflow-y: scroll;
+
+	@media ( min-width: 780px ) {
+		width: 500px;
+		left: calc( 50% - 250px );
+		top: 20%;
+		overflow-y: hidden;
+	}
+`;
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,react__WEBPACK_IMPORTED_MODULE_0__.memo)(Modal));
+
+/***/ }),
+
+/***/ "./lib/components/onboarding-modal.js":
+/*!********************************************!*\
+  !*** ./lib/components/onboarding-modal.js ***!
+  \********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   OnboardingModal: () => (/* binding */ OnboardingModal)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
+/* harmony import */ var _subscription_box__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./subscription-box */ "./lib/components/subscription-box.js");
+/* harmony import */ var _pages_about_about__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../pages/about/about */ "./lib/pages/about/about.js");
+/* harmony import */ var _collect_data__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./collect-data */ "./lib/components/collect-data.js");
+
+
+
+
+
+
+const OnboardingModal = ({
+  onClose
+}) => {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Modal, {
+    onRequestClose: onClose,
+    size: "large"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(OnboardingContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h1", null, " You\u2019ve successfully installed Beehiiv to WP"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_subscription_box__WEBPACK_IMPORTED_MODULE_2__.SubscriptionBox, {
+    marginTop: "20px"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_pages_about_about__WEBPACK_IMPORTED_MODULE_3__.Divider, null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_collect_data__WEBPACK_IMPORTED_MODULE_4__.CollectData, null)));
+};
+const OnboardingContainer = styled_components__WEBPACK_IMPORTED_MODULE_5__.styled.div`
+    padding: 16px 8px 20px;
+    display: flex;
+    flex-direction: column;
+    margin-top: 12px;
+    gap: 24px;
+    & > * {
+        margin: 0;
+    }
+`;
+
+/***/ }),
+
+/***/ "./lib/components/our-product.js":
+/*!***************************************!*\
+  !*** ./lib/components/our-product.js ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   OurProduct: () => (/* binding */ OurProduct)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
+/* harmony import */ var _icon_passwordless_login__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./icon/passwordless-login */ "./lib/components/icon/passwordless-login.tsx");
+/* harmony import */ var _icon_campaign_url_builder__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./icon/campaign-url-builder */ "./lib/components/icon/campaign-url-builder.tsx");
+/* harmony import */ var _icon_everhour_time_off__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./icon/everhour-time-off */ "./lib/components/icon/everhour-time-off.tsx");
+
+
+
+
+
+function OurProduct() {
+  const products = [{
+    title: 'Passwordless Login',
+    description: 'Allow users to register with and log into WordPress without a password, using an',
+    logo: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_icon_passwordless_login__WEBPACK_IMPORTED_MODULE_1__.PasswordlessLoginIcon, null),
+    backgroundColor: 'linear-gradient(292deg, #E8F0FF 26.93%, #D0E0FD 94.62%)',
+    href: 'https://refact.co/toolkit/',
+    target: '_blank'
+  }, {
+    title: 'Campaign URL Builder',
+    description: 'Create custom URLs and add tracking parameters to monitor campaign performance...',
+    logo: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_icon_campaign_url_builder__WEBPACK_IMPORTED_MODULE_2__.CampaignUrlBuilderIcon, null),
+    backgroundColor: 'linear-gradient(109deg, #93F6C1 -2.19%, #D3F8E4 65.57%)',
+    href: 'https://refact.co/campaign-url-builder/',
+    target: '_blank'
+  }, {
+    title: 'Everhour Time-Off Management',
+    description: 'Pull time-off data from Everhour and display it in Google Calendar and Slack channels.',
+    logo: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_icon_everhour_time_off__WEBPACK_IMPORTED_MODULE_3__.EverhourTimeOffIcon, null),
+    backgroundColor: 'linear-gradient(256deg, #E7F9FB -3.17%, #BAE9F1 108.64%)',
+    href: 'https://refact.co/google-calendar-slack-integration-to-manage-time-off/',
+    target: '_blank'
+  }];
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(OurProductContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", null, "Our other products"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(OurProductWrapper, null, products.map((product, index) => {
+    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(OurProductItem, {
+      key: index,
+      href: product.href,
+      target: product.target
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(OurProductItemLogo, {
+      backgroundColor: product.backgroundColor
+    }, product.logo), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(OurProductItemContent, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null, product.title), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, product.description)));
+  })));
+}
+const OurProductContainer = styled_components__WEBPACK_IMPORTED_MODULE_4__.styled.div`
+    display: flex;
+    flex-direction: column;
+    margin-top: 40px;
+    gap: 12px;
+    & > * {
+        margin: 0;
+    }
+`;
+const OurProductWrapper = styled_components__WEBPACK_IMPORTED_MODULE_4__.styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+`;
+const OurProductItem = styled_components__WEBPACK_IMPORTED_MODULE_4__.styled.a`
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    padding: 12px;
+    border-radius: 4px;
+    border: 1px solid #D7DBDB;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+
+    &:hover {
+        border-color: #2E9E62;
+        background-color: #E5F7E3;
+    }
+`;
+const OurProductItemLogo = styled_components__WEBPACK_IMPORTED_MODULE_4__.styled.div`
+   display: flex;
+   width: 32px;
+   height: 32px;
+   padding: 16px;
+   justify-content: center;
+   align-items: center;
+   border-radius: 4px;
+   background: ${props => props.backgroundColor || 'transparent'};
+`;
+const OurProductItemContent = styled_components__WEBPACK_IMPORTED_MODULE_4__.styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    & > * {
+        margin: 0;
+    }
+    & > p {
+        color: #798686;
+    }
+`;
+
+/***/ }),
+
+/***/ "./lib/components/powered-by.js":
+/*!**************************************!*\
+  !*** ./lib/components/powered-by.js ***!
+  \**************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   PoweredBy: () => (/* binding */ PoweredBy)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
+/* harmony import */ var _icon_refact_logo__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./icon/refact-logo */ "./lib/components/icon/refact-logo.tsx");
+
+
+
+function PoweredBy() {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(PoweredByContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(PoweredByWrapper, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null, "Powered by"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_icon_refact_logo__WEBPACK_IMPORTED_MODULE_1__.RefactLogo, null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "When Refact needs something to make our projects easier and our clients more successful, we create it\u2014and allow everyone else to use it too.")));
+}
+const PoweredByContainer = styled_components__WEBPACK_IMPORTED_MODULE_2__.styled.div`
+    width: 100%;
+    border-radius: 4px;
+    border: 1px solid #D7DBDB;
+    background:  #FFF;
+    padding: 8px;
+`;
+const PoweredByWrapper = styled_components__WEBPACK_IMPORTED_MODULE_2__.styled.div`
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+    border-radius: 4px;
+    background:  #E5F7E3;
+    align-items: flex-start;
+    gap:8px;
+    & > * {
+        margin: 0;
+        color: #002729;
+    }
+    & > p {
+    margin-top: 8px;
+    }
+`;
+
+/***/ }),
+
+/***/ "./lib/components/schedule-not-found.js":
+/*!**********************************************!*\
+  !*** ./lib/components/schedule-not-found.js ***!
+  \**********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   StyledContainer: () => (/* binding */ StyledContainer),
+/* harmony export */   StyledWrapper: () => (/* binding */ StyledWrapper),
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
+/* harmony import */ var _add_button__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./add-button */ "./lib/components/add-button.js");
+/* harmony import */ var _add_new_schedule_modal__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./add-new-schedule-modal */ "./lib/components/add-new-schedule-modal.js");
+
+
+
+const {
+  useState
+} = wp.element;
+
+const ScheduleNotFound = ({
+  handleRefreshScheduleData
+}) => {
+  const [showAddNewScheduleModal, setShowAddNewScheduleModal] = useState(false);
+  const closeAddNewScheduleModalHandler = () => {
+    setShowAddNewScheduleModal(false);
+  };
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(StyledContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(StyledWrapper, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
+    xmlns: "http://www.w3.org/2000/svg",
+    width: "65",
+    height: "64",
+    viewBox: "0 0 65 64",
+    fill: "none"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    d: "M51.0876 7.99984H48.4209V2.6665H43.0876V7.99984H21.7542V2.6665H16.4209V7.99984H13.7542C10.8209 7.99984 8.4209 10.3998 8.4209 13.3332V50.6665C8.4209 53.5998 10.8209 55.9998 13.7542 55.9998H24.4209V50.6665H13.7542V23.9998H51.0876V50.6665H40.4209V55.9998H51.0876C54.0209 55.9998 56.4209 53.5998 56.4209 50.6665V13.3332C56.4209 10.3998 54.0209 7.99984 51.0876 7.99984ZM13.7542 18.6665V13.3332H51.0876V18.6665H13.7542ZM32.4209 31.9998L21.7542 42.6665H29.7542V58.6665H35.0876V42.6665H43.0876L32.4209 31.9998Z",
+    fill: "#D7DBDB"
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", null, "No Manual Schedule Found/Available.")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_add_button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    icon: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
+      xmlns: "http://www.w3.org/2000/svg",
+      width: "24",
+      height: "24",
+      viewBox: "0 0 24 24",
+      fill: "none"
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+      d: "M19 11.5V12.5C19 12.7761 18.7761 13 18.5 13H13V18.5C13 18.7761 12.7761 19 12.5 19H11.5C11.2239 19 11 18.7761 11 18.5V13H5.5C5.22386 13 5 12.7761 5 12.5V11.5C5 11.2239 5.22386 11 5.5 11H11V5.5C11 5.22386 11.2239 5 11.5 5H12.5C12.7761 5 13 5.22386 13 5.5V11H18.5C18.7761 11 19 11.2239 19 11.5Z",
+      fill: "white"
+    })),
+    onClick: () => {
+      setShowAddNewScheduleModal(true);
+    }
+  }, "Add a New Schedule Import"), showAddNewScheduleModal ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_add_new_schedule_modal__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    onClose: closeAddNewScheduleModalHandler,
+    handleRefreshScheduleData: handleRefreshScheduleData
+  }) : null);
+};
+const StyledContainer = styled_components__WEBPACK_IMPORTED_MODULE_3__.styled.div`
+	background-color: #fff;
+	width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    border: 1px solid var(--Text-Gains-Boro, #D7DBDB);
+    gap: 20px;
+    min-height: 307px;
+    flex-direction: column;
+`;
+const StyledWrapper = styled_components__WEBPACK_IMPORTED_MODULE_3__.styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+`;
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ScheduleNotFound);
+
+/***/ }),
+
+/***/ "./lib/components/spinner.js":
+/*!***********************************!*\
+  !*** ./lib/components/spinner.js ***!
+  \***********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
+
+
+const Spinner = ({
+  label,
+  marginBottom
+}) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(SpinnerContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Loader, {
+  marginBottom: marginBottom
+}), label && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Label, null, label));
+const spin = (0,styled_components__WEBPACK_IMPORTED_MODULE_1__.keyframes)`
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+`;
+const SpinnerContainer = styled_components__WEBPACK_IMPORTED_MODULE_1__["default"].div`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: absolute;
+	flex-direction: column;
+	gap: 8px;
+	top: 50%;
+	left: 50%;
+	transform: translate( -50%, -50% );
+`;
+const Loader = styled_components__WEBPACK_IMPORTED_MODULE_1__["default"].div`
+	border: 4px solid rgba( 0, 0, 0, 0.1 );
+	border-top: 4px solid #2e9e62;
+	border-radius: 50%;
+	width: 40px;
+	height: 40px;
+	margin-bottom: ${props => {
+  var _props$marginBottom;
+  return (_props$marginBottom = props.marginBottom) !== null && _props$marginBottom !== void 0 ? _props$marginBottom : '16px';
+}};
+	animation: ${spin} 1s linear infinite;
+`;
+const Label = styled_components__WEBPACK_IMPORTED_MODULE_1__["default"].p`
+	color: #fff;
+	font-size: 16px;
+`;
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Spinner);
+
+/***/ }),
+
+/***/ "./lib/components/subscription-box.js":
+/*!********************************************!*\
+  !*** ./lib/components/subscription-box.js ***!
+  \********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   SubscriptionBox: () => (/* binding */ SubscriptionBox)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
+/* harmony import */ var _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @refactco/ui-kit */ "./node_modules/@refactco/ui-kit/dist/ui-kit-expose.js");
+
+const {
+  useState
+} = wp.element;
+
+
+function SubscriptionBox({
+  marginTop = "31px"
+}) {
+  const [email, setEmail] = useState('');
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(SubscriptionBoxWrapper, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", null, "Get Weekly media tech news in easy-to-read chunks."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "Boost your productivity with our streamlined plugin, designed to simplify your workflow and integrate seamlessly with your favorite tools."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(SubscriptionForm, {
+    marginTop: marginTop
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Input, {
+    type: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.InputType.TEXT,
+    value: email,
+    onChange: value => setEmail(value),
+    required: true,
+    placeholder: "Enter your email address"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "No Spam. Unsubscribe any time.")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Button, {
+    type: "submit"
+  }, "Subscribe")));
+}
+const SubscriptionBoxWrapper = styled_components__WEBPACK_IMPORTED_MODULE_2__.styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    & > * {
+        flex: 1;
+        margin:0;
+    }
+    & > p {
+        margin-top: 15px;
+        color: #798686;
+    }
+`;
+const SubscriptionForm = styled_components__WEBPACK_IMPORTED_MODULE_2__.styled.form`
+    display: flex;
+    flex-direction: column;
+    margin-top: 16px;
+    width: 100%;
+    gap: 11px;
+    @media (min-width: 768px) {
+  	    margin-top: ${({
+  marginTop
+}) => marginTop !== null && marginTop !== void 0 ? marginTop : '31px'};
+        flex-direction: row;
+  }
+}`;
+const InputContainer = styled_components__WEBPACK_IMPORTED_MODULE_2__.styled.div`
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 4px;
+     & > * {
+        margin:0;
+    }
+    & > p {
+        color: #798686;
+    }
+`;
+
+/***/ }),
+
+/***/ "./lib/container/manaulImport/manaulImportHelper.js":
+/*!**********************************************************!*\
+  !*** ./lib/container/manaulImport/manaulImportHelper.js ***!
+  \**********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   manaulImportHelper: () => (/* binding */ manaulImportHelper)
+/* harmony export */ });
+/* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/dist/react-toastify.esm.mjs");
+/* harmony import */ var _common_common_function__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../common/common-function */ "./lib/common/common-function.js");
+/* eslint-disable camelcase */
+
+const apiFetch = wp.apiFetch;
+
+
+function manaulImportHelper(state, setState, groupName, setGroupName, removeGroupName, setTotalQueuedCampaigns, removeTotalQueuedCampaigns, scheduleID, setScheduleID, removeScheduleID) {
+  async function getDefaultOptions() {
+    try {
+      const response = await apiFetch({
+        path: 'itfb/v1/import-defaults-options'
+      });
+      const {
+        post_statuses,
+        authors,
+        current_server_time,
+        post_types
+      } = response;
+      if (authors.length === 0) {
+        react_toastify__WEBPACK_IMPORTED_MODULE_0__.toast.error('You should add at least one new user with rule Author.Navigating to the Add New User page...');
+        await (0,_common_common_function__WEBPACK_IMPORTED_MODULE_1__.delay)(5000);
+        window.location.href = 'user-new.php';
+        return false;
+      }
+      const postStatusesData = Object.entries(post_statuses).map(([key, value]) => ({
+        label: value,
+        value: key
+      }));
+      const selectedPostType = post_types[0].post_type;
+      const taxonomies = post_types[0].taxonomies ? post_types[0].taxonomies : [];
+      const selectedTaxonomy = taxonomies.length > 0 ? taxonomies[0].taxonomy_slug : '';
+      const terms = taxonomies[0].terms ? taxonomies[0].terms : [];
+      const selectedTerm = terms.length > 0 ? terms[0].term_id : '';
+      const selectedAuthor = authors[0].id;
+      setState({
+        ...state,
+        postStatuses: postStatusesData,
+        postTypes: post_types,
+        taxonomies,
+        selectedTaxonomy,
+        selectedPostType: selectedPostType ? selectedPostType : 'post',
+        terms,
+        selectedTerm,
+        authors,
+        selectedAuthor,
+        serverTime: current_server_time
+      });
+    } catch (error) {
+      (0,_common_common_function__WEBPACK_IMPORTED_MODULE_1__.logger)(error);
+    }
+  }
+  function handleInputChange(value, name) {
+    setState(prevState => {
+      const newState = {
+        ...prevState,
+        [name]: value
+      };
+      const {
+        publishedCampaigns,
+        draftededCampaigns,
+        archivedCampaigns
+      } = newState;
+      if (name === 'selectedPostType') {
+        const selectedPostType = state.postTypes.find(pt => pt.post_type === value);
+        newState.taxonomies = selectedPostType ? selectedPostType.taxonomies : [];
+        newState.selectedTaxonomy = newState.taxonomies.length > 0 ? newState.taxonomies[0].taxonomy_slug : '';
+        newState.selectedTerm = newState.taxonomies.length > 0 && newState.terms.length > 0 ? newState.terms[0].term_id : '';
+        newState.terms = newState.selectedTaxonomy ? newState.taxonomies.find(pt => pt.taxonomy_slug === newState.selectedTaxonomy).terms : [];
+      }
+      if (name === 'selectedTaxonomy') {
+        const selectedTaxonomy = state.taxonomies.find(pt => pt.taxonomy_slug === value);
+        newState.terms = selectedTaxonomy ? selectedTaxonomy.terms : [];
+        newState.selectedTerm = newState.terms.length > 0 ? newState.terms[0].term_id : '';
+      }
+      if ((name === 'publishedCampaigns' || name === 'draftededCampaigns' || name === 'archivedCampaigns') && value) {
+        newState.errors = {
+          ...prevState.errors,
+          campaignStatus: ''
+        };
+        newState.isFormDisabled = false;
+      }
+      if (!publishedCampaigns && !draftededCampaigns && !archivedCampaigns) {
+        newState.errors = {
+          ...prevState.errors,
+          campaignStatus: 'You should select at least one campaign status'
+        };
+        newState.isFormDisabled = true;
+      }
+      if (name === 'createNewConnection' && value) {
+        newState.selectedConnection = 'not_set';
+        newState.isFormDisabled = true;
+      }
+      return newState;
+    });
+  }
+  function validateInput(name, value) {
+    switch (name) {
+      case 'apiKey':
+        if (!value) return 'API Key is required.';
+        if (value.length !== 64) return 'API Key must be 64 characters.';
+        break;
+      case 'publicationId':
+        if (!value) return 'Publication ID is required.';
+        if (value.length !== 40) return 'Publication ID must be 40 characters.';
+        break;
+      case 'runHour':
+        if (!value) return 'Run hour is required.';
+        if (value < 1 || value > 24) return 'The run hour should be between 1 to 24';
+        if (!/^(?:[01]?[0-9]|2[0-4])$/.test(value)) return 'Invalid hour format';
+        break;
+      case 'runTime':
+        if (!value) return 'Run time is required.';
+        if (!/^(?:[01]\d|2[0-3]):[0-5]\d$/.test(value)) return 'Invalid time format. Use "HH:mm" (e.g., "02:00").';
+        break;
+      case 'connectionName':
+        if (!value && state.includeAsConnection && state.createNewConnection) return 'Connection name is required.';
+        break;
+      case 'includeAsConnection':
+        if (!value) {
+          setState(prevState => ({
+            ...prevState,
+            errors: {
+              ...prevState.errors,
+              connectionName: ''
+            },
+            isFormDisabled: false
+          }));
+        } else {
+          if (!state.connectionName) {
+            return 'Connection name is required.';
+          }
+        }
+      default:
+        return '';
+    }
+  }
+  function handleBlur(name, value) {
+    const error = validateInput(name, value);
+    if (error) {
+      setState(prevState => ({
+        ...prevState,
+        errors: {
+          ...prevState.errors,
+          [name]: error
+        },
+        isFormDisabled: true
+      }));
+    } else {
+      setState(prevState => ({
+        ...prevState,
+        errors: {
+          ...prevState.errors,
+          [name]: ''
+        },
+        isFormDisabled: false
+      }));
+    }
+  }
+  async function getImportStatus(group_name) {
+    let response = null;
+    try {
+      response = await apiFetch({
+        path: `itfb/v1/import-status?group_name=${group_name}`
+      });
+    } catch (error) {
+      (0,_common_common_function__WEBPACK_IMPORTED_MODULE_1__.logger)('ImportStatus request error:', error);
+    }
+    return response;
+  }
+  function updateProgress(response, intervalId) {
+    const {
+      remaining_campaigns,
+      status
+    } = response;
+    const totalQueuedCampaigns = window.localStorage.getItem('totalQueuedCampaigns');
+    const totalCampaignsNumber = Number(totalQueuedCampaigns);
+    const remainingCampaigns = Number(remaining_campaigns);
+    const progressValue = (totalCampaignsNumber - remainingCampaigns) / totalCampaignsNumber * 100;
+    setState(prevState => ({
+      ...prevState,
+      progressValue: Math.floor(progressValue),
+      startImporting: true
+    }));
+    if (intervalId && status !== 'active') {
+      clearAllIntervals();
+      setState(prevState => {
+        return {
+          ...prevState,
+          intervalId: [],
+          progressValue: 100
+        };
+      });
+    }
+  }
+  const clearAllIntervals = () => {
+    const {
+      intervalId
+    } = state;
+    intervalId.forEach(id => clearInterval(id));
+    setState(prevState => ({
+      ...prevState,
+      intervalId: []
+    }));
+  };
+  async function importStatus(group_name) {
+    const intervalId = setInterval(async () => {
+      const response = await getImportStatus(group_name);
+      if (response && response.status === 'active') {
+        updateProgress(response, intervalId);
+      }
+      if (response && response.status === 'not_active' || response.status === 'active' && Number(response.remaining_campaigns === 0)) {
+        clearAllIntervals();
+        react_toastify__WEBPACK_IMPORTED_MODULE_0__.toast.success('Import completed successfully');
+        removeGroupName();
+        removeTotalQueuedCampaigns();
+        setState(prevState => {
+          return {
+            ...prevState,
+            progressValue: 100,
+            loadingJobAction: true
+          };
+        });
+        await (0,_common_common_function__WEBPACK_IMPORTED_MODULE_1__.delay)(5000);
+        window.location.reload();
+      }
+    }, 10000);
+    return intervalId;
+  }
+  async function checkCurrentImportStatus() {
+    if (groupName) {
+      const response = await getImportStatus(groupName);
+      if (response && response.status === 'active') {
+        updateProgress(response);
+        clearAllIntervals();
+        const newIntervalId = importStatus(groupName);
+        setState(prevState => ({
+          ...prevState,
+          intervalId: [...state.intervalId, newIntervalId]
+        }));
+      }
+      if (response && response.status === 'paused') {
+        updateProgress(response);
+        setState(prevState => {
+          return {
+            ...prevState,
+            jobAction: 'resume'
+          };
+        });
+      }
+    }
+    // setState( ( prevState ) => ( {
+    // 	...prevState,
+    // 	loading: false,
+    // } ) );
+  }
+  async function startImportHandler(event) {
+    event.preventDefault();
+    const {
+      apiKey,
+      publicationId,
+      publishedCampaigns,
+      publishedWrodpressPostStatus,
+      draftededCampaigns,
+      draftedWrodpressPostStatus,
+      archivedCampaigns,
+      archivedWrodpressPostStatus,
+      selectedPostType,
+      selectedTaxonomy,
+      selectedTerm,
+      selectedAuthor,
+      importCampaignTagAs,
+      importOption,
+      enableSchedule,
+      frequency,
+      runHour,
+      runTime,
+      runDay,
+      contentType,
+      includeAsConnection,
+      connectionName,
+      selectedConnection
+    } = state;
+    const post_status = {};
+    if (publishedCampaigns) {
+      post_status.confirmed = publishedWrodpressPostStatus;
+    }
+    if (draftededCampaigns) {
+      post_status.draft = draftedWrodpressPostStatus;
+    }
+    if (archivedCampaigns) {
+      post_status.archived = archivedWrodpressPostStatus;
+    }
+    const schedule_settings = {};
+    if (!enableSchedule) {
+      schedule_settings.enabled = 'off';
+    }
+    if (enableSchedule) {
+      schedule_settings.enabled = 'on';
+      schedule_settings.frequency = frequency;
+      if (frequency === 'hourly') {
+        schedule_settings.specific_hour = runHour;
+      } else if (frequency === 'daily') {
+        schedule_settings.time = runTime;
+      } else {
+        schedule_settings.time = runTime;
+        schedule_settings.specific_day = runDay;
+      }
+    }
+    const data = {
+      credentials: JSON.stringify({
+        api_key: apiKey,
+        publication_id: publicationId
+      }),
+      post_status: JSON.stringify(post_status),
+      post_type: selectedPostType,
+      taxonomy: selectedTaxonomy !== null && selectedTaxonomy !== void 0 ? selectedTaxonomy : null,
+      taxonomy_term: selectedTerm !== null && selectedTerm !== void 0 ? selectedTerm : null,
+      author: selectedAuthor !== null && selectedAuthor !== void 0 ? selectedAuthor : null,
+      import_cm_tags_as: importCampaignTagAs !== null && importCampaignTagAs !== void 0 ? importCampaignTagAs : null,
+      import_option: importOption !== null && importOption !== void 0 ? importOption : null,
+      schedule_settings: JSON.stringify(schedule_settings),
+      audience: contentType,
+      include_as_connection: includeAsConnection ? "true" : "false",
+      new_connection_name: connectionName,
+      selected_connection: selectedConnection
+    };
+    try {
+      setState(prevState => ({
+        ...prevState,
+        isFormDisabled: true,
+        disableInput: true
+      }));
+      const response = await apiFetch({
+        path: 'itfb/v1/import-campaigns',
+        method: 'POST',
+        data
+      });
+      const {
+        group_name,
+        message,
+        total_queued_campaigns
+      } = response;
+      let scheduleId = null;
+      if (response.schedule_id) {
+        scheduleId = response.schedule_id;
+      }
+      setState(prevState => ({
+        ...prevState,
+        errors: {
+          ...prevState.errors,
+          requestError: ''
+        },
+        startImporting: true,
+        scheduleId
+      }));
+      setScheduleID(scheduleId);
+      react_toastify__WEBPACK_IMPORTED_MODULE_0__.toast.success(message);
+      setGroupName(group_name);
+      setTotalQueuedCampaigns(total_queued_campaigns);
+      const newIntervalId = await importStatus(group_name);
+      setState(prevState => ({
+        ...prevState,
+        intervalId: [...state.intervalId, newIntervalId],
+        disableInput: false
+      }));
+    } catch (error) {
+      const {
+        message
+      } = error;
+      setState(prevState => ({
+        ...prevState,
+        errors: {
+          ...prevState.errors,
+          requestError: message
+        },
+        isFormDisabled: false,
+        disableInput: false
+      }));
+      react_toastify__WEBPACK_IMPORTED_MODULE_0__.toast.error(message);
+    }
+  }
+  async function jobActionHandler(jobAction) {
+    setState(prevState => {
+      return {
+        ...prevState,
+        loadingJobAction: true
+      };
+    });
+    try {
+      clearAllIntervals();
+      // Define the base path
+      let path = `itfb/v1/manage-import-job?job_action=${jobAction}`;
+
+      // Check if jobAction is 'cancel' and add groupname to the path if true
+      if (jobAction === 'cancel') {
+        var _state$scheduleId;
+        const scheduleId = (_state$scheduleId = state.scheduleId) !== null && _state$scheduleId !== void 0 ? _state$scheduleId : scheduleID;
+        path += `&group_name=${groupName}&schedule_id=${scheduleId}`;
+      }
+      const response = await apiFetch({
+        path,
+        method: 'POST'
+      });
+      if (response) {
+        const {
+          message
+        } = response;
+        if (jobAction === 'cancel') {
+          react_toastify__WEBPACK_IMPORTED_MODULE_0__.toast.warning(message);
+          removeGroupName();
+          removeTotalQueuedCampaigns();
+          removeScheduleID();
+          setState(prevState => {
+            return {
+              ...prevState,
+              progressValue: 0,
+              startImporting: false,
+              intervalId: [],
+              loadingJobAction: false
+            };
+          });
+        }
+        if (jobAction === 'pause') {
+          react_toastify__WEBPACK_IMPORTED_MODULE_0__.toast.warning(message);
+          setState(prevState => {
+            return {
+              ...prevState,
+              jobAction: 'resume',
+              intervalId: []
+            };
+          });
+        }
+        if (jobAction === 'resume') {
+          react_toastify__WEBPACK_IMPORTED_MODULE_0__.toast.success(message);
+          setState(prevState => ({
+            ...prevState,
+            jobAction: 'pause',
+            loadingJobAction: false
+          }));
+          const newIntervalId = await importStatus();
+          setState(prevState => ({
+            ...prevState,
+            intervalId: [...state.intervalId, newIntervalId]
+          }));
+        }
+      }
+    } catch (error) {
+      const {
+        message
+      } = error;
+      react_toastify__WEBPACK_IMPORTED_MODULE_0__.toast.error(message);
+    } finally {
+      setState(prevState => {
+        return {
+          ...prevState,
+          loadingJobAction: false
+        };
+      });
+    }
+  }
+  async function getAllConnections() {
+    try {
+      const response = await apiFetch({
+        path: 'itfb/v1/get-all-connections',
+        method: 'GET'
+      });
+      const selectedConnection = Object.keys(response).length > 0 ? Object.keys(response)[0] : 'not_set';
+      setState(prevState => ({
+        ...prevState,
+        connections: response,
+        loading: false,
+        selectedConnection,
+        isFormDisabled: selectedConnection === 'not_set' ? true : false
+      }));
+    } catch (error) {
+      const {
+        message
+      } = error;
+      react_toastify__WEBPACK_IMPORTED_MODULE_0__.toast.error(message);
+    }
+  }
+  return {
+    getDefaultOptions,
+    handleInputChange,
+    handleBlur,
+    startImportHandler,
+    checkCurrentImportStatus,
+    jobActionHandler,
+    getAllConnections
+  };
+}
+
+/***/ }),
+
+/***/ "./lib/container/manaulImport/manualImport.js":
+/*!****************************************************!*\
+  !*** ./lib/container/manaulImport/manualImport.js ***!
+  \****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   InputContainer: () => (/* binding */ InputContainer),
+/* harmony export */   StyledWrapper: () => (/* binding */ StyledWrapper),
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @refactco/ui-kit */ "./node_modules/@refactco/ui-kit/dist/ui-kit-expose.js");
+/* harmony import */ var _manaulImportHelper__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./manaulImportHelper */ "./lib/container/manaulImport/manaulImportHelper.js");
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
+/* harmony import */ var _components_backdrop__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../components/backdrop */ "./lib/components/backdrop.js");
+/* harmony import */ var _components_spinner__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../components/spinner */ "./lib/components/spinner.js");
+/* harmony import */ var _components_import_percentage__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../components/import-percentage */ "./lib/components/import-percentage.js");
+/* harmony import */ var _common_common_function__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../common/common-function */ "./lib/common/common-function.js");
+/* harmony import */ var _hooks_useLocalStorage__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../hooks/useLocalStorage */ "./lib/hooks/useLocalStorage.js");
+
+/* eslint-disable camelcase */
+/* eslint-disable no-nested-ternary */
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-unused-vars */
+const {
+  useState,
+  useEffect
+} = wp.element;
+
+
+
+
+
+
+
+
+const ManualImport = () => {
+  const [state, setState] = useState({
+    apiKey: '',
+    clientId: '',
+    publishedCampaigns: true,
+    publishedWrodpressPostStatus: 'publish',
+    draftededCampaigns: true,
+    draftedWrodpressPostStatus: 'draft',
+    archivedCampaigns: true,
+    archivedWrodpressPostStatus: 'future',
+    postStatuses: [],
+    postTypes: [],
+    selectedPostType: '',
+    taxonomies: [],
+    selectedTaxonomy: '',
+    terms: [],
+    selectedTerm: '',
+    authors: [],
+    selectedAuthor: '',
+    importCampaignTagAs: 'post_tag',
+    importOption: 'new',
+    enableSchedule: false,
+    frequency: 'hourly',
+    runHour: 1,
+    runDay: 'monday',
+    runTime: '00:00',
+    serverTime: '',
+    errors: {},
+    disableInput: false,
+    isFormDisabled: true,
+    intervalId: [],
+    startImporting: false,
+    progressValue: 0,
+    loading: true,
+    jobAction: 'pause',
+    loadingJobAction: false,
+    scheduleId: null,
+    contentType: 'free',
+    selectedConnection: 'not_set',
+    connections: [],
+    createNewConnection: false,
+    includeAsConnection: true,
+    connectionName: ''
+  });
+  const {
+    apiKey,
+    publicationId,
+    publishedCampaigns,
+    publishedWrodpressPostStatus,
+    draftededCampaigns,
+    draftedWrodpressPostStatus,
+    archivedCampaigns,
+    archivedWrodpressPostStatus,
+    postStatuses,
+    postTypes,
+    selectedPostType,
+    taxonomies,
+    selectedTaxonomy,
+    terms,
+    selectedTerm,
+    authors,
+    selectedAuthor,
+    importCampaignTagAs,
+    importOption,
+    enableSchedule,
+    frequency,
+    runHour,
+    runDay,
+    runTime,
+    serverTime,
+    errors,
+    disableInput,
+    isFormDisabled,
+    intervalId,
+    startImporting,
+    progressValue,
+    loading,
+    jobAction,
+    loadingJobAction,
+    scheduleId,
+    contentType,
+    selectedConnection,
+    connections,
+    createNewConnection,
+    includeAsConnection,
+    connectionName
+  } = state;
+  const [groupName, setGroupName, removeGroupName] = (0,_hooks_useLocalStorage__WEBPACK_IMPORTED_MODULE_7__["default"])('groupName', null);
+  const [totalQueuedCampaigns, setTotalQueuedCampaigns, removeTotalQueuedCampaigns] = (0,_hooks_useLocalStorage__WEBPACK_IMPORTED_MODULE_7__["default"])('totalQueuedCampaigns', null);
+  const [scheduleID, setScheduleID, removeScheduleID] = (0,_hooks_useLocalStorage__WEBPACK_IMPORTED_MODULE_7__["default"])('scheduleID', null);
+  const helper = (0,_manaulImportHelper__WEBPACK_IMPORTED_MODULE_2__.manaulImportHelper)(state, setState, groupName, setGroupName, removeGroupName, setTotalQueuedCampaigns, removeTotalQueuedCampaigns, scheduleID, setScheduleID, removeScheduleID);
+  const {
+    getDefaultOptions,
+    handleInputChange,
+    startImportHandler,
+    handleBlur,
+    checkCurrentImportStatus,
+    jobActionHandler,
+    getAllConnections
+  } = helper;
+  useEffect(() => {
+    (async () => {
+      await getDefaultOptions();
+      await checkCurrentImportStatus();
+      await getAllConnections();
+    })();
+  }, []);
+  useEffect(() => {
+    return () => {
+      if (intervalId) {
+        clearInterval(state.intervalId);
+      }
+    };
+  }, [intervalId]);
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(StyledWrapper, null, disableInput && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_backdrop__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    show: true,
+    modalClosed: () => (0,_common_common_function__WEBPACK_IMPORTED_MODULE_6__.logger)('Fetching Campaigns ...')
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_spinner__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    label: "Fetching campaigns from Beehiiv. Please wait...",
+    marginBottom: "0px"
+  })), startImporting ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_import_percentage__WEBPACK_IMPORTED_MODULE_5__["default"], {
+    progressValue: progressValue,
+    jobAction: jobAction,
+    jobActionHandler: jobActionHandler,
+    loadingJobAction: loadingJobAction,
+    scheduleId: scheduleId
+  }) : loading ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_spinner__WEBPACK_IMPORTED_MODULE_4__["default"], null) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Section, {
+    headerProps: {
+      title: 'Import Campaign Data',
+      description: 'Manually import content from Beehiiv to your WordPress site.'
+    }
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("form", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Accordion, {
+    noDraggable: true,
+    transitionTimeout: 300,
+    items: [{
+      header: 'Step 1: Choose Data from Beehiiv',
+      initialEntered: true,
+      active: true,
+      content: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Container, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, Object.keys(connections).length > 0 && !createNewConnection ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Select, {
+        label: "Select Connection",
+        options: [...Object.keys(connections).map(connection_name => ({
+          label: connection_name,
+          value: connection_name
+        }))],
+        value: selectedConnection,
+        onChange: value => handleInputChange(value, 'selectedConnection'),
+        required: true,
+        disabled: disableInput
+      }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+        className: "include-as-connection-container"
+      }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Checkbox, {
+        label: "OR create new connection",
+        checked: createNewConnection,
+        onChange: value => handleInputChange(value, 'createNewConnection'),
+        disabled: disableInput
+      })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null)) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+        className: "label",
+        htmlFor: "apiKey"
+      }, "API Key", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Tooltip, {
+        id: "apiKey",
+        mode: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.TooltipMode.DARK,
+        place: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.TooltipPlace.TOP,
+        content: "The API Key is a unique identifier that allows you to access your Beehiiv account data. You can find your API Key by logging into your Beehiiv account and go to Settings > Integrations > which will open up the API tab"
+      }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+        className: "question-icon"
+      }, "?"))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Input, {
+        type: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.InputType.TEXT,
+        value: apiKey,
+        onChange: value => handleInputChange(value, 'apiKey'),
+        onBlur: () => handleBlur('apiKey', apiKey),
+        required: true,
+        hasError: errors.apiKey,
+        disabled: disableInput
+      }), errors.apiKey && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ErrorContainer, null, errors.apiKey)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+        className: "label",
+        htmlFor: "publicationId"
+      }, "Publication ID", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Tooltip, {
+        id: "publicationId",
+        mode: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.TooltipMode.DARK,
+        place: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.TooltipPlace.TOP,
+        content: "The Publication ID is a unique identifier that allows you to access your Beehiiv account data. You can find your Publication ID by logging into your Beehiiv account and go to Settings > Integrations > which will open up the API tab"
+      }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+        className: "question-icon"
+      }, "?"))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Input, {
+        type: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.InputType.TEXT,
+        value: publicationId,
+        onChange: value => handleInputChange(value, 'publicationId'),
+        onBlur: () => handleBlur('publicationId', publicationId),
+        required: true,
+        hasError: errors.publicationId,
+        disabled: disableInput
+      }), errors.publicationId && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ErrorContainer, null, errors.publicationId)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+        className: "include-as-connection-container"
+      }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Checkbox, {
+        label: "Include as Connection",
+        checked: includeAsConnection,
+        onChange: value => handleInputChange(value, 'includeAsConnection'),
+        onBlur: () => handleBlur('includeAsConnection', includeAsConnection),
+        disabled: disableInput
+      }))))), includeAsConnection && selectedConnection === 'not_set' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Container, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+        className: "label",
+        htmlFor: "connectionName"
+      }, "Name of Connection"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Input, {
+        type: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.InputType.TEXT,
+        value: connectionName,
+        onChange: value => handleInputChange(value, 'connectionName'),
+        onBlur: () => handleBlur('connectionName', connectionName),
+        hasError: errors.connectionName,
+        required: includeAsConnection,
+        disabled: disableInput
+      }), errors.connectionName && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ErrorContainer, null, errors.connectionName)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null))) : null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Divider, null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Container, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+        className: "label",
+        htmlFor: "contentType"
+      }, "Content Type", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Tooltip, {
+        id: "contentType",
+        mode: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.TooltipMode.DARK,
+        place: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.TooltipPlace.TOP,
+        content: "Choose the content subscription level you'd like to import. 'Free' pertains to content available without subscription fees, while 'Premium' is exclusive paid content"
+      }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+        className: "question-icon"
+      }, "?"))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Select, {
+        onChange: value => handleInputChange(value, 'contentType'),
+        options: [{
+          label: 'Free',
+          value: 'free'
+        }, {
+          label: 'Premium',
+          value: 'premium'
+        }, {
+          label: 'All',
+          value: 'all'
+        }],
+        value: contentType,
+        required: true,
+        disabled: disableInput
+      })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null, "Select type of campaigns that you want migrated from Beehiiv", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Tooltip, {
+        id: "campaignType",
+        mode: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.TooltipMode.DARK,
+        place: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.TooltipPlace.TOP,
+        content: "Select the visibility status of the posts within. 'Published' posts are live on, 'Archived' posts are stored but not visible to the audience, and 'Draft' posts are unpublished content."
+      }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+        className: "question-icon"
+      }, "?"))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Container, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, "Campaign status on Beehiiv"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, "Post Status On Wordpress")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Checkbox, {
+        label: "Published Campaigns",
+        checked: publishedCampaigns,
+        onChange: value => handleInputChange(value, 'publishedCampaigns'),
+        disabled: disableInput
+      }), publishedCampaigns && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Select, {
+        value: publishedWrodpressPostStatus,
+        options: postStatuses,
+        onChange: value => handleInputChange(value, 'publishedWrodpressPostStatus'),
+        disabled: disableInput
+      })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Checkbox, {
+        label: "Draft Campaigns",
+        checked: draftededCampaigns,
+        onChange: value => handleInputChange(value, 'draftededCampaigns'),
+        disabled: disableInput
+      }), draftededCampaigns && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Select, {
+        value: draftedWrodpressPostStatus,
+        options: postStatuses,
+        onChange: value => handleInputChange(value, 'draftedWrodpressPostStatus'),
+        disabled: disableInput
+      })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Checkbox, {
+        label: "Archived Campaigns",
+        checked: archivedCampaigns,
+        onChange: value => handleInputChange(value, 'archivedCampaigns'),
+        disabled: disableInput
+      }), archivedCampaigns && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Select, {
+        value: archivedWrodpressPostStatus,
+        options: postStatuses,
+        onChange: value => handleInputChange(value, 'archivedWrodpressPostStatus'),
+        disabled: disableInput
+      })), errors.campaignStatus && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ErrorContainer, null, errors.campaignStatus)))
+    }, {
+      header: 'Step 2: Import Data to WordPress',
+      content: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Container, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+        className: "label",
+        htmlFor: "postType"
+      }, "Select Post Type", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Tooltip, {
+        id: "postType",
+        mode: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.TooltipMode.DARK,
+        place: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.TooltipPlace.TOP,
+        content: "Define how you'd like the imported content to be categorized within your WordPress site. 'Post Type' determines the format of your content, such as a blog post, page, or custom post type."
+      }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+        className: "question-icon"
+      }, "?"))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Select, {
+        options: postTypes.map(({
+          post_type
+        }) => ({
+          label: post_type.charAt(0).toUpperCase() + post_type.slice(1),
+          // Capitalize the first letter
+          value: post_type
+        })),
+        value: selectedPostType,
+        onChange: value => handleInputChange(value, 'selectedPostType'),
+        required: true,
+        disabled: disableInput
+      })), taxonomies && taxonomies.length !== 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+        className: "label",
+        htmlFor: "taxonomy"
+      }, "Select Taxonomy", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Tooltip, {
+        id: "taxonomy",
+        mode: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.TooltipMode.DARK,
+        place: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.TooltipPlace.TOP,
+        content: "'Taxonomy' allows you to classify your content into categories and tags for easy searching and organization."
+      }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+        className: "question-icon"
+      }, "?"))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Select, {
+        options: taxonomies.map(({
+          taxonomy_name,
+          taxonomy_slug
+        }) => ({
+          label: taxonomy_name !== null && taxonomy_name !== void 0 ? taxonomy_name : '',
+          value: taxonomy_slug !== null && taxonomy_slug !== void 0 ? taxonomy_slug : ''
+        })),
+        value: selectedTaxonomy,
+        onChange: value => handleInputChange(value, 'selectedTaxonomy'),
+        disabled: disableInput
+      })), terms && terms.length !== 0 && taxonomies && taxonomies.length !== 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+        className: "label",
+        htmlFor: "term"
+      }, "Select Term", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Tooltip, {
+        id: "term",
+        mode: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.TooltipMode.DARK,
+        place: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.TooltipPlace.TOP,
+        content: "'Term' refers to the specific category or tag that you'd like to assign to your imported content."
+      }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+        className: "question-icon"
+      }, "?"))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Select, {
+        options: terms.map(({
+          term_id,
+          term_name
+        }) => ({
+          label: term_name !== null && term_name !== void 0 ? term_name : '',
+          value: term_id !== null && term_id !== void 0 ? term_id : ''
+        })),
+        value: selectedTerm,
+        onChange: value => handleInputChange(value, 'selectedTerm'),
+        disabled: disableInput
+      }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Divider, null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, authors && authors.length !== 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+        className: "label",
+        htmlFor: "author"
+      }, "Select Author", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Tooltip, {
+        id: "author",
+        mode: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.TooltipMode.DARK,
+        place: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.TooltipPlace.TOP,
+        content: "Choose a WordPress user to be designated as the author of the imported content. This user will be credited for the posts and will have edit rights over them."
+      }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+        className: "question-icon"
+      }, "?"))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Select, {
+        options: authors.map(({
+          display_name,
+          id
+        }) => ({
+          label: display_name !== null && display_name !== void 0 ? display_name : '',
+          value: id !== null && id !== void 0 ? id : ''
+        })),
+        value: selectedAuthor,
+        onChange: value => handleInputChange(value, 'selectedAuthor'),
+        required: true,
+        disabled: disableInput
+      })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+        className: "label",
+        htmlFor: "importCampaignTagsAs"
+      }, "Import campaign tags as", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Tooltip, {
+        id: "importCampaignTagsAs",
+        mode: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.TooltipMode.DARK,
+        place: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.TooltipPlace.TOP,
+        content: "Tags help organize and categorize your content. This setting allows you to pull tags associated with your content and assign them to specific taxonomies and terms within WordPress."
+      }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+        className: "question-icon"
+      }, "?"))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Select, {
+        options: [{
+          label: 'Post Tag',
+          value: 'post_tag'
+        }, {
+          label: 'Category',
+          value: 'category'
+        }],
+        value: importCampaignTagAs,
+        onChange: value => handleInputChange(value, 'importCampaignTagAs'),
+        required: true,
+        disabled: disableInput
+      })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+        className: "label",
+        htmlFor: "importOption"
+      }, "Import Option", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Tooltip, {
+        id: "importOption",
+        mode: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.TooltipMode.DARK,
+        place: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.TooltipPlace.TOP,
+        content: "Select how you'd like to handle the incoming content. 'Import new items' will only add new content, 'Update existing items' will overwrite existing content with updates from, and 'Do both' will import new items while updating any matching existing content."
+      }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+        className: "question-icon"
+      }, "?"))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Select, {
+        onChange: value => handleInputChange(value, 'importOption'),
+        options: [{
+          label: 'New',
+          value: 'new'
+        }, {
+          label: 'Update',
+          value: 'update'
+        }, {
+          label: 'Both',
+          value: 'both'
+        }],
+        value: importOption,
+        required: true,
+        disabled: disableInput
+      }))))
+    }, {
+      header: 'Step 3: Schedule Import',
+      content: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Toggle, {
         label: "Schedule",
         onChange: value => handleInputChange(value, 'enableSchedule'),
         checked: enableSchedule,
@@ -12635,6 +15173,13 @@ const ManualImport = () => {
     disabled: isFormDisabled
   }, "Start Import")))));
 };
+const StyledWrapper = styled_components__WEBPACK_IMPORTED_MODULE_8__.styled.div`
+	background-color: #fff;
+	position: relative;
+	min-height: 307px;
+	padding-bottom: 20px;
+	padding-right: 20px;
+`;
 const Container = styled_components__WEBPACK_IMPORTED_MODULE_8__.styled.div`
 	display: flex;
 	flex-direction: column;
@@ -12679,18 +15224,25 @@ const ErrorContainer = styled_components__WEBPACK_IMPORTED_MODULE_8__.styled.div
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   StyledWrapper: () => (/* binding */ StyledWrapper),
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
 /* harmony import */ var _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @refactco/ui-kit */ "./node_modules/@refactco/ui-kit/dist/ui-kit-expose.js");
 /* harmony import */ var _components_spinner__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../components/spinner */ "./lib/components/spinner.js");
 /* harmony import */ var _scheduleImportHelper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./scheduleImportHelper */ "./lib/container/scheduleImport/scheduleImportHelper.js");
-/* harmony import */ var _components_modal__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../components/modal */ "./lib/components/modal.js");
-/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
+/* harmony import */ var _components_custom_section__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../components/custom-section */ "./lib/components/custom-section.js");
+/* harmony import */ var _components_info_modal__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../components/info-modal */ "./lib/components/info-modal.js");
+/* harmony import */ var _components_delete_modal__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../components/delete-modal */ "./lib/components/delete-modal.js");
+/* harmony import */ var _components_schedule_not_found__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../components/schedule-not-found */ "./lib/components/schedule-not-found.js");
+/* harmony import */ var _components_add_new_schedule_modal__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../components/add-new-schedule-modal */ "./lib/components/add-new-schedule-modal.js");
 
 /* eslint-disable react/no-unescaped-entities   */
 /* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable  no-nested-ternary */
+
 
 const {
   useState,
@@ -12700,23 +15252,46 @@ const {
 
 
 
+
+
+
 const ScheduledImport = () => {
   const [state, setState] = useState({
-    loadingScheduledImports: false,
+    loadingScheduledImports: true,
     scheduledImports: [],
     rowData: [],
     selectedRowInfo: null,
     showMoreInfoModal: false,
     showDeleteScheduleModal: false,
-    loadingDeleteAction: false
+    loadingDeleteAction: false,
+    showAddNewScheduleModal: false,
+    refreshScheduleData: false,
+    scheduleId: null
   });
   const {
     loadingScheduledImports,
     rowData,
     selectedRowInfo,
     showMoreInfoModal,
-    showDeleteScheduleModal
+    showDeleteScheduleModal,
+    showAddNewScheduleModal,
+    loadingDeleteAction,
+    refreshScheduleData,
+    scheduleId
   } = state;
+  const closeAddNewScheduleModalHandler = () => {
+    setState({
+      ...state,
+      showAddNewScheduleModal: false,
+      scheduleId: null
+    });
+  };
+  const handleRefreshScheduleData = () => {
+    setState(prevState => ({
+      ...prevState,
+      refreshScheduleData: !prevState.refreshScheduleData
+    }));
+  };
   const helper = (0,_scheduleImportHelper__WEBPACK_IMPORTED_MODULE_3__.scheduleImportHelper)(state, setState);
   const {
     getScheduledImports,
@@ -12725,17 +15300,26 @@ const ScheduledImport = () => {
     getRecurrenceText,
     showDeleteScheduleModalHandler,
     deleteScheduleModalCloseHandler,
-    loadingDeleteAction,
-    deleteScheduleHandler
+    deleteScheduleHandler,
+    EditScheduleHandler
   } = helper;
   const actions = [{
+    color: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.ButtonColor.GREEN,
+    variant: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.ButtonVariant.PRIMARY,
+    text: 'Edit',
+    onClick: index => {
+      EditScheduleHandler(index);
+    }
+  }, {
     color: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.ButtonColor.BLUE,
+    variant: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.ButtonVariant.SECONDARY,
     text: 'More Info',
     onClick: index => {
       showMoreInfoModalHandler(index);
     }
   }, {
     color: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.ButtonColor.RED,
+    variant: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.ButtonVariant.SECONDARY,
     text: 'Delete',
     onClick: index => {
       showDeleteScheduleModalHandler(index);
@@ -12745,33 +15329,61 @@ const ScheduledImport = () => {
     (async () => {
       await getScheduledImports();
     })();
-  }, []);
-  const headers = ['Schedule Id', 'Recurrency ', 'Publication Id'];
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Section, null, loadingScheduledImports ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_spinner__WEBPACK_IMPORTED_MODULE_2__["default"], null) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Table, {
+  }, [refreshScheduleData]);
+  const headers = ['Recurrency ', 'Publication ID', 'Next Run'];
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_custom_section__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    title: "Scheduled Imports",
+    description: "Schedule your content imports from Beehiiv to your WordPress site.",
+    showButton: rowData.length > 0 ? true : false,
+    buttonText: "Add a Schedule Import",
+    buttonIcon: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
+      xmlns: "http://www.w3.org/2000/svg",
+      width: "24",
+      height: "24",
+      viewBox: "0 0 24 24",
+      fill: "none"
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+      d: "M19 11.5V12.5C19 12.7761 18.7761 13 18.5 13H13V18.5C13 18.7761 12.7761 19 12.5 19H11.5C11.2239 19 11 18.7761 11 18.5V13H5.5C5.22386 13 5 12.7761 5 12.5V11.5C5 11.2239 5.22386 11 5.5 11H11V5.5C11 5.22386 11.2239 5 11.5 5H12.5C12.7761 5 13 5.22386 13 5.5V11H18.5C18.7761 11 19 11.2239 19 11.5Z",
+      fill: "white"
+    })),
+    onClick: () => {
+      setState({
+        ...state,
+        showAddNewScheduleModal: true
+      });
+    }
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(StyledWrapper, null, loadingScheduledImports ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_spinner__WEBPACK_IMPORTED_MODULE_2__["default"], null) : rowData.length > 0 ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Table, {
     headers: headers,
     actions: actions,
-    dataRows: rowData,
+    dataRows: rowData.map(item => item.slice(0, 3)),
     noDraggable: true
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_modal__WEBPACK_IMPORTED_MODULE_4__["default"], {
+  }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_schedule_not_found__WEBPACK_IMPORTED_MODULE_7__["default"], {
+    handleRefreshScheduleData: handleRefreshScheduleData
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_info_modal__WEBPACK_IMPORTED_MODULE_5__["default"], {
     show: showMoreInfoModal,
-    modalClosed: moreInfoModalCloseHandler
-  }, selectedRowInfo && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null, "Schedule Information"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, "Schedule Id:"), " ", selectedRowInfo.id, " ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, "Publication Id:"), ' ', selectedRowInfo.params[0].credentials.publication_id, ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, "Content Type:"), ' ', selectedRowInfo.params[0].audience, " ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "Campaign tags are imported as", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, selectedRowInfo.params[0].import_cm_tags_as), ' ', ", with the import option set to", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, selectedRowInfo.params[0].import_option), ".", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "The post type specified is", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, selectedRowInfo.params[0].post_type), ".", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "This schedule recurs", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, getRecurrenceText(selectedRowInfo.params[0].schedule_settings)), ".", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), ' '), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "The taxonomy used is", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, selectedRowInfo.params[0].taxonomy), ".", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "Campaign status on Beehiiv is mapped to the post status on WordPress as follows:", ' ', selectedRowInfo.params[0].post_status.confirmed && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, "'Confirmed'"), " corresponds to", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, selectedRowInfo.params[0].post_status.confirmed)), selectedRowInfo.params[0].post_status.draft && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, selectedRowInfo.params[0].post_status.confirmed ? ',' : '', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, "'Draft'"), " corresponds to", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, selectedRowInfo.params[0].post_status.draft)), selectedRowInfo.params[0].post_status.archived && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, selectedRowInfo.params[0].post_status.draft || selectedRowInfo.params[0].post_status.confirmed ? ', and ' : '', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, "'Archived'"), " corresponds to", ' ', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("b", null, selectedRowInfo.params[0].post_status.archived)), "."))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_modal__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    selectedRowInfo: selectedRowInfo,
+    onClose: moreInfoModalCloseHandler,
+    getRecurrenceText: getRecurrenceText
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_delete_modal__WEBPACK_IMPORTED_MODULE_6__["default"], {
     show: showDeleteScheduleModal,
-    modalClosed: deleteScheduleModalCloseHandler
-  }, selectedRowInfo && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null, "Are you sure you want to delete schedule with id", ' ', selectedRowInfo.id), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ButtonContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Button, {
-    color: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.ButtonColor.RED,
-    onClick: deleteScheduleHandler,
-    disabled: loadingDeleteAction
-  }, "Delete Schedule"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Button, {
-    onClick: deleteScheduleModalCloseHandler,
-    disabled: loadingDeleteAction
-  }, "Cancel")))));
+    selectedRowInfo: selectedRowInfo,
+    onClose: deleteScheduleModalCloseHandler,
+    loadingDeleteAction: loadingDeleteAction,
+    deleteScheduleHandler: deleteScheduleHandler,
+    title: `Are you sure you want to delete schedule with id ${selectedRowInfo ? selectedRowInfo.id : ''}?`,
+    textButton: "Delete Schedule"
+  }), showAddNewScheduleModal ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_add_new_schedule_modal__WEBPACK_IMPORTED_MODULE_8__["default"], {
+    onClose: closeAddNewScheduleModalHandler,
+    handleRefreshScheduleData: handleRefreshScheduleData,
+    scheduleId: scheduleId,
+    setSchedule: setState
+  }) : null);
 };
-const ButtonContainer = styled_components__WEBPACK_IMPORTED_MODULE_5__.styled.div`
-	display: flex;
-	justify-content: flex-start;
-	margin-top: 20px;
-	gap: 1rem;
+const StyledWrapper = styled_components__WEBPACK_IMPORTED_MODULE_9__.styled.div`
+	background-color: #fff;
+	padding: 32px;
+	position: relative;
+	min-height: 307px;
 `;
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ScheduledImport);
 
@@ -12842,7 +15454,7 @@ function scheduleImportHelper(state, setState) {
       const rowData = [];
       response.map(item => {
         const recurrency = getRecurrenceText(item.params[0].schedule_settings);
-        rowData.push([item.id, recurrency, item.params[0].credentials.publication_id]);
+        rowData.push([recurrency, item.params[0].credentials.publication_id, item.next_run, item.id]);
       });
       setState({
         ...state,
@@ -12903,12 +15515,13 @@ function scheduleImportHelper(state, setState) {
         });
         if (response && response.id) {
           const newScheduledImports = scheduledImports.filter(item => item.id !== selectedRowInfo.id);
-          const newRowData = rowData.filter(item => item[0] !== selectedRowInfo.id);
+          const newRowData = rowData.filter(item => item[3] !== selectedRowInfo.id);
           (0,_common_common_function__WEBPACK_IMPORTED_MODULE_1__.logger)(newScheduledImports, newRowData);
           setState(prevState => ({
             ...prevState,
             scheduledImports: newScheduledImports,
-            rowData: newRowData
+            rowData: newRowData,
+            scheduleId: null
           }));
           react_toastify__WEBPACK_IMPORTED_MODULE_0__.toast.success(response.message);
         } else {
@@ -12927,6 +15540,19 @@ function scheduleImportHelper(state, setState) {
       }
     }
   }
+  async function EditScheduleHandler(index) {
+    const row = state.scheduledImports[index];
+    if (row) {
+      const {
+        id
+      } = row;
+      setState({
+        ...state,
+        scheduleId: id,
+        showAddNewScheduleModal: true
+      });
+    }
+  }
   return {
     getScheduledImports,
     moreInfoModalCloseHandler,
@@ -12934,7 +15560,8 @@ function scheduleImportHelper(state, setState) {
     getRecurrenceText,
     deleteScheduleHandler,
     showDeleteScheduleModalHandler,
-    deleteScheduleModalCloseHandler
+    deleteScheduleModalCloseHandler,
+    EditScheduleHandler
   };
 }
 
@@ -13010,28 +15637,291 @@ function useLocalStorage(key, initialValue) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Divider: () => (/* binding */ Divider),
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @refactco/ui-kit */ "./node_modules/@refactco/ui-kit/dist/ui-kit-expose.js");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/dist/index.js");
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
+/* harmony import */ var _components_about_plugin__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../components/about-plugin */ "./lib/components/about-plugin.js");
+/* harmony import */ var _components_subscription_box__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../components/subscription-box */ "./lib/components/subscription-box.js");
+/* harmony import */ var _components_collect_data__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../components/collect-data */ "./lib/components/collect-data.js");
+/* harmony import */ var _components_powered_by__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../components/powered-by */ "./lib/components/powered-by.js");
+/* harmony import */ var _components_our_product__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../components/our-product */ "./lib/components/our-product.js");
 
 /* eslint-disable react/no-unescaped-entities */
 
 
 
+
+
+
+
+
 const About = () => {
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Section, {
-    headerProps: {
-      title: 'Refact.co',
-      description: 'Product Design Studio for Audience-first Media'
-    }
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "We help digital newsrooms and publication media design scalable publishing platforms, collect and make sense of their data, and optimize their audience's experience."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Link, {
-    to: 'https://refact.co'
-  }, "Refact.co"));
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(AboutContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(AboutLayout, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_about_plugin__WEBPACK_IMPORTED_MODULE_2__.AboutPlugin, null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Divider, null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_subscription_box__WEBPACK_IMPORTED_MODULE_3__.SubscriptionBox, null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Divider, null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_collect_data__WEBPACK_IMPORTED_MODULE_4__.CollectData, null)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_powered_by__WEBPACK_IMPORTED_MODULE_5__.PoweredBy, null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_our_product__WEBPACK_IMPORTED_MODULE_6__.OurProduct, null))));
 };
+const AboutContainer = styled_components__WEBPACK_IMPORTED_MODULE_7__.styled.div`
+	margin-top: -70px;
+	padding: 32px;
+`;
+const AboutLayout = styled_components__WEBPACK_IMPORTED_MODULE_7__.styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+   & > * {
+    flex: 1;
+  }
+
+  @media (min-width: 768px) {
+	flex-direction: row;
+  	gap: 103px;
+  }
+`;
+const Divider = styled_components__WEBPACK_IMPORTED_MODULE_7__.styled.div`
+  width: 100%;
+  height: 1px;
+  background-color: #e5e5e5;
+  margin: 24px 0;
+`;
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (About);
+
+/***/ }),
+
+/***/ "./lib/pages/connections/connections-helper.js":
+/*!*****************************************************!*\
+  !*** ./lib/pages/connections/connections-helper.js ***!
+  \*****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   connectionsHelper: () => (/* binding */ connectionsHelper)
+/* harmony export */ });
+/* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/dist/react-toastify.esm.mjs");
+const apiFetch = wp.apiFetch;
+
+function connectionsHelper(state, setState) {
+  async function getAllConnections() {
+    try {
+      const response = await apiFetch({
+        path: 'itfb/v1/get-all-connections',
+        method: 'GET'
+      });
+      const connections = Object.keys(response).map(connection_name => [connection_name, response[connection_name].publication_id]);
+      setState(prevState => ({
+        ...prevState,
+        connections: connections,
+        loading: false
+      }));
+    } catch (error) {
+      const {
+        message
+      } = error;
+      react_toastify__WEBPACK_IMPORTED_MODULE_0__.toast.error(message);
+    }
+  }
+  const handleRefreshConnectionsData = () => {
+    setState(prevState => ({
+      ...prevState,
+      refreshConnectionsData: !prevState.refreshConnectionsData
+    }));
+  };
+  const closeAddNewConnectionModalHandler = () => {
+    setState(prevState => ({
+      ...prevState,
+      showAddNewConnectionModal: false
+    }));
+  };
+  function showDeleteConnectionModalHandler(index) {
+    const row = state.connections[index];
+    setState({
+      ...state,
+      selectedRowInfo: row[0],
+      showDeleteConnectionModal: true
+    });
+  }
+  function deleteConnectionModalCloseHandler() {
+    setState({
+      ...state,
+      showDeleteConnectionModal: false,
+      selectedRowInfo: null
+    });
+  }
+  async function deleteConnectionHandler() {
+    const {
+      selectedRowInfo,
+      connections
+    } = state;
+    if (selectedRowInfo) {
+      try {
+        setState(prevState => ({
+          ...prevState,
+          loadingDeleteAction: true
+        }));
+        const response = await apiFetch({
+          path: `itfb/v1/delete-connection`,
+          method: 'DELETE',
+          body: JSON.stringify({
+            connection_name: selectedRowInfo
+          })
+        });
+        if (response) {
+          const newConnections = connections.filter(item => item[0] !== selectedRowInfo);
+          setState(prevState => ({
+            ...prevState,
+            connections: newConnections,
+            showDeleteConnectionModal: false
+          }));
+          react_toastify__WEBPACK_IMPORTED_MODULE_0__.toast.success(response.message);
+        } else {
+          react_toastify__WEBPACK_IMPORTED_MODULE_0__.toast.error(response.message);
+        }
+      } catch (error) {
+        logger(error);
+        react_toastify__WEBPACK_IMPORTED_MODULE_0__.toast.error(error.message);
+      } finally {
+        setState(prevState => ({
+          ...prevState,
+          loadingDeleteAction: false,
+          selectedRowInfo: null,
+          showDeleteConnectionModal: false
+        }));
+      }
+    }
+  }
+  return {
+    getAllConnections,
+    handleRefreshConnectionsData,
+    closeAddNewConnectionModalHandler,
+    showDeleteConnectionModalHandler,
+    deleteConnectionModalCloseHandler,
+    deleteConnectionHandler
+  };
+}
+
+/***/ }),
+
+/***/ "./lib/pages/connections/connections.js":
+/*!**********************************************!*\
+  !*** ./lib/pages/connections/connections.js ***!
+  \**********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _components_custom_section__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../components/custom-section */ "./lib/components/custom-section.js");
+/* harmony import */ var _connections_helper__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./connections-helper */ "./lib/pages/connections/connections-helper.js");
+/* harmony import */ var _container_scheduleImport_scheduleImport__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../container/scheduleImport/scheduleImport */ "./lib/container/scheduleImport/scheduleImport.js");
+/* harmony import */ var _components_spinner__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../components/spinner */ "./lib/components/spinner.js");
+/* harmony import */ var _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @refactco/ui-kit */ "./node_modules/@refactco/ui-kit/dist/ui-kit-expose.js");
+/* harmony import */ var _components_connection_not_found__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../components/connection-not-found */ "./lib/components/connection-not-found.js");
+/* harmony import */ var _components_add_new_connection_modal_add_new_connection_modal__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../components/add-new-connection-modal/add-new-connection-modal */ "./lib/components/add-new-connection-modal/add-new-connection-modal.js");
+/* harmony import */ var _components_delete_modal__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../components/delete-modal */ "./lib/components/delete-modal.js");
+
+const {
+  useState,
+  useEffect
+} = wp.element;
+
+
+
+
+
+
+
+
+const Connections = () => {
+  const [state, setState] = useState({
+    loading: true,
+    showAddNewConnectionModal: false,
+    refreshConnectionsData: false,
+    connections: [],
+    showDeleteConnectionModal: false,
+    selectedRowInfo: null,
+    loadingDeleteAction: false
+  });
+  const {
+    loading,
+    connections,
+    showAddNewConnectionModal,
+    refreshConnectionsData,
+    showDeleteConnectionModal,
+    selectedRowInfo,
+    loadingDeleteAction
+  } = state;
+  const helper = (0,_connections_helper__WEBPACK_IMPORTED_MODULE_2__.connectionsHelper)(state, setState);
+  const {
+    getAllConnections,
+    handleRefreshConnectionsData,
+    closeAddNewConnectionModalHandler,
+    showDeleteConnectionModalHandler,
+    deleteConnectionModalCloseHandler,
+    deleteConnectionHandler
+  } = helper;
+  useEffect(() => {
+    (async () => {
+      await getAllConnections();
+    })();
+  }, [refreshConnectionsData]);
+  const actions = [{
+    color: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_5__.ButtonColor.RED,
+    variant: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_5__.ButtonVariant.SECONDARY,
+    text: 'Delete',
+    onClick: index => {
+      showDeleteConnectionModalHandler(index);
+    }
+  }];
+  const headers = ['Connection Name', 'Publication ID'];
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_custom_section__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    title: "Connections",
+    description: "Manage the connections that you can be use in manaul/scheduled imports.",
+    showButton: connections.length > 0 ? true : false,
+    buttonText: "Add a New Connection",
+    buttonIcon: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
+      xmlns: "http://www.w3.org/2000/svg",
+      width: "24",
+      height: "24",
+      viewBox: "0 0 24 24",
+      fill: "none"
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+      d: "M19 11.5V12.5C19 12.7761 18.7761 13 18.5 13H13V18.5C13 18.7761 12.7761 19 12.5 19H11.5C11.2239 19 11 18.7761 11 18.5V13H5.5C5.22386 13 5 12.7761 5 12.5V11.5C5 11.2239 5.22386 11 5.5 11H11V5.5C11 5.22386 11.2239 5 11.5 5H12.5C12.7761 5 13 5.22386 13 5.5V11H18.5C18.7761 11 19 11.2239 19 11.5Z",
+      fill: "white"
+    })),
+    onClick: () => {
+      setState({
+        ...state,
+        showAddNewConnectionModal: true
+      });
+    }
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_container_scheduleImport_scheduleImport__WEBPACK_IMPORTED_MODULE_3__.StyledWrapper, null, loading ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_spinner__WEBPACK_IMPORTED_MODULE_4__["default"], null) : connections.length > 0 ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_5__.Table, {
+    headers: headers,
+    actions: actions,
+    dataRows: connections,
+    noDraggable: true
+  }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_connection_not_found__WEBPACK_IMPORTED_MODULE_6__["default"], {
+    handleRefreshConnectionsData: handleRefreshConnectionsData
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_delete_modal__WEBPACK_IMPORTED_MODULE_8__["default"], {
+    show: showDeleteConnectionModal,
+    selectedRowInfo: selectedRowInfo,
+    onClose: deleteConnectionModalCloseHandler,
+    loadingDeleteAction: loadingDeleteAction,
+    deleteScheduleHandler: deleteConnectionHandler,
+    title: `Are you sure you want to delete connection with name ${selectedRowInfo ? selectedRowInfo : ''}?`,
+    textButton: "Delete Connection"
+  }), showAddNewConnectionModal ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_add_new_connection_modal_add_new_connection_modal__WEBPACK_IMPORTED_MODULE_7__["default"], {
+    onClose: closeAddNewConnectionModalHandler,
+    handleRefreshConnectionsData: handleRefreshConnectionsData
+  }) : null);
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Connections);
 
 /***/ }),
 
@@ -13048,72 +15938,55 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/dist/index.js");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/dist/index.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
 /* harmony import */ var _components_layout__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../components/layout */ "./lib/components/layout.js");
 /* harmony import */ var _components_header__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../components/header */ "./lib/components/header.js");
 /* harmony import */ var _about_about__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../about/about */ "./lib/pages/about/about.js");
-/* harmony import */ var _import_campaigns_import_campaigns__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../import-campaigns/import-campaigns */ "./lib/pages/import-campaigns/import-campaigns.js");
-/* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/dist/react-toastify.esm.mjs");
+/* harmony import */ var _connections_connections__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../connections/connections */ "./lib/pages/connections/connections.js");
+/* harmony import */ var _import_campaigns_import_campaigns__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../import-campaigns/import-campaigns */ "./lib/pages/import-campaigns/import-campaigns.js");
+/* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/dist/react-toastify.esm.mjs");
+/* harmony import */ var _components_onboarding_modal__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../components/onboarding-modal */ "./lib/components/onboarding-modal.js");
+/* harmony import */ var _hooks_useLocalStorage__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../hooks/useLocalStorage */ "./lib/hooks/useLocalStorage.js");
 
 
 
 
-// use react-router-dom to create routes
 
+
+
+
+const {
+  useState
+} = wp.element;
 
 
 const Home = () => {
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_router_dom__WEBPACK_IMPORTED_MODULE_6__.HashRouter, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_layout__WEBPACK_IMPORTED_MODULE_1__["default"], null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_header__WEBPACK_IMPORTED_MODULE_2__["default"], null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_toastify__WEBPACK_IMPORTED_MODULE_5__.ToastContainer, {
+  const [isUnbordedUser, setIsUnbordedUsers] = (0,_hooks_useLocalStorage__WEBPACK_IMPORTED_MODULE_8__["default"])('isUnbordedUser', false);
+  const [showOnboardingModal, setshowOnboardingModal] = useState(!isUnbordedUser);
+  const closeOnboardingModalHandler = () => {
+    setshowOnboardingModal(false);
+    setIsUnbordedUsers(true);
+  };
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_router_dom__WEBPACK_IMPORTED_MODULE_9__.HashRouter, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_layout__WEBPACK_IMPORTED_MODULE_1__["default"], null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_header__WEBPACK_IMPORTED_MODULE_2__["default"], null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_toastify__WEBPACK_IMPORTED_MODULE_6__.ToastContainer, {
     position: "bottom-right"
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_router_dom__WEBPACK_IMPORTED_MODULE_7__.Routes, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_router_dom__WEBPACK_IMPORTED_MODULE_7__.Route, {
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_router_dom__WEBPACK_IMPORTED_MODULE_10__.Routes, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_router_dom__WEBPACK_IMPORTED_MODULE_10__.Route, {
     path: "/",
-    element: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_import_campaigns_import_campaigns__WEBPACK_IMPORTED_MODULE_4__["default"], null)
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_router_dom__WEBPACK_IMPORTED_MODULE_7__.Route, {
+    element: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_import_campaigns_import_campaigns__WEBPACK_IMPORTED_MODULE_5__["default"], null)
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_router_dom__WEBPACK_IMPORTED_MODULE_10__.Route, {
     path: "/about",
     element: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_about_about__WEBPACK_IMPORTED_MODULE_3__["default"], null)
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_router_dom__WEBPACK_IMPORTED_MODULE_7__.Route, {
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_router_dom__WEBPACK_IMPORTED_MODULE_10__.Route, {
+    path: "/connections",
+    element: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_connections_connections__WEBPACK_IMPORTED_MODULE_4__["default"], null)
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_router_dom__WEBPACK_IMPORTED_MODULE_10__.Route, {
     path: "/import-campaigns/*",
-    element: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_import_campaigns_import_campaigns__WEBPACK_IMPORTED_MODULE_4__["default"], null)
-  }))));
+    element: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_import_campaigns_import_campaigns__WEBPACK_IMPORTED_MODULE_5__["default"], null)
+  })))), showOnboardingModal ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_onboarding_modal__WEBPACK_IMPORTED_MODULE_7__.OnboardingModal, {
+    onClose: closeOnboardingModalHandler
+  }) : null);
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Home);
-
-/***/ }),
-
-/***/ "./lib/pages/import-campaigns/import-campaigns-helper.js":
-/*!***************************************************************!*\
-  !*** ./lib/pages/import-campaigns/import-campaigns-helper.js ***!
-  \***************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   importCampaignsHelper: () => (/* binding */ importCampaignsHelper),
-/* harmony export */   tabs: () => (/* binding */ tabs)
-/* harmony export */ });
-const tabs = [{
-  name: 'manual',
-  title: 'Import Setting',
-  route: '/import-campaigns/manual'
-}, {
-  name: 'scheduled',
-  title: 'Scheduled Import',
-  route: '/import-campaigns/scheduled'
-}];
-function importCampaignsHelper(state, setState, navigate) {
-  function handleTabClick(tabIndex) {
-    setState({
-      ...state,
-      activeIndex: tabIndex
-    });
-    navigate(tabs[tabIndex].route);
-  }
-  return {
-    handleTabClick
-  };
-}
 
 /***/ }),
 
@@ -13126,104 +15999,41 @@ function importCampaignsHelper(state, setState, navigate) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   TabContent: () => (/* binding */ TabContent),
-/* harmony export */   TabItem: () => (/* binding */ TabItem),
 /* harmony export */   TabPanelContainer: () => (/* binding */ TabPanelContainer),
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
-/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
 /* harmony import */ var _container_manaulImport_manualImport__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../container/manaulImport/manualImport */ "./lib/container/manaulImport/manualImport.js");
 /* harmony import */ var _container_scheduleImport_scheduleImport__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../container/scheduleImport/scheduleImport */ "./lib/container/scheduleImport/scheduleImport.js");
-/* harmony import */ var _import_campaigns_helper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./import-campaigns-helper */ "./lib/pages/import-campaigns/import-campaigns-helper.js");
 
 /* eslint-disable react-hooks/exhaustive-deps */
-const {
-  useState,
-  useEffect
-} = wp.element;
 
 
 
 
 
 const ImportCampaigns = () => {
-  const [state, setState] = useState({
-    activeIndex: 0
-  });
-  const navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_4__.useNavigate)();
-  const location = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_4__.useLocation)();
-  const helper = (0,_import_campaigns_helper__WEBPACK_IMPORTED_MODULE_3__.importCampaignsHelper)(state, setState, navigate);
-  const {
-    handleTabClick
-  } = helper;
-  const {
-    activeIndex
-  } = state;
-  useEffect(() => {
-    if (location.pathname.includes('scheduled')) {
-      setState({
-        ...state,
-        activeIndex: 1
-      });
-    } else if (location.pathname.includes('manual')) {
-      setState({
-        ...state,
-        activeIndex: 0
-      });
-    }
-  }, [location.pathname]);
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(TabPanelContainer, null, _import_campaigns_helper__WEBPACK_IMPORTED_MODULE_3__.tabs.map((tab, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(TabItem, {
-    key: tab.name,
-    isActive: index === activeIndex,
-    onClick: () => handleTabClick(index)
-  }, tab.title))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(TabContent, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_router_dom__WEBPACK_IMPORTED_MODULE_4__.Routes, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_router_dom__WEBPACK_IMPORTED_MODULE_4__.Route, {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(TabPanelContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_router_dom__WEBPACK_IMPORTED_MODULE_3__.Routes, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_router_dom__WEBPACK_IMPORTED_MODULE_3__.Route, {
     index: true,
     element: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_container_manaulImport_manualImport__WEBPACK_IMPORTED_MODULE_1__["default"], null)
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_router_dom__WEBPACK_IMPORTED_MODULE_4__.Route, {
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_router_dom__WEBPACK_IMPORTED_MODULE_3__.Route, {
     path: "manual",
     element: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_container_manaulImport_manualImport__WEBPACK_IMPORTED_MODULE_1__["default"], null)
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_router_dom__WEBPACK_IMPORTED_MODULE_4__.Route, {
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_router_dom__WEBPACK_IMPORTED_MODULE_3__.Route, {
     path: "scheduled",
     element: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_container_scheduleImport_scheduleImport__WEBPACK_IMPORTED_MODULE_2__["default"], null)
-  }))));
+  })));
 };
 
 // Styled component for the tab panel container
-const TabPanelContainer = styled_components__WEBPACK_IMPORTED_MODULE_5__["default"].div`
+const TabPanelContainer = styled_components__WEBPACK_IMPORTED_MODULE_4__["default"].div`
 	background-color: white; // Set background color to white
-	display: flex; // Use flexbox to align items
-	align-items: center; // Ensure items are centered vertically
 	box-shadow: 0px 2px 4px 0px rgba( 0, 0, 0, 0.08 );
 	padding: 20px 0px 0px 20px;
 	box-sizing: border-box;
-`;
-const TabItem = styled_components__WEBPACK_IMPORTED_MODULE_5__["default"].div`
-	padding: 10px 20px;
-	margin: 0 15px; // Consistent spacing between tabs
-	cursor: pointer;
-	color: ${props => props.isActive ? '#2e9e62' : '#003233'}; // Green for active tab, grey for inactive
-	background-color: transparent; // No background color
-	font-size: 13px; // Larger font size for better readability
-	font-weight: ${props => props.isActive ? 'bold' : 'normal'}; // Bold for active, normal for inactive
-	border-bottom: ${props => props.isActive ? '3px solid #2e9e62' : '3px solid transparent'}; // Bold green bottom border for active
-	transition: all 0.3s; // Smooth transition for color and border changes
-
-	&:hover {
-		color: #2e9e62; // Green color on hover
-		border-bottom: 3px solid #2e9e62; // Maintain bold green bottom border on hover
-	}
-`;
-
-// Styled component for the content area under tabs
-const TabContent = styled_components__WEBPACK_IMPORTED_MODULE_5__["default"].div`
-	box-shadow: 0px 2px 4px 0px rgba( 0, 0, 0, 0.08 );
-	padding: 25px 45px;
-	box-sizing: border-box;
-	background-color: white; // Match the body's background color
-	// Removing border for a seamless integration with the rest of the page
 `;
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ImportCampaigns);
 
@@ -33482,6 +36292,7 @@ function parse (value, root, parent, rule, rules, rulesets, pseudo, points, decl
 				switch ((0,_Tokenizer_js__WEBPACK_IMPORTED_MODULE_0__.peek)()) {
 					case 42: case 47:
 						;(0,_Utility_js__WEBPACK_IMPORTED_MODULE_1__.append)(comment((0,_Tokenizer_js__WEBPACK_IMPORTED_MODULE_0__.commenter)((0,_Tokenizer_js__WEBPACK_IMPORTED_MODULE_0__.next)(), (0,_Tokenizer_js__WEBPACK_IMPORTED_MODULE_0__.caret)()), root, parent, declarations), declarations)
+						if (((0,_Tokenizer_js__WEBPACK_IMPORTED_MODULE_0__.token)(previous || 1) == 5 || (0,_Tokenizer_js__WEBPACK_IMPORTED_MODULE_0__.token)((0,_Tokenizer_js__WEBPACK_IMPORTED_MODULE_0__.peek)() || 1) == 5) && (0,_Utility_js__WEBPACK_IMPORTED_MODULE_1__.strlen)(characters) && (0,_Utility_js__WEBPACK_IMPORTED_MODULE_1__.substr)(characters, -1, void 0) !== ' ') characters += ' '
 						break
 					default:
 						characters += '/'
@@ -33497,7 +36308,7 @@ function parse (value, root, parent, rule, rules, rulesets, pseudo, points, decl
 					case 0: case 125: scanning = 0
 					// ;
 					case 59 + offset: if (ampersand == -1) characters = (0,_Utility_js__WEBPACK_IMPORTED_MODULE_1__.replace)(characters, /\f/g, '')
-						if (property > 0 && ((0,_Utility_js__WEBPACK_IMPORTED_MODULE_1__.strlen)(characters) - length))
+						if (property > 0 && ((0,_Utility_js__WEBPACK_IMPORTED_MODULE_1__.strlen)(characters) - length || (variable === 0 && previous === 47)))
 							(0,_Utility_js__WEBPACK_IMPORTED_MODULE_1__.append)(property > 32 ? declaration(characters + ';', rule, parent, length - 1, declarations) : declaration((0,_Utility_js__WEBPACK_IMPORTED_MODULE_1__.replace)(characters, ' ', '') + ';', rule, parent, length - 2, declarations), declarations)
 						break
 					// @ ;
@@ -33644,11 +36455,14 @@ function prefix (value, length, children) {
 		case 5737: case 4201: case 3177: case 3433: case 1641: case 4457: case 2921:
 		// text-decoration, filter, clip-path, backface-visibility, column, box-decoration-break
 		case 5572: case 6356: case 5844: case 3191: case 6645: case 3005:
-		// mask, mask-image, mask-(mode|clip|size), mask-(repeat|origin), mask-position, mask-composite,
-		case 6391: case 5879: case 5623: case 6135: case 4599: case 4855:
 		// background-clip, columns, column-(count|fill|gap|rule|rule-color|rule-style|rule-width|span|width)
 		case 4215: case 6389: case 5109: case 5365: case 5621: case 3829:
+		// mask, mask-image, mask-(mode|clip|size), mask-(repeat|origin), mask-position
+		case 6391: case 5879: case 5623: case 6135: case 4599:
 			return _Enum_js__WEBPACK_IMPORTED_MODULE_1__.WEBKIT + value + value
+		// mask-composite
+		case 4855:
+			return _Enum_js__WEBPACK_IMPORTED_MODULE_1__.WEBKIT + value.replace('add', 'source-over').replace('substract', 'source-out').replace('intersect', 'source-in').replace('exclude', 'xor') + value
 		// tab-size
 		case 4789:
 			return _Enum_js__WEBPACK_IMPORTED_MODULE_1__.MOZ + value + value
@@ -33704,7 +36518,7 @@ function prefix (value, length, children) {
 			return (0,_Utility_js__WEBPACK_IMPORTED_MODULE_0__.replace)(value, /(image-set\([^]*)/, _Enum_js__WEBPACK_IMPORTED_MODULE_1__.WEBKIT + '$1' + '$`$1')
 		// justify-content
 		case 4968:
-			return (0,_Utility_js__WEBPACK_IMPORTED_MODULE_0__.replace)((0,_Utility_js__WEBPACK_IMPORTED_MODULE_0__.replace)(value, /(.+:)(flex-)?(.*)/, _Enum_js__WEBPACK_IMPORTED_MODULE_1__.WEBKIT + 'box-pack:$3' + _Enum_js__WEBPACK_IMPORTED_MODULE_1__.MS + 'flex-pack:$3'), /s.+-b[^;]+/, 'justify') + _Enum_js__WEBPACK_IMPORTED_MODULE_1__.WEBKIT + value + value
+			return (0,_Utility_js__WEBPACK_IMPORTED_MODULE_0__.replace)((0,_Utility_js__WEBPACK_IMPORTED_MODULE_0__.replace)(value, /(.+:)(flex-)?(.*)/, _Enum_js__WEBPACK_IMPORTED_MODULE_1__.WEBKIT + 'box-pack:$3' + _Enum_js__WEBPACK_IMPORTED_MODULE_1__.MS + 'flex-pack:$3'), /space-between/, 'justify') + _Enum_js__WEBPACK_IMPORTED_MODULE_1__.WEBKIT + value + value
 		// justify-self
 		case 4200:
 			if (!(0,_Utility_js__WEBPACK_IMPORTED_MODULE_0__.match)(value, /flex-|baseline/)) return _Enum_js__WEBPACK_IMPORTED_MODULE_1__.MS + 'grid-column-align' + (0,_Utility_js__WEBPACK_IMPORTED_MODULE_0__.substr)(value, length) + value
@@ -35484,7 +38298,7 @@ LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
 OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 PERFORMANCE OF THIS SOFTWARE.
 ***************************************************************************** */
-/* global Reflect, Promise, SuppressedError, Symbol */
+/* global Reflect, Promise, SuppressedError, Symbol, Iterator */
 
 var extendStatics = function(d, b) {
   extendStatics = Object.setPrototypeOf ||
@@ -35595,8 +38409,8 @@ function __awaiter(thisArg, _arguments, P, generator) {
 }
 
 function __generator(thisArg, body) {
-  var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-  return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+  var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
+  return g.next = verb(0), g["throw"] = verb(1), g["return"] = verb(2), typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
   function verb(n) { return function (v) { return step([n, v]); }; }
   function step(op) {
       if (f) throw new TypeError("Generator is already executing.");
@@ -35700,7 +38514,7 @@ function __await(v) {
 function __asyncGenerator(thisArg, _arguments, generator) {
   if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
   var g = generator.apply(thisArg, _arguments || []), i, q = [];
-  return i = {}, verb("next"), verb("throw"), verb("return", awaitReturn), i[Symbol.asyncIterator] = function () { return this; }, i;
+  return i = Object.create((typeof AsyncIterator === "function" ? AsyncIterator : Object).prototype), verb("next"), verb("throw"), verb("return", awaitReturn), i[Symbol.asyncIterator] = function () { return this; }, i;
   function awaitReturn(f) { return function (v) { return Promise.resolve(v).then(f, reject); }; }
   function verb(n, f) { if (g[n]) { i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; if (f) i[n] = f(i[n]); } }
   function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
@@ -35798,17 +38612,22 @@ function __disposeResources(env) {
     env.error = env.hasError ? new _SuppressedError(e, env.error, "An error was suppressed during disposal.") : e;
     env.hasError = true;
   }
+  var r, s = 0;
   function next() {
-    while (env.stack.length) {
-      var rec = env.stack.pop();
+    while (r = env.stack.pop()) {
       try {
-        var result = rec.dispose && rec.dispose.call(rec.value);
-        if (rec.async) return Promise.resolve(result).then(next, function(e) { fail(e); return next(); });
+        if (!r.async && s === 1) return s = 0, env.stack.push(r), Promise.resolve().then(next);
+        if (r.dispose) {
+          var result = r.dispose.call(r.value);
+          if (r.async) return s |= 2, Promise.resolve(result).then(next, function(e) { fail(e); return next(); });
+        }
+        else s |= 1;
       }
       catch (e) {
-          fail(e);
+        fail(e);
       }
     }
+    if (s === 1) return env.hasError ? Promise.reject(env.error) : Promise.resolve();
     if (env.hasError) throw env.error;
   }
   return next();
