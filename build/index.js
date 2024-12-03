@@ -11422,7 +11422,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function AboutPlugin() {
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(AboutPluginWrapper, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", null, "About RE/beehiiv"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "Boost your productivity with our streamlined plugin, designed to simplify your workflow and integrate seamlessly with your favorite tools. Whether you're automating tasks, tracking key metrics, or improving efficiency, this plugin delivers the flexibility and ease you need to stay focused on what matters most. Get started today and experience a smarter, more effective way to work."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(PluginInfo, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "Version: 00000"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "Latest Changes: [Date]")));
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(AboutPluginWrapper, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", null, "About RE/beehiiv"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "Boost your productivity with our streamlined plugin, designed to simplify your workflow and integrate seamlessly with your favorite tools. Whether you're automating tasks, tracking key metrics, or improving efficiency, this plugin delivers the flexibility and ease you need to stay focused on what matters most. Get started today and experience a smarter, more effective way to work."));
 }
 ;
 const AboutPluginWrapper = styled_components__WEBPACK_IMPORTED_MODULE_1__.styled.div`
@@ -13695,6 +13695,54 @@ const ModalContainer = styled_components__WEBPACK_IMPORTED_MODULE_2__["default"]
 
 /***/ }),
 
+/***/ "./lib/components/onboarding-modal.js":
+/*!********************************************!*\
+  !*** ./lib/components/onboarding-modal.js ***!
+  \********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   OnboardingModal: () => (/* binding */ OnboardingModal)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
+/* harmony import */ var _subscription_box__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./subscription-box */ "./lib/components/subscription-box.js");
+/* harmony import */ var _pages_about_about__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../pages/about/about */ "./lib/pages/about/about.js");
+/* harmony import */ var _collect_data__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./collect-data */ "./lib/components/collect-data.js");
+
+
+
+
+
+
+const OnboardingModal = ({
+  onClose
+}) => {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Modal, {
+    onRequestClose: onClose,
+    size: "large"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(OnboardingContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h1", null, " You\u2019ve successfully installed Beehiiv to WP"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_subscription_box__WEBPACK_IMPORTED_MODULE_2__.SubscriptionBox, {
+    marginTop: "20px"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_pages_about_about__WEBPACK_IMPORTED_MODULE_3__.Divider, null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_collect_data__WEBPACK_IMPORTED_MODULE_4__.CollectData, null)));
+};
+const OnboardingContainer = styled_components__WEBPACK_IMPORTED_MODULE_5__.styled.div`
+    padding: 16px 8px 20px;
+    display: flex;
+    flex-direction: column;
+    margin-top: 12px;
+    gap: 24px;
+    & > * {
+        margin: 0;
+    }
+`;
+
+/***/ }),
+
 /***/ "./lib/components/our-product.js":
 /*!***************************************!*\
   !*** ./lib/components/our-product.js ***!
@@ -14011,9 +14059,13 @@ const {
 } = wp.element;
 
 
-function SubscriptionBox() {
+function SubscriptionBox({
+  marginTop = "31px"
+}) {
   const [email, setEmail] = useState('');
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(SubscriptionBoxWrapper, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", null, "Get Weekly media tech news in easy-to-read chunks."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "Boost your productivity with our streamlined plugin, designed to simplify your workflow and integrate seamlessly with your favorite tools."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(SubscriptionForm, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Input, {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(SubscriptionBoxWrapper, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", null, "Get Weekly media tech news in easy-to-read chunks."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "Boost your productivity with our streamlined plugin, designed to simplify your workflow and integrate seamlessly with your favorite tools."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(SubscriptionForm, {
+    marginTop: marginTop
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(InputContainer, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.Input, {
     type: _refactco_ui_kit__WEBPACK_IMPORTED_MODULE_1__.InputType.TEXT,
     value: email,
     onChange: value => setEmail(value),
@@ -14043,7 +14095,9 @@ const SubscriptionForm = styled_components__WEBPACK_IMPORTED_MODULE_2__.styled.f
     width: 100%;
     gap: 11px;
     @media (min-width: 768px) {
-  	    margin-top: 31px;
+  	    margin-top: ${({
+  marginTop
+}) => marginTop !== null && marginTop !== void 0 ? marginTop : '31px'};
         flex-direction: row;
   }
 }`;
@@ -15583,6 +15637,7 @@ function useLocalStorage(key, initialValue) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Divider: () => (/* binding */ Divider),
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
@@ -15883,38 +15938,53 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/dist/index.js");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/dist/index.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
 /* harmony import */ var _components_layout__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../components/layout */ "./lib/components/layout.js");
 /* harmony import */ var _components_header__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../components/header */ "./lib/components/header.js");
 /* harmony import */ var _about_about__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../about/about */ "./lib/pages/about/about.js");
 /* harmony import */ var _connections_connections__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../connections/connections */ "./lib/pages/connections/connections.js");
 /* harmony import */ var _import_campaigns_import_campaigns__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../import-campaigns/import-campaigns */ "./lib/pages/import-campaigns/import-campaigns.js");
 /* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/dist/react-toastify.esm.mjs");
+/* harmony import */ var _components_onboarding_modal__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../components/onboarding-modal */ "./lib/components/onboarding-modal.js");
+/* harmony import */ var _hooks_useLocalStorage__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../hooks/useLocalStorage */ "./lib/hooks/useLocalStorage.js");
 
 
 
 
 
 
+
+
+const {
+  useState
+} = wp.element;
 
 
 const Home = () => {
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_router_dom__WEBPACK_IMPORTED_MODULE_7__.HashRouter, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_layout__WEBPACK_IMPORTED_MODULE_1__["default"], null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_header__WEBPACK_IMPORTED_MODULE_2__["default"], null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_toastify__WEBPACK_IMPORTED_MODULE_6__.ToastContainer, {
+  const [isUnbordedUser, setIsUnbordedUsers] = (0,_hooks_useLocalStorage__WEBPACK_IMPORTED_MODULE_8__["default"])('isUnbordedUser', false);
+  const [showOnboardingModal, setshowOnboardingModal] = useState(!isUnbordedUser);
+  const closeOnboardingModalHandler = () => {
+    setshowOnboardingModal(false);
+    setIsUnbordedUsers(true);
+  };
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_router_dom__WEBPACK_IMPORTED_MODULE_9__.HashRouter, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_layout__WEBPACK_IMPORTED_MODULE_1__["default"], null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_header__WEBPACK_IMPORTED_MODULE_2__["default"], null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_toastify__WEBPACK_IMPORTED_MODULE_6__.ToastContainer, {
     position: "bottom-right"
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_router_dom__WEBPACK_IMPORTED_MODULE_8__.Routes, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_router_dom__WEBPACK_IMPORTED_MODULE_8__.Route, {
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_router_dom__WEBPACK_IMPORTED_MODULE_10__.Routes, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_router_dom__WEBPACK_IMPORTED_MODULE_10__.Route, {
     path: "/",
     element: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_import_campaigns_import_campaigns__WEBPACK_IMPORTED_MODULE_5__["default"], null)
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_router_dom__WEBPACK_IMPORTED_MODULE_8__.Route, {
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_router_dom__WEBPACK_IMPORTED_MODULE_10__.Route, {
     path: "/about",
     element: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_about_about__WEBPACK_IMPORTED_MODULE_3__["default"], null)
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_router_dom__WEBPACK_IMPORTED_MODULE_8__.Route, {
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_router_dom__WEBPACK_IMPORTED_MODULE_10__.Route, {
     path: "/connections",
     element: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_connections_connections__WEBPACK_IMPORTED_MODULE_4__["default"], null)
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_router_dom__WEBPACK_IMPORTED_MODULE_8__.Route, {
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_router_dom__WEBPACK_IMPORTED_MODULE_10__.Route, {
     path: "/import-campaigns/*",
     element: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_import_campaigns_import_campaigns__WEBPACK_IMPORTED_MODULE_5__["default"], null)
-  }))));
+  })))), showOnboardingModal ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_onboarding_modal__WEBPACK_IMPORTED_MODULE_7__.OnboardingModal, {
+    onClose: closeOnboardingModalHandler
+  }) : null);
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Home);
 
